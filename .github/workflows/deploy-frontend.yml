@@ -1,0 +1,28 @@
+name: Deploy HRthis Frontend
+
+on:
+  push:
+    branches: [ main ] # Oder dein Haupt-Branch-Name
+    paths:
+      - 'HRthis/**' # Läuft NUR, wenn sich was im Frontend-Ordner ändert
+      # WICHTIG: Hier muss es "HRthis/**" heißen, um den Unterordner zu erfassen
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Create Frontend Tarball
+        run: |
+          cd HRthis
+          tar -cvf ../deployment-frontend.tar --exclude-from=.tarignore .
+
+      - name: Deploy to CapRover
+        uses: caprover/deploy-action@v1.1.2
+        with:
+          server: '${{ secrets.CAPROVER_SERVER }}'
+          app: 'hrthis-frontend'
+          app-token: '${{ secrets.HRTHIS_FRONTEND_TOKEN }}'
+          tar-file: './deployment-frontend.tar'
