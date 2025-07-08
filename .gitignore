@@ -1,0 +1,75 @@
+# Global ignores for macOS
+.DS_Store
+
+# Environment variables files (sensitive info)
+.env
+.env.*
+
+# Log files
+*.log
+
+# Temporary archives
+*.tar
+*.zip
+
+# Python specific ignores
+__pycache__/
+*.pyc
+venv/
+hrthis.db
+
+# Node.js specific ignores for Frontend
+node_modules/
+build/
+.cache/
+.eslintcache
+
+# CapRover temporary deployment files generated locally
+temporary-captain-to-deploy.tar
+deployment-backend.tar
+frontend-deployment.tar
+
+# Specific folders/files that are not part of the core source code
+# (These were identified from your previous `git status` output)
+.env.global
+.env.production
+.env.production.example
+DEPLOYMENT.md
+HRthis/.tarignore # This will be ignored now as a file, the content of this file is in the root .gitignore
+HRthis/Dockerfile # This Dockerfile is for local Docker Compose build, not for CapRover template
+HRthis/build.tar.gz
+HRthis/captain-definition # This captain-definition is for the Frontend sub-project
+HRthis/frontend-deployment.tar
+HRthis/nginx.conf
+HRthis/src/components/benefits/CoinEventForm.tsx
+HRthis/src/components/benefits/CoinGrantForm.tsx
+HRthis/src/components/benefits/CoinGrantFormHelpers.tsx
+HRthis/src/components/benefits/CoinRuleForm.tsx
+HRthis/src/components/benefits/EarnTab.tsx
+HRthis/src/components/benefits/HistoryTab.tsx
+HRthis/src/components/benefits/ManageTab.tsx
+HRthis/src/components/benefits/ShopTab.tsx
+HRthis/src/components/benefits/TabNavigation.tsx
+HRthis/src/screens/BenefitsScreen.backup.tsx
+SERVER-DEPLOYMENT-COMMANDS.md
+ag666-instructions-update-traefik-ports.yaml
+ag666-update-traefik-ports.yaml
+browo-hrthis-backend/.env.production
+browo-hrthis-backend/.tarignore # This will be ignored now as a file, the content of this file is in the root .gitignore
+browo-hrthis-backend/captain-definition # This captain-definition is for the Backend sub-project
+browo-hrthis-backend/deployment.tar
+deploy-hrthis.sh
+docker-compose.deploy.yml
+docker-compose.redis.yml
+hrthis screenshots/
+hrthis-frontend/ # This refers to the old frontend root (if it's not the current HRthis/HRthis)
+init-db-multi-example.sql
+ragflow/ # This folder was causing issues, exclude it completely unless it's part of your core project
+restart-backend-replace-string.yaml
+restart_traefik.yaml
+run-backend.sh
+server-update-traefik-ports.yaml
+update-traefik-ports-actions.yaml
+update-traefik-ports-final.yaml
+update-traefik-ports-instruction.yaml
+update-traefik-ports.yaml

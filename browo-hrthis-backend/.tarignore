@@ -1,0 +1,10 @@
+.git
+.DS_Store
+.env
+.env.*
+venv
+__pycache__
+*.pyc
+hrthis.db
+backend.log
+
