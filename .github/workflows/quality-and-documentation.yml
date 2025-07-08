@@ -15,25 +15,27 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
-
-      - name: Change to Frontend Directory
-        run: cd HRthis # HIER wechseln wir in den Frontend-Ordner
+          cache: 'npm' # Fügt Caching für node_modules hinzu
 
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
+        working-directory: HRthis # WICHTIG: Ausführen im Frontend-Ordner
 
       - name: Run ESLint
         run: npm run lint # Assuming you have a 'lint' script in package.json
-        continue-on-error: true # Allow build to continue even if linting fails
+        working-directory: HRthis # WICHTIG: Ausführen im Frontend-Ordner
+        continue-on-error: true
 
       - name: Generate Documentation (if applicable)
         run: |
           # Add your documentation generation commands here, e.g.,
           # npm run docs:build
+        working-directory: HRthis # WICHTIG: Ausführen im Frontend-Ordner
+        # Wenn dies ein Schritt ist, der tatsächlich Doku generiert und nicht nur ein Platzhalter ist
 
       - name: Upload Documentation (if applicable)
-        uses: actions/upload-artifact@v4 # <-- HIER IST DIE KORRIGIERTE VERSION
+        uses: actions/upload-artifact@v4
         with:
           name: project-documentation
-          path: docs/ # Adjust this path to your generated docs output
+          path: HRthis/docs/ # Pfad ist relativ zum REPOSITORY-ROOT
           retention-days: 7
