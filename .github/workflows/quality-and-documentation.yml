@@ -15,22 +15,23 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
-          cache: 'npm' # Fügt Caching für node_modules hinzu
+          cache: 'npm'
+          cache-dependency-path: 'HRthis/package-lock.json' # <--- HIER IST DIE NEUE ZEILE
 
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
-        working-directory: HRthis # WICHTIG: Ausführen im Frontend-Ordner
+        working-directory: HRthis # Ausführen im Frontend-Ordner
 
       - name: Run ESLint
         run: npm run lint # Assuming you have a 'lint' script in package.json
-        working-directory: HRthis # WICHTIG: Ausführen im Frontend-Ordner
+        working-directory: HRthis # Ausführen im Frontend-Ordner
         continue-on-error: true
 
       - name: Generate Documentation (if applicable)
         run: |
           # Add your documentation generation commands here, e.g.,
           # npm run docs:build
-        working-directory: HRthis # WICHTIG: Ausführen im Frontend-Ordner
+        working-directory: HRthis # Ausführen im Frontend-Ordner
         # Wenn dies ein Schritt ist, der tatsächlich Doku generiert und nicht nur ein Platzhalter ist
 
       - name: Upload Documentation (if applicable)
