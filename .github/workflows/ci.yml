@@ -1,39 +1,60 @@
-name: CI/CD Pipeline
+name: HRthis CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ] # Oder dein Haupt-Branch-Name
+    branches:
+      - main
 
 jobs:
-  build:
+  quality-check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 20.x
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '20'
           cache: 'npm'
-          cache-dependency-path: 'HRthis/package-lock.json' # <--- HIER IST DIE NEUE ZEILE
+          cache-dependency-path: 'HRthis/package-lock.json'
 
-      - name: Install Dependencies
-        run: npm install --legacy-peer-deps
-        working-directory: HRthis # Ausführen im Frontend-Ordner
+      - name: Install Frontend Dependencies
+        run: npm install
+        working-directory: ./HRthis
 
-      - name: Run npm audit
-        run: npm audit --production
-        working-directory: HRthis # Ausführen im Frontend-Ordner
-        continue-on-error: true
+      - name: Run ESLint
+        run: npm run lint -- --max-warnings 0
+        working-directory: ./HRthis
 
-      - name: Build Frontend
-        run: npm run build
-        working-directory: HRthis # Ausführen im Frontend-Ordner
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    needs: quality-check
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - name: Upload dependency check results
-        uses: actions/upload-artifact@v4
+      - name: Deploy Frontend to CapRover
+        uses: caprover/deploy-action@v2
         with:
-          name: dependency-check-report
-          path: HRthis/reports/ # Pfad ist relativ zum REPOSITORY-ROOT
-          retention-days: 7
+          server: "${{ secrets.CAPROVER_SERVER }}"
+          app: "${{ secrets.CAPROVER_FRONTEND_APP_NAME }}"
+          password: "${{ secrets.CAPROVER_PASSWORD }}"
+          branch: "main"
+          source: './HRthis'
+
+  deploy-backend:
+    runs-on: ubuntu-latest
+    needs: quality-check
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy Backend to CapRover
+        uses: caprover/deploy-action@v2
+        with:
+          server: "${{ secrets.CAPROVER_SERVER }}"
+          app: "${{ secrets.CAPROVER_BACKEND_APP_NAME }}"
+          password: "${{ secrets.CAPROVER_PASSWORD }}"
+          branch: "main"
+          source: './browo-hrthis-backend'
