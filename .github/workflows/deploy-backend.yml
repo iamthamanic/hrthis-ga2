@@ -19,7 +19,7 @@ jobs:
           tar -cvf ../deployment-backend.tar --exclude-from=.tarignore .
 
       - name: Deploy to CapRover
-        uses: caprover/deploy-action@v1.1.2
+        uses: caprover/deploy-action@v2
         with:
           server: '${{ secrets.CAPROVER_SERVER }}'
           app: 'hrthis-backend'
