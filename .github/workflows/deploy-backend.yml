@@ -3,9 +3,6 @@ name: Deploy HRthis Backend
 on:
   push:
     branches: [ main ] # Oder dein Haupt-Branch-Name
-    paths:
-      - 'browo-hrthis-backend/**' # Läuft NUR, wenn sich was im Backend-Ordner ändert
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
