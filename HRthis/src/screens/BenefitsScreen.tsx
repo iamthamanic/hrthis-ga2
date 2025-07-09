@@ -4,7 +4,7 @@ import { useCoinsStore } from '../state/coins';
 import { useShopStore } from '../state/shop';
 import { useCoinEventsStore } from '../state/coinEvents';
 import { cn } from '../utils/cn';
-import { ShopTab } from '../components/benefits/ShopTab.tsx';
+import { ShopTab } from '../components/benefits/ShopTab';
 import { EarnTab } from '../components/benefits/EarnTab';
 import { HistoryTab } from '../components/benefits/HistoryTab';
 import { ManageTab } from '../components/benefits/ManageTab';
