@@ -16,6 +16,7 @@ export const AddEmployeeScreen = () => {
   const [formData, setFormData] = useState({
     // Required fields
     email: '',
+    employeeNumber: '',
     firstName: '',
     lastName: '',
     role: 'EMPLOYEE' as UserRole,
@@ -42,6 +43,11 @@ export const AddEmployeeScreen = () => {
     // Banking (optional)
     iban: '',
     bic: '',
+    
+    // Clothing sizes
+    clothingSizeTop: '',
+    clothingSizePants: '',
+    clothingSizeShoes: '',
   });
 
   /**
@@ -74,6 +80,10 @@ export const AddEmployeeScreen = () => {
       newErrors.email = 'E-Mail ist erforderlich';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Ungültige E-Mail-Adresse';
+    }
+
+    if (!formData.employeeNumber.trim()) {
+      newErrors.employeeNumber = 'Personalnummer ist erforderlich';
     }
 
     if (!formData.firstName.trim()) {
@@ -133,6 +143,7 @@ export const AddEmployeeScreen = () => {
       // Prepare user data
       const userData: Omit<User, 'id' | 'organizationId'> = {
         email: formData.email.trim(),
+        employeeNumber: formData.employeeNumber.trim(),
         name: `${formData.firstName.trim()} ${formData.lastName.trim()}`,
         firstName: formData.firstName.trim(),
         lastName: formData.lastName.trim(),
@@ -143,6 +154,7 @@ export const AddEmployeeScreen = () => {
         department: formData.department.trim(),
         weeklyHours: parseInt(formData.weeklyHours),
         employmentType: formData.employmentType,
+        employmentTypeCustom: formData.employmentType === 'OTHER' ? formData.employmentTypeCustom.trim() || undefined : undefined,
         employmentStatus: formData.employmentStatus,
         joinDate: formData.joinDate,
         vacationDays: parseInt(formData.vacationDays),
@@ -154,6 +166,11 @@ export const AddEmployeeScreen = () => {
         bankDetails: formData.iban.trim() ? {
           iban: formData.iban.trim(),
           bic: formData.bic.trim() || undefined
+        } : undefined,
+        clothingSizes: (formData.clothingSizeTop.trim() || formData.clothingSizePants.trim() || formData.clothingSizeShoes.trim()) ? {
+          top: formData.clothingSizeTop.trim() || undefined,
+          pants: formData.clothingSizePants.trim() || undefined,
+          shoes: formData.clothingSizeShoes.trim() || undefined
         } : undefined,
         coinWallet: 0,
         coinProgress: 0,
@@ -226,6 +243,26 @@ export const AddEmployeeScreen = () => {
                 />
                 {errors.email && (
                   <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Personalnummer *
+                </label>
+                <input
+                  type="text"
+                  name="employeeNumber"
+                  value={formData.employeeNumber}
+                  onChange={handleInputChange}
+                  className={cn(
+                    "w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
+                    errors.employeeNumber ? "border-red-500" : "border-gray-300"
+                  )}
+                  placeholder="z.B. EMP001"
+                />
+                {errors.employeeNumber && (
+                  <p className="mt-1 text-sm text-red-600">{errors.employeeNumber}</p>
                 )}
               </div>
 
@@ -541,6 +578,62 @@ export const AddEmployeeScreen = () => {
                   onChange={handleInputChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="COBADEFFXXX"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Clothing Sizes */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">Arbeitskleidung Größen (Optional)</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Oberteil
+                </label>
+                <select
+                  name="clothingSizeTop"
+                  value={formData.clothingSizeTop}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Bitte wählen</option>
+                  <option value="XS">XS</option>
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                  <option value="XXL">XXL</option>
+                  <option value="XXXL">XXXL</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Hose
+                </label>
+                <input
+                  type="text"
+                  name="clothingSizePants"
+                  value={formData.clothingSizePants}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="z.B. 32, W32/L34"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Schuhe
+                </label>
+                <input
+                  type="text"
+                  name="clothingSizeShoes"
+                  value={formData.clothingSizeShoes}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="z.B. 42, 9.5"
                 />
               </div>
             </div>

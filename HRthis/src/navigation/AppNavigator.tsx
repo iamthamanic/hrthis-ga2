@@ -1,15 +1,14 @@
 import React from 'react';
 import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../state/auth';
-import { useNotificationsStore } from '../state/notifications';
-import { useLeavesStore } from '../state/leaves';
+// Removed unused imports for requests functionality
 
 // Screens
 import { LoginScreen } from '../screens/LoginScreen';
 import { DashboardScreen } from '../screens/DashboardScreen';
 import { RequestLeaveScreen } from '../screens/RequestLeaveScreen';
 // import { TimeRecordsScreen } from '../screens/TimeRecordsScreen';
-import { MyRequestsScreen } from '../screens/MyRequestsScreen';
+// import { MyRequestsScreen } from '../screens/MyRequestsScreen';
 import { DocumentsScreen } from '../screens/DocumentsScreen';
 // import { CalendarScreen } from '../screens/CalendarScreen';
 import { TimeAndVacationScreen } from '../screens/TimeAndVacationScreen';
@@ -36,29 +35,11 @@ import { cn } from '../utils/cn';
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const { user } = useAuthStore();
-  const { getUnreadCount } = useNotificationsStore();
-  const { getAllLeaveRequests } = useLeavesStore();
+  // Removed unused notification logic for requests tab
   
-  const getNotificationCount = (tabPath: string): number => {
-    if (!user) return 0;
-    
-    const isAdmin = user.role === 'ADMIN' || user.role === 'SUPERADMIN';
-    
-    switch (tabPath) {
-      case '/requests':
-        if (isAdmin) {
-          // For admin: show pending leave requests (these are the actionable items)
-          return getAllLeaveRequests().filter(req => req.status === 'PENDING').length;
-        } else {
-          // For users: show unread notifications about their requests
-          return getUnreadCount(user.id);
-        }
-      case '/training':
-        // Could add training-related notifications here
-        return 0;
-      default:
-        return 0;
-    }
+  const getNotificationCount = (_tabPath: string): number => {
+    // Future: Could add training-related notifications here
+    return 0;
   };
   
   const isAdmin = user?.role === 'ADMIN' || user?.role === 'SUPERADMIN';
@@ -136,7 +117,7 @@ export const AppNavigator = () => {
     <Routes>
       <Route path="/" element={<MainLayout><Navigate to="/dashboard" /></MainLayout>} />
       <Route path="/dashboard" element={<MainLayout><DashboardScreen /></MainLayout>} />
-      <Route path="/requests" element={<MainLayout><MyRequestsScreen /></MainLayout>} />
+      {/* Route removed: Requests functionality moved to Zeit & Urlaub */}
       <Route path="/time-vacation" element={<MainLayout><TimeAndVacationScreen /></MainLayout>} />
       {/* Legacy routes - redirect to time-vacation */}
       <Route path="/time" element={<Navigate to="/time-vacation" />} />

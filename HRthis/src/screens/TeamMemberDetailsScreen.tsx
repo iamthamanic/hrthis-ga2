@@ -250,6 +250,19 @@ export const TeamMemberDetailsScreen = () => {
                 <p className="py-2 text-gray-500">{targetUser.email}</p>
               </div>
               <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Personalnummer</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editedUser.employeeNumber || ''}
+                    onChange={(e) => setEditedUser(prev => ({ ...prev, employeeNumber: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                ) : (
+                  <p className="py-2 text-gray-900">{targetUser.employeeNumber || 'Nicht angegeben'}</p>
+                )}
+              </div>
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Private E-Mail</label>
                 {isEditing ? (
                   <input
@@ -374,6 +387,82 @@ export const TeamMemberDetailsScreen = () => {
                     {targetUser.role === 'EMPLOYEE' ? 'Mitarbeiter' : 
                      targetUser.role === 'ADMIN' ? 'Admin' : 'Super Admin'}
                   </p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Clothing Sizes */}
+          <div className="bg-white p-6 rounded-lg border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Arbeitskleidung Größen</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Oberteil</label>
+                {isEditing ? (
+                  <select
+                    value={editedUser.clothingSizes?.top || ''}
+                    onChange={(e) => setEditedUser(prev => ({ 
+                      ...prev, 
+                      clothingSizes: { 
+                        ...prev.clothingSizes, 
+                        top: e.target.value || undefined 
+                      } 
+                    }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option value="">Bitte wählen</option>
+                    <option value="XS">XS</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                    <option value="XXL">XXL</option>
+                    <option value="XXXL">XXXL</option>
+                  </select>
+                ) : (
+                  <p className="py-2 text-gray-900">{targetUser.clothingSizes?.top || 'Nicht angegeben'}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Hose</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editedUser.clothingSizes?.pants || ''}
+                    onChange={(e) => setEditedUser(prev => ({ 
+                      ...prev, 
+                      clothingSizes: { 
+                        ...prev.clothingSizes, 
+                        pants: e.target.value || undefined 
+                      } 
+                    }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="z.B. 32, W32/L34"
+                  />
+                ) : (
+                  <p className="py-2 text-gray-900">{targetUser.clothingSizes?.pants || 'Nicht angegeben'}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Schuhe</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editedUser.clothingSizes?.shoes || ''}
+                    onChange={(e) => setEditedUser(prev => ({ 
+                      ...prev, 
+                      clothingSizes: { 
+                        ...prev.clothingSizes, 
+                        shoes: e.target.value || undefined 
+                      } 
+                    }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="z.B. 42, 9.5"
+                  />
+                ) : (
+                  <p className="py-2 text-gray-900">{targetUser.clothingSizes?.shoes || 'Nicht angegeben'}</p>
                 )}
               </div>
             </div>

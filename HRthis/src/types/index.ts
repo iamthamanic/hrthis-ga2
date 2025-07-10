@@ -4,6 +4,7 @@ export interface User {
   name: string;
   role: UserRole;
   organizationId: string;
+  employeeNumber?: string; // Unique employee number for internal identification
   // Personal info
   firstName?: string;
   lastName?: string;
@@ -18,11 +19,18 @@ export interface User {
     iban?: string;
     bic?: string;
   };
+  // Clothing sizes for work attire
+  clothingSizes?: {
+    top?: string; // XS, S, M, L, XL, XXL, XXXL
+    pants?: string; // e.g. "32", "W32/L34"
+    shoes?: string; // e.g. "42", "9.5"
+  };
   // Work info
   position?: string;
   department?: string;
   weeklyHours?: number;
   employmentType?: EmploymentType;
+  employmentTypeCustom?: string; // Custom description when employmentType is 'OTHER'
   joinDate?: string;
   employmentStatus?: EmploymentStatus;
   vacationDays?: number; // Total vacation days per year

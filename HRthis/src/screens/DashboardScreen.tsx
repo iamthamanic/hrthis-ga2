@@ -124,6 +124,9 @@ export const DashboardScreen = () => {
                   : `Mitarbeiter: ${displayUser.name}`
                 }
               </h1>
+              {displayUser.employeeNumber && (
+                <p className="text-sm text-gray-500">Personalnummer: {displayUser.employeeNumber}</p>
+              )}
               {isAdmin && displayUser.id !== user.id && (
                 <select
                   value={selectedUserId}
@@ -364,6 +367,8 @@ export const DashboardScreen = () => {
                   {displayUser.employmentType === 'FULL_TIME' && 'Vollzeit'}
                   {displayUser.employmentType === 'PART_TIME' && 'Teilzeit'}
                   {displayUser.employmentType === 'MINI_JOB' && 'Minijob'}
+                  {displayUser.employmentType === 'INTERN' && 'Praktikant'}
+                  {displayUser.employmentType === 'OTHER' && (displayUser.employmentTypeCustom || 'Sonstige')}
                   {!displayUser.employmentType && '-'}
                 </p>
               </div>
@@ -412,17 +417,6 @@ export const DashboardScreen = () => {
             <p className="text-sm text-gray-500 mt-1">Shop & Coins</p>
           </button>
 
-          <button
-            onClick={() => navigate('/requests')}
-            className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow text-left"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-3xl">📝</span>
-              <span className="text-gray-400">→</span>
-            </div>
-            <h3 className="font-semibold text-gray-900">Anträge</h3>
-            <p className="text-sm text-gray-500 mt-1">Urlaub & Krankmeldung</p>
-          </button>
 
           <button
             onClick={() => navigate('/documents')}
