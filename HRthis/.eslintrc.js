@@ -1,5 +1,8 @@
 module.exports = {
-  extends: [
+  parserOptions: {
+    project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
+  },  extends: [
     'react-app',
     'react-app/jest'
   ],
