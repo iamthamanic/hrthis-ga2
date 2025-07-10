@@ -8,7 +8,8 @@ module.exports = {
   ],
   plugins: [
     'sonarjs',
-    'complexity'
+    'complexity',
+    'import'
   ],
   rules: {
     // ===== KRITISCHE FEHLER (Blockierend) =====
@@ -28,7 +29,7 @@ module.exports = {
     'no-new-func': 'error',
     
     // React Sicherheit
-    'react/no-dangerously-set-inner-html': 'error',
+    'react/no-danger': 'error', // Korrekte Regel für dangerouslySetInnerHTML
     'react/no-find-dom-node': 'error',
     'react/no-direct-mutation-state': 'error',
     
