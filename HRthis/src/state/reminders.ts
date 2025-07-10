@@ -234,7 +234,7 @@ export const useRemindersStore = create<RemindersState>()(
         }
       },
 
-      getUpcomingNotifications: (managerId: string) => {
+      getUpcomingNotifications: (_managerId: string) => {
         const today = new Date().toISOString().split('T')[0];
         const upcomingDays = new Date();
         upcomingDays.setDate(upcomingDays.getDate() + 7); // Next 7 days

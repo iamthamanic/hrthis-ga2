@@ -1,5 +1,5 @@
 import React from 'react';
-import { VideoContent } from '../types/learning';
+import { VideoContent, TranscriptionSegment } from '../types/learning';
 import { VideoContainer } from './video/VideoContainer';
 import { ProgressBar } from './video/ProgressBar';
 import { VideoControls } from './video/VideoControls';
@@ -58,7 +58,7 @@ const VideoControlsOverlay: React.FC<{
   </div>
 );
 
-const ActiveSubtitle: React.FC<{ segment: any }> = ({ segment }) => (
+const ActiveSubtitle: React.FC<{ segment: TranscriptionSegment }> = ({ segment }) => (
   <div className="absolute bottom-20 left-0 right-0 text-center px-4">
     <div className="inline-block bg-black/80 text-white px-4 py-2 rounded-lg">
       <p className="text-lg">{segment.text}</p>

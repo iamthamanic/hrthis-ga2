@@ -14,7 +14,7 @@ interface TabButtonProps {
   onClick: () => void;
 }
 
-const TabButton: React.FC<TabButtonProps> = ({ id, label, isActive, onClick }) => (
+const TabButton: React.FC<TabButtonProps> = ({ id: _id, label, isActive, onClick }) => (
   <button
     onClick={onClick}
     className={cn(

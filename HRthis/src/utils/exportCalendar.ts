@@ -153,7 +153,7 @@ export const exportToPDF = (
     });
     
     // Create rows for each user
-    const tableRows: any[][] = [];
+    const tableRows: string[][] = [];
     users.forEach(user => {
       const row = [user.userName];
       
@@ -263,7 +263,7 @@ export const exportToPDF = (
     });
     
     // Add legend
-    const finalY = (doc as any).lastAutoTable.finalY + 10;
+    const finalY = doc.lastAutoTable.finalY + 10;
     doc.setFontSize(10);
     doc.text('Legende:', 14, finalY);
     
@@ -313,7 +313,7 @@ export const exportToPDF = (
     
     // Create table data
     const tableHeaders = ['Mitarbeiter', 'Urlaub', 'Krankheit', 'Meeting', 'Fortbildung', 'Sonderurlaub', 'Arbeitsstunden'];
-    const tableRows: any[][] = [];
+    const tableRows: string[][] = [];
     
     Object.entries(summaryData).forEach(([userName, data]) => {
       tableRows.push([

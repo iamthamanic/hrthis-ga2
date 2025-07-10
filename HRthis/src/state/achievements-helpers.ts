@@ -77,22 +77,22 @@ export const checkAchievementCondition = (
 };
 
 // Mock functions that would normally be in the store
-const getTotalTrainingsCompleted = (userId: string): number => {
+const getTotalTrainingsCompleted = (_userId: string): number => {
   // This would fetch from training store
   return 0;
 };
 
-const getTotalPunctualDays = (userId: string): number => {
+const getTotalPunctualDays = (_userId: string): number => {
   // This would fetch from time tracking store
   return 0;
 };
 
-const getTotalCoinsEarned = (userId: string): number => {
+const getTotalCoinsEarned = (_userId: string): number => {
   // This would fetch from coins store
   return 0;
 };
 
-const getTotalFeedbackGiven = (userId: string): number => {
+const getTotalFeedbackGiven = (_userId: string): number => {
   // This would fetch from feedback/teams store
   return 0;
 };

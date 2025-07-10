@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLearningStore } from '../../state/learning';
 import { VideoContent } from '../../types/learning';
 

@@ -94,7 +94,7 @@ const useAchievementsGalleryLogic = (userId: string, filterCategory?: string, sh
 export const AchievementsGallery: React.FC<AchievementsGalleryProps> = ({
   userId,
   showLocked = true,
-  showProgress = true,
+  showProgress: _showProgress = true,
   layout = 'grid',
   filterCategory,
   className

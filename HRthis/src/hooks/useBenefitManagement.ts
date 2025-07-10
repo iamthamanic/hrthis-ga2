@@ -58,7 +58,7 @@ export const useBenefitManagement = () => {
     }
 
     const stockLimit = benefitUnlimited ? undefined : parseInt(benefitStockLimit);
-    if (!benefitUnlimited && (isNaN(stockLimit!) || stockLimit! <= 0)) {
+    if (!benefitUnlimited && (stockLimit === undefined || isNaN(stockLimit) || stockLimit <= 0)) {
       setError('Bitte geben Sie einen gültigen Lagerbestand ein');
       return false;
     }

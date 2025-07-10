@@ -2,9 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '../../utils/cn';
 import type { ShopBenefit } from '../../state/shop';
 
+interface ShopStore {
+  addBenefit: (benefit: Omit<ShopBenefit, 'id' | 'createdAt'>) => Promise<void>;
+  updateBenefit: (benefitId: string, updates: Partial<ShopBenefit>) => Promise<void>;
+  isLoading: boolean;
+}
+
 interface BenefitFormProps {
   editingBenefit: ShopBenefit | null;
-  shopStore: any;
+  shopStore: ShopStore;
   onClose: () => void;
   onError: (error: string) => void;
 }
@@ -87,7 +93,7 @@ interface FormSubmitParams {
   e: React.FormEvent;
   formData: FormData;
   editingBenefit: ShopBenefit | null;
-  shopStore: any;
+  shopStore: ShopStore;
   handlers: {
     onClose: () => void;
     onError: (error: string) => void;
@@ -217,7 +223,7 @@ const renderStockFields = (formState: ReturnType<typeof useBenefitForm>, inputCl
   </div>
 );
 
-const renderFormButtons = (onClose: () => void, shopStore: any, editingBenefit: ShopBenefit | null) => (
+const renderFormButtons = (onClose: () => void, shopStore: ShopStore, editingBenefit: ShopBenefit | null) => (
   <div className="flex space-x-3">
     <button
       type="button"

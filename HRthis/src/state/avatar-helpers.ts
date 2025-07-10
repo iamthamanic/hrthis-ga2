@@ -16,12 +16,12 @@ export const createXPEvent = (params: {
   skillId: string | null | undefined;
   xpAmount: number;
   description: string;
-  metadata: any;
+  metadata: Record<string, unknown>;
   now: string;
 }): XPEvent => ({
   id: `${params.userId}-${Date.now()}`,
   userId: params.userId,
-  type: params.metadata.type || 'manual',
+  type: params.metadata.type as string || 'manual',
   skillId: params.skillId || undefined,
   xpAmount: params.xpAmount,
   description: params.description,

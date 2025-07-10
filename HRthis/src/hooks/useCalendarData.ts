@@ -231,7 +231,7 @@ export const useCalendarData = (viewMode: CalendarViewMode, currentDate: Date) =
                  leave.userId === user?.id && leave.status === 'APPROVED';
         });
         
-        const dayTimeRecords = teamTimeRecords.filter(record => record.date === dateString);
+        const _dayTimeRecords = teamTimeRecords.filter(record => record.date === dateString);
         const userTimeRecord = userTimeRecords.find(record => record.date === dateString) || null;
         
         const dayReminders = reminders.filter(reminder => 

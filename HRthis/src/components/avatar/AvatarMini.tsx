@@ -69,7 +69,7 @@ export const AvatarMini: React.FC<AvatarMiniProps> = ({
   userId,
   onClick,
   className,
-  showProgress = true
+  showProgress: _showProgress = true
 }) => {
   const { getUserAvatar } = useAvatarStore();
   const userAvatar = getUserAvatar(userId);

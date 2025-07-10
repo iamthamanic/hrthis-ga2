@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { VideoContent, TestQuestion, LevelConfig, TrainingCategory } from '../types/learning';
+import { VideoContent, TrainingCategory } from '../types/learning';
 import { useLearningStore } from '../state/learning';
 import { useAuthStore } from '../state/auth';
 import { cn } from '../utils/cn';

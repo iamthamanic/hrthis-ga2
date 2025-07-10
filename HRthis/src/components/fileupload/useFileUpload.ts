@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { useDashboardInfoStore } from '../../state/dashboardInfo';
 
 interface UseFileUploadProps {

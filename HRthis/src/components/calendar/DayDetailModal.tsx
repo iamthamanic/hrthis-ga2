@@ -1,5 +1,13 @@
 import React from 'react';
 import { CalendarDay, CalendarViewMode } from '../../types/calendar';
+import { LeaveRequest, TimeRecord } from '../../types';
+
+interface Reminder {
+  id: string;
+  message: string;
+  date: string;
+  userId: string;
+}
 
 interface DayDetailModalProps {
   selectedDay: CalendarDay | null;
@@ -32,7 +40,7 @@ const ModalHeader: React.FC<{ selectedDay: CalendarDay; onClose: () => void }> =
   </div>
 );
 
-const UserLeaveEvents: React.FC<{ leaves: any[] }> = ({ leaves }) => (
+const UserLeaveEvents: React.FC<{ leaves: LeaveRequest[] }> = ({ leaves }) => (
   <>
     {leaves.map(leave => (
       <div key={leave.id} className="p-3 bg-blue-50 rounded-lg">
@@ -54,7 +62,7 @@ const UserLeaveEvents: React.FC<{ leaves: any[] }> = ({ leaves }) => (
   </>
 );
 
-const TimeRecordEvent: React.FC<{ timeRecord: any }> = ({ timeRecord }) => (
+const TimeRecordEvent: React.FC<{ timeRecord: TimeRecord }> = ({ timeRecord }) => (
   <div className="p-3 bg-green-50 rounded-lg">
     <div className="flex items-center">
       <span className="text-2xl mr-3">⏰</span>
@@ -73,7 +81,7 @@ const TimeRecordEvent: React.FC<{ timeRecord: any }> = ({ timeRecord }) => (
   </div>
 );
 
-const TeamLeaveEvents: React.FC<{ leaves: any[]; getUserName: (userId: string) => string }> = ({ leaves, getUserName }) => (
+const TeamLeaveEvents: React.FC<{ leaves: LeaveRequest[]; getUserName: (userId: string) => string }> = ({ leaves, getUserName }) => (
   <>
     {leaves.map(leave => (
       <div key={leave.id} className="p-3 bg-gray-50 rounded-lg">
@@ -95,7 +103,7 @@ const TeamLeaveEvents: React.FC<{ leaves: any[]; getUserName: (userId: string) =
   </>
 );
 
-const ReminderEvents: React.FC<{ reminders: any[] }> = ({ reminders }) => (
+const ReminderEvents: React.FC<{ reminders: Reminder[] }> = ({ reminders }) => (
   <>
     {reminders.map(reminder => (
       <div key={reminder.id} className="p-3 bg-orange-50 rounded-lg">

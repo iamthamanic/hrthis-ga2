@@ -20,7 +20,7 @@ export const VideoLearningScreen = () => {
     getVideoQuestions,
     userLevel,
     userCoins,
-    addXP,
+    addXP: _addXP,
     awardBadge
   } = useLearningStore();
 

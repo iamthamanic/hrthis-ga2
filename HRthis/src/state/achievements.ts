@@ -101,7 +101,7 @@ export const useAchievementsStore = create<AchievementsState>()(
         );
       },
 
-      updateProgress: (userId: string, eventType: string, value: number, metadata = {}) => {
+      updateProgress: (userId: string, eventType: string, value: number, _metadata = {}) => {
         const now = new Date().toISOString();
         const currentQuarter = getCurrentQuarter();
         
@@ -210,22 +210,22 @@ export const useAchievementsStore = create<AchievementsState>()(
 
 
       // Helper functions for getting total values (these would integrate with other stores)
-      getTotalTrainingsCompleted: (userId: string) => {
+      getTotalTrainingsCompleted: (_userId: string) => {
         // This would integrate with training store
         return 0;
       },
 
-      getTotalPunctualDays: (userId: string) => {
+      getTotalPunctualDays: (_userId: string) => {
         // This would integrate with time records store  
         return 0;
       },
 
-      getTotalCoinsEarned: (userId: string) => {
+      getTotalCoinsEarned: (_userId: string) => {
         // This would integrate with coins store
         return 0;
       },
 
-      getTotalFeedbackGiven: (userId: string) => {
+      getTotalFeedbackGiven: (_userId: string) => {
         // This would integrate with feedback/training store
         return 0;
       },

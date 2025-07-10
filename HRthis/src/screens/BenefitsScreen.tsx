@@ -8,6 +8,7 @@ import { ShopTab } from '../components/benefits/ShopTab';
 import { EarnTab } from '../components/benefits/EarnTab';
 import { HistoryTab } from '../components/benefits/HistoryTab';
 import { ManageTab } from '../components/benefits/ManageTab';
+import { User } from '../types';
 
 type TabType = 'shop' | 'earn' | 'history' | 'manage';
 
@@ -28,8 +29,8 @@ const ADMIN_ROLES = ['ADMIN', 'SUPERADMIN'] as const;
  * - Admin: Managing coins, benefits, rules, and events
  */
 interface InitializeUserDataParams {
-  user: any;
-  coinsStore: any;
+  user: User;
+  coinsStore: ReturnType<typeof useCoinsStore>;
   handlers: {
     setUserBalance: (balance: number) => void;
     setIsAdmin: (isAdmin: boolean) => void;

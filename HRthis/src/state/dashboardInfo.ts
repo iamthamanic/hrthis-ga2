@@ -168,7 +168,7 @@ export const useDashboardInfoStore = create<DashboardInfoStore>()(
             id: uuidv4(),
             filename: data.file.name,
             mimeType: data.file.type as SupportedMimeType,
-            type: validation.type!,
+            type: validation.type || 'pdf',
             size: data.file.size,
             data: base64Data,
             uploadedAt: new Date().toISOString()
@@ -229,7 +229,7 @@ export const useDashboardInfoStore = create<DashboardInfoStore>()(
               id: uuidv4(),
               filename: data.file.name,
               mimeType: data.file.type as SupportedMimeType,
-              type: validation.type!,
+              type: validation.type || 'pdf',
               size: data.file.size,
               data: base64Data,
               uploadedAt: new Date().toISOString()

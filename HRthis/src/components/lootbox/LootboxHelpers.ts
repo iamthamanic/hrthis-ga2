@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const generateCelebrationParticles = () => {
   return Array.from({ length: 20 }, (_, i) => ({
     id: i,

@@ -4,8 +4,8 @@ import { useAuthStore } from '../state/auth';
 import { useLeavesStore } from '../state/leaves';
 import { useTimeRecordsStore } from '../state/timeRecords';
 import { useRemindersStore } from '../state/reminders';
-import { LeaveRequest, TimeRecord } from '../types';
-import { VacationReminder } from '../types/reminders';
+import { LeaveRequest } from '../types';
+// import { VacationReminder } from '../types/reminders';
 import { CalendarDay } from '../types/calendar';
 import { YearView } from '../components/YearView';
 import { cn } from '../utils/cn';
@@ -208,7 +208,7 @@ export const CalendarScreen = () => {
         });
         
         // Find time records for this date
-        const dayTimeRecords = teamTimeRecords.filter(record => record.date === dateString);
+        const _dayTimeRecords = teamTimeRecords.filter(record => record.date === dateString);
         const userTimeRecord = userTimeRecords.find(record => record.date === dateString) || null;
         
         // Find reminders for this date
@@ -338,7 +338,7 @@ export const CalendarScreen = () => {
   /**
    * Get week number for a date
    */
-  const getWeekNumber = (date: Date) => {
+  const _getWeekNumber = (date: Date) => {
     const start = new Date(date.getFullYear(), 0, 1);
     const days = Math.floor((date.getTime() - start.getTime()) / (24 * 60 * 60 * 1000));
     return Math.ceil((days + start.getDay() + 1) / 7);

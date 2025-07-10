@@ -23,6 +23,56 @@ export type CalendarViewMode = "month" | "week" | "day" | "personal" | "team" | 
 export type CalendarView = CalendarViewMode;
 
 /**
+ * User leave information for calendar display
+ */
+export interface UserLeave {
+  id: string;
+  userId: string;
+  startDate: string;
+  endDate: string;
+  type: 'VACATION' | 'SICK';
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+}
+
+/**
+ * User time record for calendar display
+ */
+export interface UserTimeRecord {
+  id: string;
+  userId: string;
+  date: string;
+  timeIn: string;
+  timeOut?: string;
+  breakMinutes: number;
+  totalHours: number;
+}
+
+/**
+ * Leave entry for calendar display
+ */
+export interface LeaveEntry {
+  id: string;
+  userId: string;
+  userName: string;
+  startDate: string;
+  endDate: string;
+  type: 'VACATION' | 'SICK';
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+}
+
+/**
+ * Reminder entry for calendar display
+ */
+export interface ReminderEntry {
+  id: string;
+  title: string;
+  description?: string;
+  date: string;
+  userId?: string;
+  type: 'personal' | 'team' | 'organization';
+}
+
+/**
  * Calendar day representation
  */
 export type CalendarDay = {
@@ -31,10 +81,10 @@ export type CalendarDay = {
   isToday: boolean;
   isWeekend: boolean;
   isCurrentMonth?: boolean;
-  userLeaves?: any[];
-  userTimeRecord?: any;
-  leaves?: any[];
-  reminders?: any[];
+  userLeaves?: UserLeave[];
+  userTimeRecord?: UserTimeRecord;
+  leaves?: LeaveEntry[];
+  reminders?: ReminderEntry[];
 };
 
 /**

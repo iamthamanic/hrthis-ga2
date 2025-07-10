@@ -106,7 +106,7 @@ export const BenefitCard: React.FC<BenefitCardProps> = ({
   onDelete
 }) => {
   const canPurchase = userBalance >= benefit.coinCost && 
-    (!benefit.stockLimit || benefit.currentStock! > 0);
+    (!benefit.stockLimit || (benefit.currentStock ?? 0) > 0);
 
   const isOutOfStock = Boolean(benefit.stockLimit && 
     (!benefit.currentStock || benefit.currentStock === 0));

@@ -50,8 +50,11 @@ export const processAddXP = (
   });
 
   // Check for level ups
+  const currentAvatar = get().getUserAvatar(userId);
+  if (!currentAvatar) return;
+  
   const levelUpEvents = checkLevelUps({
-    userAvatar: get().getUserAvatar(userId)!,
+    userAvatar: currentAvatar,
     userId,
     now
   });

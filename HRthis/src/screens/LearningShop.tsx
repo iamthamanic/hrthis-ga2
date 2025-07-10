@@ -6,7 +6,7 @@ import { LootboxAnimation, CelebrationOverlay } from '../components/LootboxAnima
 import { cn } from '../utils/cn';
 
 export const LearningShop = () => {
-  const { user } = useAuthStore();
+  const { user: _user } = useAuthStore();
   const { 
     userCoins, 
     shopItems, 
@@ -257,8 +257,8 @@ interface EventsTabProps {
   events: LearningEvent[];
 }
 
-const EventsTab: React.FC<EventsTabProps> = ({ events }) => {
-  const { userCoins } = useLearningStore();
+const EventsTab: React.FC<EventsTabProps> = ({ events: _events }) => {
+  const { userCoins: _userCoins } = useLearningStore();
 
   // Mock current event
   const currentEvent: LearningEvent = {
@@ -358,7 +358,7 @@ interface InventoryTabProps {
   ownedItems: string[];
 }
 
-const InventoryTab: React.FC<InventoryTabProps> = ({ ownedItems }) => {
+const InventoryTab: React.FC<InventoryTabProps> = ({ ownedItems: _ownedItems }) => {
   // Mock inventory items
   const inventoryItems = [
     {

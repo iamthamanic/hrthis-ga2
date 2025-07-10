@@ -23,12 +23,12 @@ export const TimeAndVacationScreen = () => {
   const { getAllLeaveRequests } = useLeavesStore();
   const { getUnreadNotificationsForUser, markAsRead } = useNotificationsStore();
   const { getTimeRecordsForPeriod, getTodayRecord, isCurrentlyTracking, clockIn, clockOut } = useTimeRecordsStore();
-  const { getTeamsByUserId } = useTeamsStore();
+  const { getTeamsByUserId: _getTeamsByUserId } = useTeamsStore();
   
   const [view, setView] = useState<'monat' | 'jahr'>('monat');
   const [calendarType, setCalendarType] = useState<'mein' | 'team'>('mein');
   const [requestsTab, setRequestsTab] = useState<'my' | 'manage'>('my');
-  const [selectedTeamId, setSelectedTeamId] = useState<string>('user');
+  const [_selectedTeamId, _setSelectedTeamId] = useState<string>('user');
   const [currentTime, setCurrentTime] = useState(new Date());
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -605,7 +605,7 @@ export const TimeAndVacationScreen = () => {
               
               {(() => {
                 const dateStr = format(selectedDay, 'yyyy-MM-dd');
-                const timeRecord = getTimeRecordsForPeriod(user!.id, dateStr, dateStr)[0];
+                const timeRecord = user ? getTimeRecordsForPeriod(user.id, dateStr, dateStr)[0] : null;
                 
                 if (!timeRecord) {
                   return (

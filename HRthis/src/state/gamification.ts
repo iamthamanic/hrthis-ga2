@@ -106,7 +106,7 @@ export const useGamificationStore = create<GamificationState>()(
             avatarStore.addXP({
               userId,
               skillId,
-              xpAmount: finalXPAmount!,
+              xpAmount: finalXPAmount,
               description: get().getXPDescription(type, metadata),
               metadata: { type, ...metadata }
             });
@@ -117,7 +117,7 @@ export const useGamificationStore = create<GamificationState>()(
           avatarStore.addXP({
             userId,
             skillId: defaultSkillId,
-            xpAmount: finalXPAmount!,
+            xpAmount: finalXPAmount,
             description: get().getXPDescription(type, metadata),
             metadata: { type, ...metadata }
           });
@@ -133,9 +133,9 @@ export const useGamificationStore = create<GamificationState>()(
             userId,
             type: skillIds ? 'skill_level_up' : 'level_up',
             title: 'XP erhalten!',
-            message: `+${finalXPAmount!} XP für ${get().getXPDescription(type, metadata)}`,
+            message: `+${finalXPAmount} XP für ${get().getXPDescription(type, metadata)}`,
             data: {
-              xpGained: finalXPAmount!,
+              xpGained: finalXPAmount,
               skillId: skillIds?.[0]
             },
             isRead: false,

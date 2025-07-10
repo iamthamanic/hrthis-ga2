@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '../state/auth';
 import { useTeamsStore } from '../state/teams';
-import { cn } from '../utils/cn';
+// import { cn } from '../utils/cn';
 import { Team } from '../types';
 
 /**
@@ -62,10 +62,15 @@ export const TeamsOverviewScreen = () => {
     }
     
     try {
+      if (!user?.organizationId) {
+        alert('Fehler: Keine Organisation zugewiesen');
+        return;
+      }
+      
       await createTeam({
         name: newTeam.name.trim(),
         description: newTeam.description.trim(),
-        organizationId: user!.organizationId,
+        organizationId: user.organizationId,
         leadIds: [],
         memberIds: []
       });

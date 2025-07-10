@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { PageContainer, ContentArea } from '../components/layout/Container';
+import { PageContainer } from '../components/layout/Container';
 import { DashboardGrid, GridItem, StatsGrid } from '../components/layout/Grid';
 import { Card, StatsCard, InfoCard, AvatarCard, CardHeader, CardContent } from '../components/layout/Card';
 

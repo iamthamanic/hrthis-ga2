@@ -45,7 +45,7 @@ interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   isAuthenticated?: boolean;
 }
 
-const AllTheProviders = ({ children, initialRoute = '/' }: { children: React.ReactNode; initialRoute?: string }) => {
+const AllTheProviders = ({ children, initialRoute: _initialRoute = '/' }: { children: React.ReactNode; initialRoute?: string }) => {
   return (
     <BrowserRouter>
       {children}

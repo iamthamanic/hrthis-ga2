@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar } from '../types/learning';
+import { Avatar, AvatarAccessory } from '../types/learning';
 import { PreviewPanel } from './avatar/PreviewPanel';
 import { CustomizationPanel } from './avatar/CustomizationPanel';
 import { useAvatarCustomization } from './avatar/useAvatarCustomization';
@@ -33,9 +33,9 @@ const CustomizationContent: React.FC<{
   activeTab: TabType;
   ownedItems: string[];
   setActiveTab: (tab: TabType) => void;
-  handleAccessoryPreview: (accessory: any) => void;
-  handleAccessoryPurchase: (accessory: any) => void;
-  handleAccessoryRemove: (accessory: any) => void;
+  handleAccessoryPreview: (accessory: AvatarAccessory) => void;
+  handleAccessoryPurchase: (accessory: AvatarAccessory) => void;
+  handleAccessoryRemove: (type: string) => void;
   handleColorChange: (type: 'skin' | 'hair' | 'background', color: string) => void;
 }> = ({
   previewAvatar,

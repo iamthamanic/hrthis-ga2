@@ -83,7 +83,7 @@ export const TeamCalendarView: React.FC<TeamCalendarViewProps> = ({
   entries,
   users,
   onCellClick,
-  isAdmin = false,
+  isAdmin: _isAdmin = false,
   showLegend = true
 }) => {
   const calendarLogic = useTeamCalendarLogic(view, entries);
