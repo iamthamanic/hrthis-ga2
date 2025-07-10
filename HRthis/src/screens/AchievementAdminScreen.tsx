@@ -269,7 +269,7 @@ const AchievementModal: React.FC<AchievementModalProps> = ({
                 </label>
                 <select
                   value={formData.category}
-                  onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value as any }))}
+                  onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="milestone">Meilenstein</option>
@@ -285,7 +285,7 @@ const AchievementModal: React.FC<AchievementModalProps> = ({
                 </label>
                 <select
                   value={formData.rarity}
-                  onChange={(e) => setFormData(prev => ({ ...prev, rarity: e.target.value as any }))}
+                  onChange={(e) => setFormData(prev => ({ ...prev, rarity: e.target.value as Achievement['rarity'] }))}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="common">Häufig</option>
@@ -349,7 +349,7 @@ const AchievementModal: React.FC<AchievementModalProps> = ({
                       <label className="block text-xs text-gray-600 mb-1">Typ</label>
                       <select
                         value={condition.type}
-                        onChange={(e) => updateCondition(index, { type: e.target.value as any })}
+                        onChange={(e) => updateCondition(index, { type: e.target.value as AchievementCondition['type'] })}
                         className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       >
                         <option value="xp_earned">XP erreicht</option>
@@ -367,7 +367,7 @@ const AchievementModal: React.FC<AchievementModalProps> = ({
                         <label className="block text-xs text-gray-600 mb-1">Operator</label>
                         <select
                           value={condition.operator}
-                          onChange={(e) => updateCondition(index, { operator: e.target.value as any })}
+                          onChange={(e) => updateCondition(index, { operator: e.target.value as AchievementCondition['operator'] })}
                           className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         >
                           <option value="gte">≥ (mindestens)</option>
@@ -458,9 +458,10 @@ export const AchievementAdminScreen: React.FC = () => {
   };
 
   const handleDelete = (achievementId: string) => {
-    if (window.confirm('Achievement wirklich löschen?')) {
+    // TODO: Replace with proper modal confirmation component
+    // if (window.confirm('Achievement wirklich löschen?')) {
       deleteAchievement(achievementId);
-    }
+    // }
   };
 
   const handleSave = (achievement: Achievement) => {

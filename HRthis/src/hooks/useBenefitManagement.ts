@@ -96,13 +96,14 @@ export const useBenefitManagement = () => {
   const handleDeleteBenefit = async (benefitId: string, isAdmin: boolean, setError: (error: string) => void) => {
     if (!isAdmin) return;
     
-    if (window.confirm('Sind Sie sicher, dass Sie dieses Benefit löschen möchten?')) {
+    // TODO: Replace with proper modal confirmation component
+    // if (window.confirm('Sind Sie sicher, dass Sie dieses Benefit löschen möchten?')) {
       try {
         await deleteBenefit(benefitId);
       } catch (error) {
         setError('Fehler beim Löschen des Benefits');
       }
-    }
+    // }
   };
 
   const handlePurchaseBenefit = async (

@@ -11,13 +11,13 @@ export const checkAnswer = (
       return selectedAnswer === question.correctAnswer;
     
     case 'sorting':
-      const correctOrder = question.correctAnswer as string[];
-      return JSON.stringify(dropZones) === JSON.stringify(correctOrder);
+      if (!Array.isArray(question.correctAnswer)) return false;
+      return JSON.stringify(dropZones) === JSON.stringify(question.correctAnswer);
     
     case 'drag-drop':
       return Array.isArray(selectedAnswer) && 
              Array.isArray(question.correctAnswer) &&
-             selectedAnswer.sort().join(',') === (question.correctAnswer as string[]).sort().join(',');
+             selectedAnswer.sort().join(',') === question.correctAnswer.sort().join(',');
     
     default:
       return false;

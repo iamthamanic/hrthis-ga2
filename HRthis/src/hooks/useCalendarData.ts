@@ -4,6 +4,7 @@ import { useLeavesStore } from '../state/leaves';
 import { useTimeRecordsStore } from '../state/timeRecords';
 import { useRemindersStore } from '../state/reminders';
 import { CalendarDay, CalendarEvent, CalendarViewMode, VacationStats } from '../types/calendar';
+import { LeaveRequest } from '../types';
 
 export const useCalendarData = (viewMode: CalendarViewMode, currentDate: Date) => {
   const { user, getAllUsers } = useAuthStore();
@@ -133,9 +134,9 @@ export const useCalendarData = (viewMode: CalendarViewMode, currentDate: Date) =
     };
   };
 
-  const generateYearData = (): { [userId: string]: { [week: string]: any[] } } => {
+  const generateYearData = (): { [userId: string]: { [week: string]: LeaveRequest[] } } => {
     const year = currentDate.getFullYear();
-    const yearData: { [userId: string]: { [week: string]: any[] } } = {};
+    const yearData: { [userId: string]: { [week: string]: LeaveRequest[] } } = {};
     
     const usersToShow = viewMode === 'team' ? allUsers : (user ? [user] : []);
     
