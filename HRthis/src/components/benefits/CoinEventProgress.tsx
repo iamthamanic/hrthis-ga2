@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCoinEventsStore } from '../../state/coinEvents';
+import { useCoinEventsStore, CoinEvent } from '../../state/coinEvents';
 
 interface CoinEventProgressProps {
   userBalance: number;
@@ -12,7 +12,7 @@ const CoinEventHeader: React.FC = () => (
   </div>
 );
 
-const NextEventProgress: React.FC<{ event: any; userBalance: number }> = ({ event, userBalance }) => {
+const NextEventProgress: React.FC<{ event: CoinEvent; userBalance: number }> = ({ event, userBalance }) => {
   const progress = (userBalance / event.requiredCoins) * 100;
   
   return (
@@ -45,7 +45,7 @@ const NoActiveEvents: React.FC = () => (
   </div>
 );
 
-const UnlockedEventsList: React.FC<{ events: any[] }> = ({ events }) => (
+const UnlockedEventsList: React.FC<{ events: CoinEvent[] }> = ({ events }) => (
   <div className="mt-4 pt-4 border-t border-white/20">
     <p className="text-xs font-semibold mb-2">✅ Freigeschaltet:</p>
     <div className="flex flex-wrap gap-2">
@@ -58,7 +58,7 @@ const UnlockedEventsList: React.FC<{ events: any[] }> = ({ events }) => (
   </div>
 );
 
-const getEventContent = (nextEvent: any, unlockedEvents: any[], allEvents: any[], userBalance: number) => {
+const getEventContent = (nextEvent: CoinEvent | null, unlockedEvents: CoinEvent[], allEvents: CoinEvent[], userBalance: number) => {
   if (nextEvent) {
     return <NextEventProgress event={nextEvent} userBalance={userBalance} />;
   } else if (unlockedEvents.length === allEvents.length && allEvents.length > 0) {

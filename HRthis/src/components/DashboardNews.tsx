@@ -9,6 +9,7 @@
 import React, { useEffect } from 'react';
 import { Info } from 'lucide-react';
 import { useDashboardInfoStore } from '../state/dashboardInfo';
+import { DashboardInfo } from '../types/dashboardInfo';
 import { NewsCard } from './news/NewsCard';
 
 /**
@@ -49,7 +50,7 @@ const NewsEmpty: React.FC = () => (
 /**
  * News Grid Component
  */
-const NewsGrid: React.FC<{ items: any[]; totalItems: number; maxItems: number }> = ({ 
+const NewsGrid: React.FC<{ items: DashboardInfo[]; totalItems: number; maxItems: number }> = ({ 
   items, 
   totalItems, 
   maxItems 

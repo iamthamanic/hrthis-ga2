@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAchievementsStore } from '../../state/achievements';
-import { Achievement } from '../../types/gamification';
+import { Achievement, UserAchievement } from '../../types/gamification';
 import { cn } from '../../utils/cn';
 import { AchievementModal } from './AchievementModal';
 import { ProgressHeader } from './ProgressHeader';
@@ -18,13 +18,20 @@ interface AchievementsGalleryProps {
   className?: string;
 }
 
+interface ProgressStats {
+  totalAchievements: number;
+  unlockedAchievements: number;
+  completionRate: number;
+  recentUnlocks: UserAchievement[];
+}
+
 
 /**
  * Achievements Gallery Component
  * Shows all achievements with unlock status and progress
  */
 const Header: React.FC<{
-  progressStats: any;
+  progressStats: ProgressStats;
   layout: 'grid' | 'list';
 }> = ({ progressStats, layout }) => (
   <div className="flex items-center justify-between mb-6">

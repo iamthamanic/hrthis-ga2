@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAvatarStore } from '../../state/avatar';
+import { Skill } from '../../types/avatar';
 import { cn } from '../../utils/cn';
 
 interface AvatarMiniProps {
@@ -34,7 +35,7 @@ const AvatarMiniHeader: React.FC<{ onClick?: () => void }> = ({ onClick }) => (
   </div>
 );
 
-const SkillsSection: React.FC<{ primarySkill: any }> = ({ primarySkill }) => (
+const SkillsSection: React.FC<{ primarySkill: Skill }> = ({ primarySkill }) => (
   <div className="mb-6">
     <h4 className="text-lg font-semibold text-gray-900 mb-3 text-center">Skills</h4>
     <div className="bg-gradient-to-r from-cyan-400 to-cyan-600 text-white px-4 py-2 rounded-full text-center font-medium">

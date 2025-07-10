@@ -13,11 +13,12 @@ export const transcribeAudio = async (localAudioUri: string) => {
   try {
     // Create FormData for the audio file
     const formData = new FormData();
-    formData.append("file", {
+    const fileData = {
       uri: localAudioUri,
       type: "audio/m4a",
       name: "recording.m4a",
-    } as any);
+    } as unknown as Blob;
+    formData.append("file", fileData);
     formData.append("model", "gpt-4o-transcribe");
     formData.append("language", "en");
 

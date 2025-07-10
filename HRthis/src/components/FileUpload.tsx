@@ -31,8 +31,21 @@ interface FileUploadProps {
   placeholder?: string;
 }
 
+interface UploadHandlers {
+  isDragOver: boolean;
+  previewUrl: string | null;
+  fileInputRef: React.RefObject<HTMLInputElement | null>;
+  handleFileSelect: (file: File) => void;
+  handleFileRemove: () => void;
+  handleDragOver: (e: React.DragEvent) => void;
+  handleDragLeave: (e: React.DragEvent) => void;
+  handleDrop: (e: React.DragEvent) => void;
+  handleClick: (isUploading: boolean) => void;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
 const UploadAreaSection: React.FC<{
-  uploadHandlers: any;
+  uploadHandlers: UploadHandlers;
   isUploading: boolean;
   error?: string;
   placeholder: string;
