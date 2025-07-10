@@ -58,11 +58,11 @@ const initializeUserData = ({
 interface PurchaseBenefitParams {
   benefitId: string;
   coinCost: number;
-  user: any;
+  user: User;
   userBalance: number;
   stores: {
-    shopStore: any;
-    coinsStore: any;
+    shopStore: ReturnType<typeof useShopStore>;
+    coinsStore: ReturnType<typeof useCoinsStore>;
   };
   handlers: {
     setUserBalance: (balance: number) => void;
@@ -98,11 +98,11 @@ interface TabContentProps {
   activeTab: TabType;
   userBalance: number;
   isAdmin: boolean;
-  user: any;
+  user: User;
   stores: {
-    shopStore: any;
-    coinsStore: any;
-    eventsStore: any;
+    shopStore: ReturnType<typeof useShopStore>;
+    coinsStore: ReturnType<typeof useCoinsStore>;
+    eventsStore: ReturnType<typeof useCoinEventsStore>;
   };
   handlers: {
     onPurchaseBenefit: (benefitId: string, coinCost: number) => Promise<void>;

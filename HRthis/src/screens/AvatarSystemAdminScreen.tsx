@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { useAvatarStore } from '../state/avatar';
 import { useAchievementsStore } from '../state/achievements';
 import { useGamificationStore } from '../state/gamification';
+import { UserAvatar, Skill } from '../types/avatar';
 import { cn } from '../utils/cn';
 
 interface UserAvatarRowProps {
   userId: string;
-  userAvatar: any;
+  userAvatar: UserAvatar;
   onManageUser: (userId: string) => void;
 }
 
@@ -39,7 +40,7 @@ const UserAvatarRow: React.FC<UserAvatarRowProps> = ({ userId, userAvatar, onMan
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex gap-1">
-          {userAvatar.skills.map((skill: any) => (
+          {userAvatar.skills.map((skill: Skill) => (
             <div
               key={skill.id}
               className="flex items-center gap-1 text-xs bg-gray-100 px-2 py-1 rounded-full"
@@ -138,7 +139,7 @@ const ManageUserModal: React.FC<ManageUserModalProps> = ({ userId, isOpen, onClo
         <div className="mb-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-3">Skills</h3>
           <div className="space-y-3">
-            {userAvatar.skills.map((skill: any) => (
+            {userAvatar.skills.map((skill: Skill) => (
               <div key={skill.id} className="flex items-center gap-4">
                 <span className="text-xl">{skill.icon}</span>
                 <div className="flex-1">
@@ -194,7 +195,7 @@ const ManageUserModal: React.FC<ManageUserModalProps> = ({ userId, isOpen, onClo
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">Allgemein (alle Skills)</option>
-                {userAvatar.skills.map((skill: any) => (
+                {userAvatar.skills.map((skill: Skill) => (
                   <option key={skill.id} value={skill.id}>
                     {skill.icon} {skill.name}
                   </option>
