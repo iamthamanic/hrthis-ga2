@@ -1,35 +1,36 @@
 import React from 'react';
 import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
-import { useAuthStore } from '../state/auth';
+
 // Removed unused imports for requests functionality
 
 // Screens
-import { LoginScreen } from '../screens/LoginScreen';
+import { AdminCoinsScreen } from '../screens/AdminCoinsScreen';
+import { AdminScreen } from '../screens/AdminScreen';
+import { BenefitsScreen } from '../screens/BenefitsScreen';
+import { CoinHistoryScreen } from '../screens/CoinHistoryScreen';
+import { CreateTrainingScreen } from '../screens/CreateTrainingScreen';
 import { DashboardScreen } from '../screens/DashboardScreen';
+import { DocumentsScreen } from '../screens/DocumentsScreen';
+import { LearningAdmin } from '../screens/LearningAdmin';
+import { LearningDashboard } from '../screens/LearningDashboard';
+import { LoginScreen } from '../screens/LoginScreen';
 import { RequestLeaveScreen } from '../screens/RequestLeaveScreen';
 // import { TimeRecordsScreen } from '../screens/TimeRecordsScreen';
 // import { MyRequestsScreen } from '../screens/MyRequestsScreen';
-import { DocumentsScreen } from '../screens/DocumentsScreen';
 // import { CalendarScreen } from '../screens/CalendarScreen';
-import { TimeAndVacationScreen } from '../screens/TimeAndVacationScreen';
-import { BenefitsScreen } from '../screens/BenefitsScreen';
-import { CoinHistoryScreen } from '../screens/CoinHistoryScreen';
-import { AdminCoinsScreen } from '../screens/AdminCoinsScreen';
-// import { TrainingOverviewScreen } from '../screens/TrainingOverviewScreen';
-import { CreateTrainingScreen } from '../screens/CreateTrainingScreen';
-import { TrainingDetailsScreen } from '../screens/TrainingDetailsScreen';
-import { TakeLessonScreen } from '../screens/TakeLessonScreen';
-import { TrainingManagementScreen } from '../screens/TrainingManagementScreen';
-import { LearningDashboard } from '../screens/LearningDashboard';
-import { VideoLearningScreen } from '../screens/VideoLearningScreen';
-import { LearningAdmin } from '../screens/LearningAdmin';
-// import { LearningShop } from '../screens/LearningShop';
 import { SettingsScreen } from '../screens/SettingsScreen';
+import { TakeLessonScreen } from '../screens/TakeLessonScreen';
+import { TimeAndVacationScreen } from '../screens/TimeAndVacationScreen';
+// import { TrainingOverviewScreen } from '../screens/TrainingOverviewScreen';
+import { TrainingDetailsScreen } from '../screens/TrainingDetailsScreen';
+import { TrainingManagementScreen } from '../screens/TrainingManagementScreen';
+import { VideoLearningScreen } from '../screens/VideoLearningScreen';
+// import { LearningShop } from '../screens/LearningShop';
 // import { TeamManagementScreen } from '../screens/TeamManagementScreen';
 import { TeamMemberDetailsScreen } from '../screens/TeamMemberDetailsScreen';
 import { TeamsOverviewScreen } from '../screens/TeamsOverviewScreen';
 import { TeamCalendarScreen } from '../screens/TeamCalendarScreen';
-import { AdminScreen } from '../screens/AdminScreen';
+import { useAuthStore } from '../state/auth';
 import { cn } from '../utils/cn';
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { useAuthStore } from '../state/auth';
+import { useCoinEventsStore } from '../state/coinEvents';
+import { useCoinsStore } from '../state/coins';
 import { useLeavesStore } from '../state/leaves';
 import { useTimeRecordsStore } from '../state/timeRecords';
-import { useCoinsStore } from '../state/coins';
-import { useCoinEventsStore } from '../state/coinEvents';
 import { cn } from '../utils/cn';
 
 /**

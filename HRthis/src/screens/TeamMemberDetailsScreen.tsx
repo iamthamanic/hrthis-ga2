@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+
 import { useAuthStore } from '../state/auth';
-import { useTeamsStore } from '../state/teams';
 import { useLeavesStore } from '../state/leaves';
+import { useTeamsStore } from '../state/teams';
 // import { useCoinsStore } from '../state/coins';
 // import { cn } from '../utils/cn';
-import { User } from '../types';
+import { User, UserRole, EmploymentStatus } from '../types';
 
 /**
  * Team Member Details Screen Component
@@ -50,7 +51,7 @@ export const TeamMemberDetailsScreen = () => {
       setSelectedTeams(userTeams.map(t => t.id));
       setLeadTeams(userLeadTeams.map(t => t.id));
     }
-  }, [targetUser, userId]);
+  }, [targetUser, userId, getTeamsByUserId, getTeamsLedByUser]);
 
   if (!isAdmin) {
     return (
@@ -356,7 +357,7 @@ export const TeamMemberDetailsScreen = () => {
                 {isEditing ? (
                   <select
                     value={editedUser.employmentStatus || targetUser.employmentStatus}
-                    onChange={(e) => setEditedUser(prev => ({ ...prev, employmentStatus: e.target.value as any }))}
+                    onChange={(e) => setEditedUser(prev => ({ ...prev, employmentStatus: e.target.value as EmploymentStatus }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="ACTIVE">Aktiv</option>
@@ -375,7 +376,7 @@ export const TeamMemberDetailsScreen = () => {
                 {isEditing ? (
                   <select
                     value={editedUser.role || targetUser.role}
-                    onChange={(e) => setEditedUser(prev => ({ ...prev, role: e.target.value as any }))}
+                    onChange={(e) => setEditedUser(prev => ({ ...prev, role: e.target.value as UserRole }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="EMPLOYEE">Mitarbeiter</option>
