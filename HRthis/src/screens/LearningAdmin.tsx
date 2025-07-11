@@ -66,7 +66,7 @@ export const LearningAdmin = () => {
             {tabs.map(tab => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id as 'videos' | 'tests' | 'levels' | 'analytics')}
                 className={cn(
                   "flex items-center gap-2 py-4 px-2 border-b-2 font-medium transition-colors",
                   activeTab === tab.id

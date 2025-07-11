@@ -142,7 +142,7 @@ export const LearningDashboard = () => {
           {categories.map(category => (
             <button
               key={category.id}
-              onClick={() => setSelectedCategory(category.id as any)}
+              onClick={() => setSelectedCategory(category.id as TrainingCategory | 'all')}
               className={cn(
                 "flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap",
                 selectedCategory === category.id

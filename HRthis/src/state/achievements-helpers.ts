@@ -135,7 +135,7 @@ export const createAchievementFromPredefined = (achievement: any, index: number)
     timeframe: c.timeframe
   })),
   xpReward: achievement.rewards ? 
-    (achievement.rewards as unknown as any[]).find((r: any) => r.type === 'xp')?.value as number || 50 
+    achievement.rewards.find(r => r.type === 'xp')?.value as number || 50 
     : 50,
   rewards: achievement.rewards ? [...achievement.rewards] : undefined,
   isActive: true,

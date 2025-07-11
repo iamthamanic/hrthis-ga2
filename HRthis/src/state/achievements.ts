@@ -248,8 +248,8 @@ export const useAchievementsStore = create<AchievementsState>()(
 
         const updatedAchievements = [...userAvatar.achievements, newAchievement];
         
-        // Update avatar store
-        avatarStore.updateSkill(userId, 'achievements', updatedAchievements as any);
+        // Update avatar store with new achievements
+        avatarStore.updateAvatar(userId, { achievements: updatedAchievements });
       },
 
       addAchievement: (achievementData: Omit<Achievement, 'id'>) => {

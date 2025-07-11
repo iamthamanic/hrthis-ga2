@@ -38,7 +38,12 @@ export const testPDFExport = () => {
 };
 
 // Export test functions to window for easy testing
+interface WindowWithTestFunctions extends Window {
+  testCSVExport?: typeof testCSVExport;
+  testPDFExport?: typeof testPDFExport;
+}
+
 if (typeof window !== 'undefined') {
-  (window as any).testCSVExport = testCSVExport;
-  (window as any).testPDFExport = testPDFExport;
+  (window as WindowWithTestFunctions).testCSVExport = testCSVExport;
+  (window as WindowWithTestFunctions).testPDFExport = testPDFExport;
 }
