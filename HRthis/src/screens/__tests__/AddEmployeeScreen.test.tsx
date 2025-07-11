@@ -52,11 +52,12 @@ describe('AddEmployeeScreen', () => {
     
     await waitFor(() => {
       expect(screen.getByText('E-Mail ist erforderlich')).toBeInTheDocument();
-      expect(screen.getByText('Vorname ist erforderlich')).toBeInTheDocument();
-      expect(screen.getByText('Nachname ist erforderlich')).toBeInTheDocument();
-      expect(screen.getByText('Position ist erforderlich')).toBeInTheDocument();
-      expect(screen.getByText('Abteilung ist erforderlich')).toBeInTheDocument();
     });
+    
+    expect(screen.getByText('Vorname ist erforderlich')).toBeInTheDocument();
+    expect(screen.getByText('Nachname ist erforderlich')).toBeInTheDocument();
+    expect(screen.getByText('Position ist erforderlich')).toBeInTheDocument();
+    expect(screen.getByText('Abteilung ist erforderlich')).toBeInTheDocument();
   });
 
   it('should validate email format', async () => {
@@ -131,13 +132,13 @@ describe('AddEmployeeScreen', () => {
           department: 'IT',
         })
       );
-      
-      expect(mockNavigate).toHaveBeenCalledWith('/admin/team-management', {
-        state: {
-          message: 'Mitarbeiter New Employee wurde erfolgreich erstellt.',
-          type: 'success',
-        },
-      });
+    });
+    
+    expect(mockNavigate).toHaveBeenCalledWith('/admin/team-management', {
+      state: {
+        message: 'Mitarbeiter New Employee wurde erfolgreich erstellt.',
+        type: 'success',
+      },
     });
   });
 

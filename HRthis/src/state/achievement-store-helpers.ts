@@ -21,11 +21,11 @@ export const getCurrentQuarter = (): string => {
 
 // Helper to update quarterly stats
 export const updateQuarterlyStats = (
-  currentStats: any,
+  currentStats: ProgressTracker['quarterlyStats'],
   eventType: string,
   value: number,
   currentQuarter: string
-): any => {
+): ProgressTracker['quarterlyStats'] => {
   // Reset stats if quarter changed
   if (currentStats.quarter !== currentQuarter) {
     return {
@@ -38,7 +38,7 @@ export const updateQuarterlyStats = (
   }
 
   // Update existing stats
-  const updates: any = { ...currentStats };
+  const updates: ProgressTracker['quarterlyStats'] = { ...currentStats };
   switch (eventType) {
     case 'coins_earned':
       updates.coinsEarned += value;
@@ -58,10 +58,10 @@ export const updateQuarterlyStats = (
 
 // Helper to update daily streak
 export const updateDailyStreak = (
-  currentStreak: any,
+  currentStreak: ProgressTracker['dailyStreak'],
   eventType: string,
   now: string
-): any => {
+): ProgressTracker['dailyStreak'] => {
   if (eventType !== 'daily_checkin') return currentStreak;
 
   const today = now.split('T')[0];

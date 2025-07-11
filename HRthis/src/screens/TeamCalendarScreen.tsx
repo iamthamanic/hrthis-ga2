@@ -47,7 +47,7 @@ export const TeamCalendarScreen: React.FC = () => {
     
     const team = useTeamsStore.getState().getTeamById(selectedTeamId);
     return allUsers.filter(u => team?.memberIds.includes(u.id));
-  }, [selectedTeamId, userTeams, isAdmin]);
+  }, [selectedTeamId, userTeams, isAdmin, getAllUsers]);
 
   // Convert leave requests and time records to calendar entries
   const calendarEntries = useMemo(() => {

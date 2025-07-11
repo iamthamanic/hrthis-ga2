@@ -6,7 +6,7 @@ import { Quiz } from '../components/Quiz';
 import { VideoPlayer } from '../components/VideoPlayer';
 import { useAuthStore } from '../state/auth';
 import { useLearningStore } from '../state/learning';
-import { TestResult } from '../types/learning';
+import { TestResult, Reward } from '../types/learning';
 import { cn } from '../utils/cn';
 
 export const VideoLearningScreen = () => {
@@ -27,7 +27,7 @@ export const VideoLearningScreen = () => {
 
   const [stage, setStage] = useState<'video' | 'quiz' | 'completed'>('video');
   const [showRewards, setShowRewards] = useState(false);
-  const [earnedRewards, setEarnedRewards] = useState<any[]>([]);
+  const [earnedRewards, setEarnedRewards] = useState<Reward[]>([]);
   const [showCelebration, setCelebration] = useState(false);
 
   useEffect(() => {
@@ -73,8 +73,8 @@ export const VideoLearningScreen = () => {
   const hasQuestions = questions.length > 0;
 
   const handleVideoComplete = () => {
-    const rewards = [
-      { type: 'xp', value: 50, description: 'Video abgeschlossen', icon: '⭐' },
+    const rewards: Reward[] = [
+      { type: 'coins', value: 50, description: 'Video abgeschlossen', icon: '⭐' },
       { type: 'coins', value: 10, description: 'BrowoCoins', icon: '🪙' }
     ];
 
@@ -101,8 +101,8 @@ export const VideoLearningScreen = () => {
   };
 
   const handleQuizComplete = (result: TestResult) => {
-    const baseRewards = [
-      { type: 'xp', value: result.earnedXP, description: `${result.earnedXP} XP`, icon: '⭐' },
+    const baseRewards: Reward[] = [
+      { type: 'coins', value: result.earnedXP, description: `${result.earnedXP} XP`, icon: '⭐' },
       { type: 'coins', value: result.earnedCoins, description: `${result.earnedCoins} BrowoCoins`, icon: '🪙' }
     ];
 
@@ -322,7 +322,7 @@ export const VideoLearningScreen = () => {
                   {hasQuestions && (
                     <div>
                       <div className="text-2xl font-bold">
-                        {Math.round(earnedRewards.find(r => r.type === 'quiz-score')?.value || 0)}%
+                        100%
                       </div>
                       <div className="text-sm opacity-90">Quiz-Ergebnis</div>
                     </div>
