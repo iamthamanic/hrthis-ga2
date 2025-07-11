@@ -16,7 +16,7 @@ import { CalendarEntry } from '../types/calendar';
  */
 export const TeamCalendarScreen: React.FC = () => {
   const { user, getAllUsers } = useAuthStore();
-  const { getTeamsByUserId } = useTeamsStore();
+  const { getTeamsByUserId, getTeamById } = useTeamsStore();
   const { getAllLeaveRequests } = useLeavesStore();
   const { getAllTimeRecords } = useTimeRecordsStore();
   
@@ -29,25 +29,23 @@ export const TeamCalendarScreen: React.FC = () => {
 
   // Get users to display based on selected team
   const displayUsers = useMemo(() => {
-    const allUsers = getAllUsers();
-    
-    if (!isAdmin && selectedTeamId === 'all') {
-      // Non-admins only see their team members
-      const teamMemberIds = new Set<string>();
-      userTeams.forEach(team => {
-        const teamFromStore = useTeamsStore.getState().getTeamById(team.id);
-        teamFromStore?.memberIds.forEach(id => teamMemberIds.add(id));
-      });
-      return allUsers.filter(u => teamMemberIds.has(u.id));
+    if (view === 'jahr') {
+      return getAllUsers();
     }
-    
-    if (selectedTeamId === 'all') {
-      return allUsers;
+    // Im Monats-Modus
+    if (user && selectedTeamId === 'all') {
+      return [user];
     }
-    
-    const team = useTeamsStore.getState().getTeamById(selectedTeamId);
-    return allUsers.filter(u => team?.memberIds.includes(u.id));
-  }, [selectedTeamId, userTeams, isAdmin, getAllUsers]);
+    if (user && selectedTeamId) {
+      const team = getTeamById(selectedTeamId);
+      if (team) {
+        const allUsers = getAllUsers();
+        return allUsers.filter(u => team.memberIds.includes(u.id));
+      }
+      return [user];
+    }
+    return user ? [user] : [];
+  }, [view, user, selectedTeamId, getAllUsers, getTeamById]);
 
   // Convert leave requests and time records to calendar entries
   const calendarEntries = useMemo(() => {
