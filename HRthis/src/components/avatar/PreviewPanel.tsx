@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { Avatar } from '../../types/learning';
+
 import { AvatarPreview } from './AvatarPreview';
 
 interface PreviewPanelProps {

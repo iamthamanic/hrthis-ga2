@@ -1,7 +1,9 @@
 import React from 'react';
+
 import { LeaveRequest, User } from '../types';
-import { WeekHeaderRow } from './yearview/WeekHeaderRow';
+
 import { UserVacationRow } from './yearview/UserVacationRow';
+import { WeekHeaderRow } from './yearview/WeekHeaderRow';
 import { getCurrentWeekNumber } from './yearview/yearViewHelpers';
 
 interface YearViewProps {

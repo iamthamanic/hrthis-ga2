@@ -1,8 +1,10 @@
 import React from 'react';
+
 import { Reward } from '../types/learning';
-import { useLootboxAnimation } from './lootbox/useLootboxAnimation';
-import { ParticleEffect } from './lootbox/ParticleEffect';
+
 import { LootboxStages } from './lootbox/LootboxStages';
+import { ParticleEffect } from './lootbox/ParticleEffect';
+import { useLootboxAnimation } from './lootbox/useLootboxAnimation';
 
 interface LootboxAnimationProps {
   reward: Reward;

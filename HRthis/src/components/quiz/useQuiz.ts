@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { TestQuestion, TestAnswer, TestResult } from '../../types/learning';
-import { useLearningStore } from '../../state/learning';
+
 import { useAuthStore } from '../../state/auth';
+import { useLearningStore } from '../../state/learning';
+import { TestQuestion, TestAnswer, TestResult } from '../../types/learning';
+
 import { checkAnswer, calculateQuizResult, createTestAnswer } from './QuizLogic';
 
 interface UseQuizProps {

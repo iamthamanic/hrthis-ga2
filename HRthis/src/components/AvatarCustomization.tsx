@@ -1,9 +1,11 @@
 import React from 'react';
+
 import { Avatar, AvatarAccessory } from '../types/learning';
-import { PreviewPanel } from './avatar/PreviewPanel';
-import { CustomizationPanel } from './avatar/CustomizationPanel';
-import { useAvatarCustomization } from './avatar/useAvatarCustomization';
+
 import { availableAccessories } from './avatar/avatarData';
+import { CustomizationPanel } from './avatar/CustomizationPanel';
+import { PreviewPanel } from './avatar/PreviewPanel';
+import { useAvatarCustomization } from './avatar/useAvatarCustomization';
 
 interface AvatarCustomizationProps {
   avatar: Avatar;

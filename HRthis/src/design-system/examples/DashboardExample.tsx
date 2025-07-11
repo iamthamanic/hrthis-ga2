@@ -4,9 +4,10 @@
  */
 
 import React from 'react';
+
+import { Card, StatsCard, InfoCard, AvatarCard, CardHeader, CardContent } from '../components/layout/Card';
 import { PageContainer } from '../components/layout/Container';
 import { DashboardGrid, GridItem, StatsGrid } from '../components/layout/Grid';
-import { Card, StatsCard, InfoCard, AvatarCard, CardHeader, CardContent } from '../components/layout/Card';
 
 export const DashboardExample: React.FC = () => {
   return (

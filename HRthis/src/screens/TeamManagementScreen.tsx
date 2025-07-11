@@ -1,11 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+
 import { useAuthStore } from '../state/auth';
-import { useTeamsStore } from '../state/teams';
 import { useLeavesStore } from '../state/leaves';
+import { useTeamsStore } from '../state/teams';
 // import { useCoinsStore } from '../state/coins';
-import { cn } from '../utils/cn';
 import { User } from '../types';
+import { cn } from '../utils/cn';
 
 /**
  * Extended user interface for team management view
@@ -63,7 +64,7 @@ export const TeamManagementScreen = () => {
 
   // Filter and sort team members
   const filteredMembers = useMemo(() => {
-    let filtered = teamMembers.filter(member => {
+    const filtered = teamMembers.filter(member => {
       const matchesSearch = 
         member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         member.email.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+
 import { generateCelebrationParticles, createAutoCompleteTimer, startLootboxAnimation } from './LootboxHelpers';
 
 interface UseLootboxAnimationProps {

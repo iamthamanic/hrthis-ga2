@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Avatar, AvatarAccessory } from '../../types/learning';
+
 import { useLearningStore } from '../../state/learning';
+import { Avatar, AvatarAccessory } from '../../types/learning';
 
 type TabType = 'accessories' | 'colors';
 

@@ -1,14 +1,16 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+
+import { SKILL_IDS } from '../types/avatar';
 import { 
   XPEventData, 
   GamificationConfig, 
   DEFAULT_GAMIFICATION_CONFIG,
   NotificationEvent
 } from '../types/gamification';
-import { SKILL_IDS } from '../types/avatar';
-import { useAvatarStore } from './avatar';
+
 import { useAchievementsStore } from './achievements';
+import { useAvatarStore } from './avatar';
 
 interface GamificationState {
   // Configuration
@@ -92,7 +94,7 @@ export const useGamificationStore = create<GamificationState>()(
       
       awardXP: (eventData) => {
         const { type, userId, skillIds, xpAmount, metadata = {} } = eventData;
-        const config = get().config;
+        const {config} = get();
         
         const finalXPAmount = calculateXPAmount(type, xpAmount, config, metadata);
         if (!finalXPAmount || finalXPAmount <= 0) return;
@@ -276,9 +278,9 @@ export const useGamificationStore = create<GamificationState>()(
         const avatarStore = useAvatarStore.getState();
         const allAvatars = Object.values(avatarStore.userAvatars);
         
-        let leaderboard = allAvatars.map(avatar => {
+        const leaderboard = allAvatars.map(avatar => {
           let xp = avatar.totalXP;
-          let level = avatar.level;
+          let {level} = avatar;
           
           if (_skillId) {
             const skill = avatar.skills.find(s => s.id === _skillId);

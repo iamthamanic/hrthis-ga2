@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { useShopStore, type ShopBenefit } from '../../state/shop';
+
 import { BenefitCard } from './BenefitCard';
 import { CoinEventsProgress } from './CoinEventsProgress';
 

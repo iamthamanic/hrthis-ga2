@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { Reward } from '../../types/learning';
 import { LootboxAnimation } from '../LootboxAnimation';
 

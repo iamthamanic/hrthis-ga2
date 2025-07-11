@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { useLearningStore } from '../state/learning';
-import { useAuthStore } from '../state/auth';
-import { ShopItem, LearningEvent } from '../types/learning';
+
 import { LootboxAnimation, CelebrationOverlay } from '../components/LootboxAnimation';
+import { useAuthStore } from '../state/auth';
+import { useLearningStore } from '../state/learning';
+import { ShopItem, LearningEvent } from '../types/learning';
 import { cn } from '../utils/cn';
 
 export const LearningShop = () => {

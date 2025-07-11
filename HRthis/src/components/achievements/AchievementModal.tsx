@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Achievement } from '../../types/gamification';
 import { cn } from '../../utils/cn';
 

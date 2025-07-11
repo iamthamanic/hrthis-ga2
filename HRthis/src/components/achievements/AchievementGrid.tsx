@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { Achievement, UserAchievement } from '../../types/gamification';
+
 import { AchievementCard } from './AchievementCard';
 
 interface AchievementGridProps {

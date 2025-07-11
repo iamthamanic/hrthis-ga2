@@ -1,10 +1,12 @@
 import React from 'react';
+
 import { VideoContent, TranscriptionSegment } from '../types/learning';
-import { VideoContainer } from './video/VideoContainer';
+
 import { ProgressBar } from './video/ProgressBar';
-import { VideoControls } from './video/VideoControls';
 import { TranscriptPanel } from './video/TranscriptPanel';
 import { useVideoPlayer } from './video/useVideoPlayer';
+import { VideoContainer } from './video/VideoContainer';
+import { VideoControls } from './video/VideoControls';
 
 interface VideoPlayerProps {
   video: VideoContent;

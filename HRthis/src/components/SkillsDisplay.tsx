@@ -1,6 +1,8 @@
 import React from 'react';
+
 import { useAvatarStore } from '../state/avatar';
 import { cn } from '../utils/cn';
+
 import { SkillCard } from './skills/SkillCard';
 import { SkillsHeader } from './skills/SkillsHeader';
 import { SkillsSummaryStats } from './skills/SkillsSummaryStats';

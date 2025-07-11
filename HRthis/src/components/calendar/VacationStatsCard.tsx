@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { VacationStats } from '../../types/calendar';
 
 interface VacationStatsCardProps {

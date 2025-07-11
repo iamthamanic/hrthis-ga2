@@ -1,6 +1,7 @@
 import React from 'react';
-import { cn } from '../../utils/cn';
+
 import { VideoContent } from '../../types/learning';
+import { cn } from '../../utils/cn';
 
 interface TranscriptPanelProps {
   video: VideoContent;

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Skill } from '../../types/avatar';
 
 interface SkillCardGridProps {

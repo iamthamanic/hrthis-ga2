@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { useAvatarStore } from '../../state/avatar';
 import { Skill } from '../../types/avatar';
 import { cn } from '../../utils/cn';

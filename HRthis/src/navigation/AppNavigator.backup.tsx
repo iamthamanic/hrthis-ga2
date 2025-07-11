@@ -1,36 +1,37 @@
 import React from 'react';
 import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
-import { useAuthStore } from '../state/auth';
-import { useNotificationsStore } from '../state/notifications';
-import { useLeavesStore } from '../state/leaves';
+
+import { AdminCoinsScreen } from '../screens/AdminCoinsScreen';
+import { AdminScreen } from '../screens/AdminScreen';
+import { BenefitsScreen } from '../screens/BenefitsScreen';
 
 // Screens
-import { LoginScreen } from '../screens/LoginScreen';
-import { DashboardScreen } from '../screens/DashboardScreen';
 import { RequestLeaveScreen } from '../screens/RequestLeaveScreen';
 // import { TimeRecordsScreen } from '../screens/TimeRecordsScreen';
 import { MyRequestsScreen } from '../screens/MyRequestsScreen';
 import { DocumentsScreen } from '../screens/DocumentsScreen';
 // import { CalendarScreen } from '../screens/CalendarScreen';
 import { TimeAndVacationScreen } from '../screens/TimeAndVacationScreen';
-import { BenefitsScreen } from '../screens/BenefitsScreen';
 import { CoinHistoryScreen } from '../screens/CoinHistoryScreen';
-import { AdminCoinsScreen } from '../screens/AdminCoinsScreen';
 // import { TrainingOverviewScreen } from '../screens/TrainingOverviewScreen';
 import { CreateTrainingScreen } from '../screens/CreateTrainingScreen';
+import { DashboardScreen } from '../screens/DashboardScreen';
 import { TrainingDetailsScreen } from '../screens/TrainingDetailsScreen';
-import { TakeLessonScreen } from '../screens/TakeLessonScreen';
 import { TrainingManagementScreen } from '../screens/TrainingManagementScreen';
 import { LearningDashboard } from '../screens/LearningDashboard';
 import { VideoLearningScreen } from '../screens/VideoLearningScreen';
 import { LearningAdmin } from '../screens/LearningAdmin';
+import { LoginScreen } from '../screens/LoginScreen';
 // import { LearningShop } from '../screens/LearningShop';
 import { SettingsScreen } from '../screens/SettingsScreen';
+import { TakeLessonScreen } from '../screens/TakeLessonScreen';
 // import { TeamManagementScreen } from '../screens/TeamManagementScreen';
+import { TeamCalendarScreen } from '../screens/TeamCalendarScreen';
 import { TeamMemberDetailsScreen } from '../screens/TeamMemberDetailsScreen';
 import { TeamsOverviewScreen } from '../screens/TeamsOverviewScreen';
-import { TeamCalendarScreen } from '../screens/TeamCalendarScreen';
-import { AdminScreen } from '../screens/AdminScreen';
+import { useAuthStore } from '../state/auth';
+import { useLeavesStore } from '../state/leaves';
+import { useNotificationsStore } from '../state/notifications';
 import { cn } from '../utils/cn';
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {

@@ -1,7 +1,9 @@
 import React from 'react';
-import { cn } from '../../utils/cn';
-import { CATEGORIES, getCategoryCount } from './useAchievementFilters';
+
 import { Achievement } from '../../types/gamification';
+import { cn } from '../../utils/cn';
+
+import { CATEGORIES, getCategoryCount } from './useAchievementFilters';
 
 interface CategoryFilterProps {
   selectedCategory: string;

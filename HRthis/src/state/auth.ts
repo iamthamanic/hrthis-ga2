@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+
 import { User, Organization } from '../types';
 
 // Helper to create basic user fields

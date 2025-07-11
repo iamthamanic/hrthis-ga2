@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { type ShopBenefit } from '../../state/shop';
 import { cn } from '../../utils/cn';
 

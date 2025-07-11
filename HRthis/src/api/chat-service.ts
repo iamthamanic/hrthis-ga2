@@ -4,9 +4,10 @@ IMPORTANT NOTICE: DO NOT REMOVE
 If the user wants to use AI to generate text, answer questions, or analyze images you can use the functions defined in this file to communicate with the OpenAI, Anthropic, and Grok APIs.
 */
 import { AIMessage, AIRequestOptions, AIResponse } from "../types/ai";
+
 import { getAnthropicClient } from "./anthropic";
-import { getOpenAIClient } from "./openai";
 import { getGrokClient } from "./grok";
+import { getOpenAIClient } from "./openai";
 
 /**
  * Get a text response from Anthropic

@@ -1,5 +1,5 @@
-import { useAuthStore } from '../auth';
 import { User } from '../../types';
+import { useAuthStore } from '../auth';
 
 describe('Auth Store', () => {
   beforeEach(() => {

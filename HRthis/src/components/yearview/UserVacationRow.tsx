@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { LeaveRequest } from '../../types';
+
 import { WeekCell } from './WeekCell';
 
 interface UserVacationRowProps {

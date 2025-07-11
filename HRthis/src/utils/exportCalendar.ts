@@ -1,8 +1,9 @@
-import { CalendarEntry } from '../types/calendar';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+
+import { CalendarEntry } from '../types/calendar';
 
 // Extend jsPDF type for autoTable
 declare module 'jspdf' {

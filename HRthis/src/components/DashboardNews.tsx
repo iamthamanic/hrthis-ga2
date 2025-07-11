@@ -6,10 +6,12 @@
  * card-based layout with responsive design.
  */
 
-import React, { useEffect } from 'react';
 import { Info } from 'lucide-react';
+import React, { useEffect } from 'react';
+
 import { useDashboardInfoStore } from '../state/dashboardInfo';
 import { DashboardInfo } from '../types/dashboardInfo';
+
 import { NewsCard } from './news/NewsCard';
 
 /**

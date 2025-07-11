@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useLearningStore } from '../state/learning';
+
 import { useAuthStore } from '../state/auth';
-import { cn } from '../utils/cn';
+import { useLearningStore } from '../state/learning';
 import { TrainingCategory } from '../types/learning';
+import { cn } from '../utils/cn';
 
 export const LearningDashboard = () => {
   const { user } = useAuthStore();

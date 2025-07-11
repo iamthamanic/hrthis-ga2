@@ -1,8 +1,10 @@
 import React from 'react';
+
 import { TestQuestion, TestResult } from '../types/learning';
+
+import { QuizContent } from './quiz/QuizContent';
 import { useDragAndDrop } from './quiz/useDragAndDrop';
 import { useQuiz } from './quiz/useQuiz';
-import { QuizContent } from './quiz/QuizContent';
 
 interface QuizProps {
   videoId: string;

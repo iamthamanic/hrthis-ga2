@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+
 import { cn } from '../../utils/cn';
 
 interface CelebrationOverlayProps {

@@ -1,7 +1,9 @@
 import React from 'react';
+
 import { Skill } from '../../types/avatar';
-import { SkillCardHorizontal } from './SkillCardHorizontal';
+
 import { SkillCardGrid } from './SkillCardGrid';
+import { SkillCardHorizontal } from './SkillCardHorizontal';
 import { SkillCardVertical } from './SkillCardVertical';
 
 interface SkillCardProps {

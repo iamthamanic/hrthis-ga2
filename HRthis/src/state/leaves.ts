@@ -1,9 +1,11 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+
 import { LeaveRequest, VacationBalance } from '../types';
+
+import { useAuthStore } from './auth';
 import { useNotificationsStore } from './notifications';
 import { useTeamsStore } from './teams';
-import { useAuthStore } from './auth';
 
 interface LeavesState {
   leaveRequests: LeaveRequest[];

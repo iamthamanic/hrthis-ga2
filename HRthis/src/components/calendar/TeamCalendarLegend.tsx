@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { colorMap } from '../../types/calendar';
 
 interface TeamCalendarLegendProps {

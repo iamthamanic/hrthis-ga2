@@ -1,8 +1,9 @@
+import { X } from 'lucide-react';
 import React, { useState } from 'react';
+
 import { useAchievementsStore } from '../state/achievements';
 import { Achievement, AchievementCondition } from '../types/gamification';
 import { cn } from '../utils/cn';
-import { X } from 'lucide-react';
 
 interface AchievementCardProps {
   achievement: Achievement;

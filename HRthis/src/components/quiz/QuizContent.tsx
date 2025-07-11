@@ -1,7 +1,9 @@
 import React from 'react';
+
 import { TestQuestion } from '../../types/learning';
-import { MultipleChoiceQuestion, ImageSelectionQuestion, SortingQuestion } from './QuizQuestionTypes';
+
 import { QuizControls, QuizHeader, QuizExplanation } from './QuizControls';
+import { MultipleChoiceQuestion, ImageSelectionQuestion, SortingQuestion } from './QuizQuestionTypes';
 
 interface QuizContentProps {
   currentQuestion: TestQuestion;

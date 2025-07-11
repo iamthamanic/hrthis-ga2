@@ -1,15 +1,16 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../state/auth';
-import { useLeavesStore } from '../state/leaves';
-import { useTimeRecordsStore } from '../state/timeRecords';
-import { useTeamsStore } from '../state/teams';
-import { useNotificationsStore } from '../state/notifications';
-import { TeamCalendarView } from '../components/TeamCalendarView';
-import { CalendarEntry } from '../types/calendar';
-import { TimeRecord } from '../types';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { TeamCalendarView } from '../components/TeamCalendarView';
+import { useAuthStore } from '../state/auth';
+import { useLeavesStore } from '../state/leaves';
+import { useNotificationsStore } from '../state/notifications';
+import { useTeamsStore } from '../state/teams';
+import { useTimeRecordsStore } from '../state/timeRecords';
+import { TimeRecord } from '../types';
+import { CalendarEntry } from '../types/calendar';
 import { cn } from '../utils/cn';
 
 /**
@@ -605,7 +606,7 @@ export const TimeAndVacationScreen = () => {
               
               {(() => {
                 const dateStr = format(selectedDay, 'yyyy-MM-dd');
-                const timeRecord = getTimeRecordsForPeriod(user!.id, dateStr, dateStr)[0];
+                const timeRecord = getTimeRecordsForPeriod(user.id, dateStr, dateStr)[0];
                 
                 if (!timeRecord) {
                   return (

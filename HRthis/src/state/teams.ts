@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+
 import { Team, User } from '../types';
 
 /**
@@ -245,7 +246,7 @@ export const useTeamsStore = create<TeamsState>()(
               if (team.id !== teamId) return team;
               
               let newLeadIds = [...team.leadIds];
-              let newMemberIds = [...team.memberIds];
+              const newMemberIds = [...team.memberIds];
               
               if (isLead) {
                 // Add as lead and ensure they're a member

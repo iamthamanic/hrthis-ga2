@@ -1,6 +1,7 @@
 import React from 'react';
-import { CalendarDay, CalendarViewMode } from '../../types/calendar';
+
 import { LeaveRequest, TimeRecord } from '../../types';
+import { CalendarDay, CalendarViewMode } from '../../types/calendar';
 
 interface Reminder {
   id: string;

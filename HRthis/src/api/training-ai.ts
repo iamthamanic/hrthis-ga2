@@ -1,5 +1,6 @@
-import { getOpenAITextResponse } from './chat-service';
 import { AIGenerationRequest, AIGeneratedContent } from '../types/training';
+
+import { getOpenAITextResponse } from './chat-service';
 
 /**
  * AI Training Content Generator

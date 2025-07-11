@@ -1,8 +1,9 @@
-import React from 'react';
-import { Achievement } from '../../types/gamification';
-import { cn } from '../../utils/cn';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
+import React from 'react';
+
+import { Achievement } from '../../types/gamification';
+import { cn } from '../../utils/cn';
 
 interface AchievementCardListProps {
   achievement: Achievement;

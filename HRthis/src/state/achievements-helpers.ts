@@ -1,4 +1,5 @@
 import { Achievement, AchievementCondition, ProgressTracker } from '../types/gamification';
+
 import { useAvatarStore } from './avatar';
 
 // Helper to get current value for condition type

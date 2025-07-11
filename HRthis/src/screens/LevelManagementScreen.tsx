@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+
 import { useAvatarStore } from '../state/avatar';
-import { cn } from '../utils/cn';
 import { calculateXPForLevel } from '../types/avatar';
+import { cn } from '../utils/cn';
 
 interface LevelTierProps {
   level: number;

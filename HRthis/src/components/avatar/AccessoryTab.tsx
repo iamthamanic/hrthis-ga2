@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Avatar, AvatarAccessory } from '../../types/learning';
 import { cn } from '../../utils/cn';
 

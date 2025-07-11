@@ -9,6 +9,7 @@ export interface User {
   firstName?: string;
   lastName?: string;
   privateEmail?: string; // Private email address
+  avatarUrl?: string; // Profile picture URL
   address?: {
     street?: string;
     postalCode?: string;

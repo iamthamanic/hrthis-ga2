@@ -1,5 +1,6 @@
-import React from 'react';
 import { X, File, Image, CheckCircle, AlertCircle } from 'lucide-react';
+import React from 'react';
+
 import { DashboardInfoFileType } from '../../types/dashboardInfo';
 
 interface FilePreviewProps {

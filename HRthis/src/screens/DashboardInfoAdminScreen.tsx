@@ -6,7 +6,6 @@
  * images and PDF files with titles and descriptions.
  */
 
-import React, { useState, useEffect } from 'react';
 import { 
   Plus, 
   Edit, 
@@ -22,8 +21,10 @@ import {
   X,
   Info
 } from 'lucide-react';
-import { useDashboardInfoStore } from '../state/dashboardInfo';
+import React, { useState, useEffect } from 'react';
+
 import { FileUpload } from '../components/FileUpload';
+import { useDashboardInfoStore } from '../state/dashboardInfo';
 import { 
   DashboardInfo, 
   CreateDashboardInfoForm, 

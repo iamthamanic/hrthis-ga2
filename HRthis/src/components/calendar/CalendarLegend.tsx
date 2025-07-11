@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { CalendarViewMode } from '../../types/calendar';
 
 interface CalendarLegendProps {

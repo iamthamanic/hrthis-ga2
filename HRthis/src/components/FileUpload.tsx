@@ -6,10 +6,12 @@
  */
 
 import React from 'react';
+
 import { useDashboardInfoStore } from '../state/dashboardInfo';
-import { UploadArea } from './fileupload/UploadArea';
+
 import { FilePreview } from './fileupload/FilePreview';
 import { FileTypeHelp } from './fileupload/FileTypeHelp';
+import { UploadArea } from './fileupload/UploadArea';
 import { useFileUpload } from './fileupload/useFileUpload';
 
 interface FileUploadProps {

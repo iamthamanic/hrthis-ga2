@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { Avatar, AvatarAccessory } from '../../types/learning';
+
 import { AccessoryTab } from './AccessoryTab';
 import { ColorTab } from './ColorTab';
 import { CustomizationTabs } from './CustomizationTabs';

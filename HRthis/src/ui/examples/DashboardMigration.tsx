@@ -7,9 +7,9 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // Neue UI System Imports
+import { StatsCard, InfoCard, AvatarCard, CardHeader, CardContent } from '../components/layout/Card';
 import { PageContainer, HeaderCard } from '../components/layout/Container';
 import { StatsGrid } from '../components/layout/Grid';
-import { StatsCard, InfoCard, AvatarCard, CardHeader, CardContent } from '../components/layout/Card';
 
 // Deine bestehenden Hooks (bleiben unverändert)
 // ... andere Hooks

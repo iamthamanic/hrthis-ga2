@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+
 import { 
   Achievement, 
   UserAchievement, 
@@ -7,20 +8,21 @@ import {
   ProgressTracker,
   PREDEFINED_ACHIEVEMENTS
 } from '../types/gamification';
-import { useAvatarStore } from './avatar';
-import { useNotificationsStore } from './notifications';
-import { 
-  checkAchievementCondition, 
-  createAchievementFromPredefined, 
-  mapUserAchievement,
-  getUnlockedAchievementIds
-} from './achievements-helpers';
+
 import {
   createDefaultUserProgress,
   getCurrentQuarter,
   updateQuarterlyStats,
   updateDailyStreak
 } from './achievement-store-helpers';
+import { 
+  checkAchievementCondition, 
+  createAchievementFromPredefined, 
+  mapUserAchievement,
+  getUnlockedAchievementIds
+} from './achievements-helpers';
+import { useAvatarStore } from './avatar';
+import { useNotificationsStore } from './notifications';
 
 interface AchievementsState {
   // Achievement system data
@@ -74,7 +76,7 @@ export const useAchievementsStore = create<AchievementsState>()(
       getUserAchievements: (userId: string) => {
         const avatarStore = useAvatarStore.getState();
         const userAvatar = avatarStore.getUserAvatar(userId);
-        const achievements = get().achievements;
+        const {achievements} = get();
         
         if (!userAvatar?.achievements) return [];
         

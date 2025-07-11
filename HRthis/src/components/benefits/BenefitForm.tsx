@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { cn } from '../../utils/cn';
+
 import type { ShopBenefit } from '../../state/shop';
+import { cn } from '../../utils/cn';
 
 interface ShopStore {
   addBenefit: (benefit: Omit<ShopBenefit, 'id' | 'createdAt'>) => Promise<void>;

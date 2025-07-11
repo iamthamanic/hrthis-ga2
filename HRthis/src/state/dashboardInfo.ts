@@ -5,9 +5,10 @@
  * and users can view in their dashboard news section.
  */
 
+import { v4 as uuidv4 } from 'uuid';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { v4 as uuidv4 } from 'uuid';
+
 import { 
   DashboardInfoStore, 
   DashboardInfo, 
@@ -313,7 +314,7 @@ export const useDashboardInfoStore = create<DashboardInfoStore>()(
       getActiveItems: (): DashboardInfo[] => {
         const { items, sortBy, filters } = get();
         
-        let filteredItems = items.filter(item => {
+        const filteredItems = items.filter(item => {
           // Only active items
           if (!item.isActive) return false;
           

@@ -1,7 +1,9 @@
-import React from 'react';
 import { Clock } from 'lucide-react';
-import { DashboardInfo } from '../../types/dashboardInfo';
+import React from 'react';
+
 import { useDashboardInfoStore } from '../../state/dashboardInfo';
+import { DashboardInfo } from '../../types/dashboardInfo';
+
 import { FileViewer } from './FileViewer';
 import { NewsActions } from './NewsActions';
 import { useNewsCard } from './useNewsCard';

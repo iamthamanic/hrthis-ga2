@@ -1,5 +1,6 @@
-import React from 'react';
 import { Download, ExternalLink } from 'lucide-react';
+import React from 'react';
+
 import { DashboardInfoFileType } from '../../types/dashboardInfo';
 
 interface NewsActionsProps {

@@ -1,5 +1,5 @@
-import React from 'react';
 import { Upload, AlertCircle } from 'lucide-react';
+import React from 'react';
 
 interface UploadAreaProps {
   isDragOver: boolean;

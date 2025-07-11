@@ -1,6 +1,8 @@
 import React from 'react';
+
 import { Reward } from '../../types/learning';
 import { cn } from '../../utils/cn';
+
 import { getRarityColor, getRewardIcon, getRewardSound } from './LootboxHelpers';
 
 interface LootboxStageProps {

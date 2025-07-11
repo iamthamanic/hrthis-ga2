@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { AvatarUpload } from '../components/avatar/AvatarUpload';
 import { useAuthStore } from '../state/auth';
 import { User } from '../types';
 import { cn } from '../utils/cn';
@@ -14,6 +16,9 @@ export const SettingsScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarError, setAvatarError] = useState('');
+  const [isAvatarUploading, setIsAvatarUploading] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: user?.firstName || '',
@@ -61,6 +66,84 @@ export const SettingsScreen = () => {
   };
 
   /**
+   * Converts file to base64 data URL for storage
+   */
+  const fileToDataUrl = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
+  /**
+   * Handles avatar file selection
+   */
+  const handleAvatarChange = async (file: File | null) => {
+    setAvatarError('');
+    setAvatarFile(file);
+    
+    if (file) {
+      // Validate file size (already handled by FileUpload, but double-check)
+      if (file.size > 5 * 1024 * 1024) {
+        setAvatarError('Datei ist zu groß. Maximum: 5 MB');
+        return;
+      }
+      
+      // Validate file type
+      if (!['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) {
+        setAvatarError('Unsupported file type. Use PNG, JPG, or JPEG.');
+        return;
+      }
+    }
+  };
+
+  /**
+   * Handles avatar upload and immediate user update
+   */
+  const handleAvatarUpload = async () => {
+    if (!avatarFile || !user) return;
+    
+    setIsAvatarUploading(true);
+    setAvatarError('');
+    
+    try {
+      // Convert file to data URL for storage
+      const avatarUrl = await fileToDataUrl(avatarFile);
+      
+      // Update user with new avatar URL
+      await updateUser(user.id, { avatarUrl });
+      
+      setSuccess('Profilbild erfolgreich aktualisiert');
+      setAvatarFile(null);
+    } catch (err) {
+      setAvatarError('Fehler beim Hochladen des Profilbildes');
+    } finally {
+      setIsAvatarUploading(false);
+    }
+  };
+
+  /**
+   * Handles avatar removal
+   */
+  const handleAvatarRemove = async () => {
+    if (!user) return;
+    
+    setIsAvatarUploading(true);
+    
+    try {
+      await updateUser(user.id, { avatarUrl: undefined });
+      setSuccess('Profilbild erfolgreich entfernt');
+      setAvatarFile(null);
+    } catch (err) {
+      setAvatarError('Fehler beim Entfernen des Profilbildes');
+    } finally {
+      setIsAvatarUploading(false);
+    }
+  };
+
+  /**
    * Handles form submission and user update
    */
   const handleSubmit = async (e: React.FormEvent) => {
@@ -105,6 +188,13 @@ export const SettingsScreen = () => {
     }
 
     try {
+      // Handle avatar upload first if there's a new avatar file
+      if (avatarFile) {
+        const avatarUrl = await fileToDataUrl(avatarFile);
+        updateData.avatarUrl = avatarUrl;
+        setAvatarFile(null);
+      }
+      
       await updateUser(user.id, updateData);
       
       setSuccess('Profil erfolgreich aktualisiert');
@@ -145,6 +235,54 @@ export const SettingsScreen = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Avatar Upload Section */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              Profilbild
+            </h2>
+            
+            <div className="flex flex-col items-center">
+              <AvatarUpload
+                currentAvatarUrl={user.avatarUrl}
+                onAvatarChange={handleAvatarChange}
+                isUploading={isAvatarUploading}
+                error={avatarError}
+                canEdit={true}
+              />
+              
+              {avatarFile && (
+                <div className="mt-4 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={handleAvatarUpload}
+                    disabled={isAvatarUploading}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  >
+                    {isAvatarUploading ? 'Hochladen...' : 'Bild hochladen'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAvatarFile(null)}
+                    className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                  >
+                    Abbrechen
+                  </button>
+                </div>
+              )}
+              
+              {user.avatarUrl && !avatarFile && (
+                <button
+                  type="button"
+                  onClick={handleAvatarRemove}
+                  disabled={isAvatarUploading}
+                  className="mt-4 px-4 py-2 text-red-600 border border-red-300 rounded-lg hover:bg-red-50 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                >
+                  {isAvatarUploading ? 'Entfernen...' : 'Profilbild entfernen'}
+                </button>
+              )}
+            </div>
+          </div>
+
           {/* Personal Information */}
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">

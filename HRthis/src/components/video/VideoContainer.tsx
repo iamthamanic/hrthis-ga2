@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { VideoContent } from '../../types/learning';
 
 interface VideoContainerProps {

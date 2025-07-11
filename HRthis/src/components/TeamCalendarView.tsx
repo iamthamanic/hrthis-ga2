@@ -1,9 +1,11 @@
 import React, { useState, useMemo } from 'react';
+
 import { CalendarEntry } from '../types/calendar';
+
+import { TeamCalendarGrid } from './calendar/TeamCalendarGrid';
 import {
   generateDateRange
 } from './calendar/TeamCalendarHelpers';
-import { TeamCalendarGrid } from './calendar/TeamCalendarGrid';
 import { TeamCalendarLegend } from './calendar/TeamCalendarLegend';
 import { TeamCalendarNavigation } from './calendar/TeamCalendarNavigation';
 

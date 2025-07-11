@@ -1,8 +1,9 @@
-import React from 'react';
-import { CalendarEntry, colorMap, abbreviationMap, getWorkTimeColor } from '../../types/calendar';
-import { cn } from '../../utils/cn';
 import { format, isToday, startOfMonth, endOfMonth, eachDayOfInterval, startOfYear, endOfYear } from 'date-fns';
 import { de } from 'date-fns/locale';
+import React from 'react';
+
+import { CalendarEntry, colorMap, abbreviationMap, getWorkTimeColor } from '../../types/calendar';
+import { cn } from '../../utils/cn';
 
 // Helper function to generate date range
 export const generateDateRange = (view: 'monat' | 'jahr', selectedMonth: Date): Date[] => {

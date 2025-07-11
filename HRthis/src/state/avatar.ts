@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+
 import { 
   UserAvatar, 
   Skill, 
@@ -8,8 +9,9 @@ import {
   LevelUpEvent,
   calculateLevelFromXP
 } from '../types/avatar';
-import { checkLevelUps } from './avatar-helpers';
+
 import { createNewUserAvatar, calculateUserStats } from './avatar-actions';
+import { checkLevelUps } from './avatar-helpers';
 import { processAddXP } from './avatar-xp';
 
 // Helper functions for avatar store actions

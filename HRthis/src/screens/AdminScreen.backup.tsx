@@ -1,14 +1,15 @@
 import React from 'react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
+
 import { useAuthStore } from '../state/auth';
 import { cn } from '../utils/cn';
 
 // Import existing and new admin components
-import { TeamManagementScreen } from './TeamManagementScreen';
 import { AddEmployeeScreen } from './AddEmployeeScreen';
+import { DashboardInfoAdminScreen } from './DashboardInfoAdminScreen';
+import { TeamManagementScreen } from './TeamManagementScreen';
 import { TeamMemberDetailsScreen } from './TeamMemberDetailsScreen';
 import { TeamsOverviewScreen } from './TeamsOverviewScreen';
-import { DashboardInfoAdminScreen } from './DashboardInfoAdminScreen';
 
 // Placeholder components for new admin sections
 const OrganigramScreen = () => (

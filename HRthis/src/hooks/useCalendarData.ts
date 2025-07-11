@@ -1,10 +1,11 @@
 import { useState, useEffect, useMemo } from 'react';
+
 import { useAuthStore } from '../state/auth';
 import { useLeavesStore } from '../state/leaves';
-import { useTimeRecordsStore } from '../state/timeRecords';
 import { useRemindersStore } from '../state/reminders';
-import { CalendarDay, CalendarEvent, CalendarViewMode, VacationStats } from '../types/calendar';
+import { useTimeRecordsStore } from '../state/timeRecords';
 import { LeaveRequest } from '../types';
+import { CalendarDay, CalendarEvent, CalendarViewMode, VacationStats } from '../types/calendar';
 
 export const useCalendarData = (viewMode: CalendarViewMode, currentDate: Date) => {
   const { user, getAllUsers } = useAuthStore();

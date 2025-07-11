@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
+
 import { useAchievementsStore } from '../../state/achievements';
 import { Achievement, UserAchievement } from '../../types/gamification';
 import { cn } from '../../utils/cn';
+
+import { AchievementGrid } from './AchievementGrid';
 import { AchievementModal } from './AchievementModal';
-import { ProgressHeader } from './ProgressHeader';
 import { CategoryFilter } from './CategoryFilter';
 import { EmptyState } from './EmptyState';
-import { AchievementGrid } from './AchievementGrid';
+import { ProgressHeader } from './ProgressHeader';
 import { filterAchievements } from './useAchievementFilters';
 
 interface AchievementsGalleryProps {

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import { useShopStore, type ShopBenefit } from '../state/shop';
 
 export const useBenefitManagement = () => {

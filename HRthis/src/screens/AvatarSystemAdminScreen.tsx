@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useAvatarStore } from '../state/avatar';
+
 import { useAchievementsStore } from '../state/achievements';
+import { useAvatarStore } from '../state/avatar';
 import { useGamificationStore } from '../state/gamification';
 import { UserAvatar, Skill } from '../types/avatar';
 import { cn } from '../utils/cn';

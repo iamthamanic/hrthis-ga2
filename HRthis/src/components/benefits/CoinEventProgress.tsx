@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { useCoinEventsStore, CoinEvent } from '../../state/coinEvents';
 
 interface CoinEventProgressProps {

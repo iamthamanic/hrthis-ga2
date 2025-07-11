@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useLearningStore } from '../state/learning';
-import { useAuthStore } from '../state/auth';
-import { VideoPlayer } from '../components/VideoPlayer';
-import { Quiz } from '../components/Quiz';
+
 import { LootboxAnimation, CelebrationOverlay } from '../components/LootboxAnimation';
+import { Quiz } from '../components/Quiz';
+import { VideoPlayer } from '../components/VideoPlayer';
+import { useAuthStore } from '../state/auth';
+import { useLearningStore } from '../state/learning';
 import { TestResult } from '../types/learning';
 import { cn } from '../utils/cn';
 

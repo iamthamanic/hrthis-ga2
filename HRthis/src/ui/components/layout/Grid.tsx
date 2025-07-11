@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+
 import { cn } from '../../../utils/cn';
 
 // Grid Container Props
@@ -247,12 +248,12 @@ export const ContentWithSidebar: React.FC<{
   
   return (
     <DashboardGrid className={className}>
-      <GridItem span="full" mdSpan={contentSpan as any}>
+      <GridItem span="full" mdSpan={contentSpan as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12}>
         {content}
       </GridItem>
       
       {sidebar && (
-        <GridItem span="full" mdSpan={sidebarSpans[sidebarWidth] as any}>
+        <GridItem span="full" mdSpan={sidebarSpans[sidebarWidth] as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12}>
           {sidebar}
         </GridItem>
       )}

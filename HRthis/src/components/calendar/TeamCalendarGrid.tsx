@@ -1,8 +1,9 @@
-import React from 'react';
-import { CalendarEntry, colorMap, abbreviationMap, getWorkTimeColor } from '../../types/calendar';
-import { cn } from '../../utils/cn';
 import { format, isToday } from 'date-fns';
 import { de } from 'date-fns/locale';
+import React from 'react';
+
+import { CalendarEntry, colorMap, abbreviationMap, getWorkTimeColor } from '../../types/calendar';
+import { cn } from '../../utils/cn';
 
 // Constants
 const DATE_FORMAT = 'yyyy-MM-dd';

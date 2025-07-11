@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { VacationReminder, ReminderSettings, ReminderNotification } from '../types/reminders';
+
 import { LeaveRequest } from '../types';
+import { VacationReminder, ReminderSettings, ReminderNotification } from '../types/reminders';
 
 interface RemindersState {
   reminders: VacationReminder[];

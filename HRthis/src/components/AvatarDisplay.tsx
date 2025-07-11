@@ -1,12 +1,14 @@
 import React from 'react';
-import { useAvatarStore } from '../state/avatar';
+
 import { useAchievementsStore } from '../state/achievements';
+import { useAvatarStore } from '../state/avatar';
 import { cn } from '../utils/cn';
-import { AvatarCircle } from './avatar/AvatarCircle';
-import { UserInfo } from './avatar/UserInfo';
-import { SkillsList } from './avatar/SkillsList';
-import { CoinsSection } from './avatar/CoinsSection';
+
 import { AchievementsGrid } from './avatar/AchievementsGrid';
+import { AvatarCircle } from './avatar/AvatarCircle';
+import { CoinsSection } from './avatar/CoinsSection';
+import { SkillsList } from './avatar/SkillsList';
+import { UserInfo } from './avatar/UserInfo';
 
 interface AvatarDisplayProps {
   userId: string;
