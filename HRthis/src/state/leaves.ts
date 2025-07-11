@@ -7,6 +7,19 @@ import { useAuthStore } from './auth';
 import { useNotificationsStore } from './notifications';
 import { useTeamsStore } from './teams';
 
+// Helper function to get user display name by ID
+const getUserDisplayName = (userId: string): string => {
+  const names: { [key: string]: string } = {
+    '1': 'Max M.',
+    '2': 'Anna A.',
+    '3': 'Tom K.',
+    '4': 'Lisa S.',
+    '5': 'Julia B.',
+    '6': 'Marco L.'
+  };
+  return names[userId] || 'Unbekannt';
+};
+
 interface LeavesState {
   leaveRequests: LeaveRequest[];
   vacationBalance: VacationBalance | null;
@@ -231,24 +244,12 @@ export const useLeavesStore = create<LeavesState>()(
           
           // Notify user about approval
           if (requestToApprove) {
-            const getUserName = (userId: string): string => {
-              const names: { [key: string]: string } = {
-                '1': 'Max M.',
-                '2': 'Anna A.',
-                '3': 'Tom K.',
-                '4': 'Lisa S.',
-                '5': 'Julia B.',
-                '6': 'Marco L.'
-              };
-              return names[userId] || 'Unbekannt';
-            };
-
             const notificationsStore = useNotificationsStore.getState();
             notificationsStore.addNotification({
               userId: requestToApprove.userId,
               type: 'leave_approved',
               title: 'Antrag genehmigt',
-              message: `Ihr ${requestToApprove.type === 'VACATION' ? 'Urlaubs' : 'Krankheits'}antrag wurde von ${getUserName(approverId)} genehmigt`,
+              message: `Ihr ${requestToApprove.type === 'VACATION' ? 'Urlaubs' : 'Krankheits'}antrag wurde von ${getUserDisplayName(approverId)} genehmigt`,
               isRead: false,
               relatedId: requestId
             });
@@ -287,24 +288,12 @@ export const useLeavesStore = create<LeavesState>()(
 
           // Notify user about rejection
           if (requestToReject) {
-            const getUserName = (userId: string): string => {
-              const names: { [key: string]: string } = {
-                '1': 'Max M.',
-                '2': 'Anna A.',
-                '3': 'Tom K.',
-                '4': 'Lisa S.',
-                '5': 'Julia B.',
-                '6': 'Marco L.'
-              };
-              return names[userId] || 'Unbekannt';
-            };
-
             const notificationsStore = useNotificationsStore.getState();
             notificationsStore.addNotification({
               userId: requestToReject.userId,
               type: 'leave_rejected',
               title: 'Antrag abgelehnt',
-              message: `Ihr ${requestToReject.type === 'VACATION' ? 'Urlaubs' : 'Krankheits'}antrag wurde von ${getUserName(approverId)} abgelehnt`,
+              message: `Ihr ${requestToReject.type === 'VACATION' ? 'Urlaubs' : 'Krankheits'}antrag wurde von ${getUserDisplayName(approverId)} abgelehnt`,
               isRead: false,
               relatedId: requestId
             });
