@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 
 import { FileUpload } from '../FileUpload';
 
-import { AvatarCircle } from './AvatarCircle';
-
 interface AvatarUploadProps {
   /** Current avatar URL */
   currentAvatarUrl?: string;

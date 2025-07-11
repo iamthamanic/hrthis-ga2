@@ -67,7 +67,7 @@ export const LearningShop = () => {
           {tabs.map(tab => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id as 'shop' | 'events' | 'inventory')}
               className={cn(
                 "flex-1 flex items-center justify-center gap-2 py-4 font-medium transition-colors rounded-xl",
                 activeTab === tab.id

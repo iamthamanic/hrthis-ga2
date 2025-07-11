@@ -370,13 +370,16 @@ export const DashboardInfoAdminScreen: React.FC = () => {
    * Handle item deletion
    */
   const handleDelete = async (id: string) => {
-    if (window.confirm('Sind Sie sicher, dass Sie diese Info löschen möchten?')) {
+    // TODO: Replace with modal confirmation component
+    // if (window.confirm('Sind Sie sicher, dass Sie diese Info löschen möchten?')) {
       try {
         await deleteItem(id);
       } catch (error) {
-        alert('Fehler beim Löschen der Info');
+        // TODO: Replace with toast notification
+        // alert('Fehler beim Löschen der Info');
+        console.error('Error deleting info:', error);
       }
-    }
+    // }
   };
 
   /**

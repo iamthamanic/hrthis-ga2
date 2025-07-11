@@ -58,13 +58,17 @@ export const TeamsOverviewScreen = () => {
   const handleCreateTeam = async () => {
     // Validate team name
     if (!newTeam.name.trim()) {
-      alert('Bitte geben Sie einen Team-Namen ein');
+      // TODO: Replace with toast notification
+      // alert('Bitte geben Sie einen Team-Namen ein');
+      console.error('Team name is required');
       return;
     }
     
     try {
       if (!user?.organizationId) {
-        alert('Fehler: Keine Organisation zugewiesen');
+        // TODO: Replace with toast notification
+        // alert('Fehler: Keine Organisation zugewiesen');
+        console.error('No organization assigned');
         return;
       }
       
@@ -79,7 +83,8 @@ export const TeamsOverviewScreen = () => {
       setIsCreating(false);
     } catch (error) {
       console.error('Error creating team:', error);
-      alert('Fehler beim Erstellen des Teams');
+      // TODO: Replace with toast notification
+      // alert('Fehler beim Erstellen des Teams');
     }
   };
 
@@ -98,13 +103,14 @@ export const TeamsOverviewScreen = () => {
   };
 
   const handleDeleteTeam = async (teamId: string) => {
-    if (window.confirm('Sind Sie sicher, dass Sie dieses Team löschen möchten?')) {
+    // TODO: Replace with modal confirmation component
+    // if (window.confirm('Sind Sie sicher, dass Sie dieses Team löschen möchten?')) {
       try {
         await deleteTeam(teamId);
       } catch (error) {
         console.error('Error deleting team:', error);
       }
-    }
+    // }
   };
 
   return (

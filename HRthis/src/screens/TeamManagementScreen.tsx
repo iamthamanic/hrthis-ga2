@@ -60,7 +60,7 @@ export const TeamManagementScreen = () => {
         level: user.level || 1
       };
     });
-  }, [allUsers, allTeams, getTeamsByUserId, getVacationBalance]);
+  }, [allUsers, getTeamsByUserId, getVacationBalance]);
 
   // Filter and sort team members
   const filteredMembers = useMemo(() => {

@@ -101,7 +101,7 @@ export const TeamCalendarScreen: React.FC = () => {
     ];
     
     return [...entries, ...mockEntries];
-  }, []);
+  }, [getAllUsers, getAllLeaveRequests, getAllTimeRecords]);
 
   // Handle cell click
   const handleCellClick = (userId: string, date: string) => {

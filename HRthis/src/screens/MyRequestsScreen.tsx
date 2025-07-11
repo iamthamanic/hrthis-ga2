@@ -193,7 +193,7 @@ export const MyRequestsScreen = () => {
               <span className="text-sm text-gray-500">Filter:</span>
               <select
                 value={filter}
-                onChange={(e) => setFilter(e.target.value as any)}
+                onChange={(e) => setFilter(e.target.value as 'ALL' | 'PENDING' | 'APPROVED' | 'REJECTED')}
                 className="border border-gray-300 rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="ALL">Alle</option>
