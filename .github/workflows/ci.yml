@@ -24,7 +24,7 @@ jobs:
         working-directory: ./HRthis
 
       - name: Run ESLint
-        run: npm run lint -- --max-warnings 0
+        run: CI=false npm run lint -- --max-warnings 0
         working-directory: ./HRthis
 
   deploy-frontend:
