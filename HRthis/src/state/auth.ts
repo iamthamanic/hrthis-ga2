@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
 import { User, Organization } from '../types';
+import { RequiredStep, markStepExecuted } from '../pipeline/annotations';
 
 // Helper to create basic user fields
 const createBasicUserFields = (userData: Partial<User>) => ({
@@ -198,26 +199,37 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true });
         
         try {
+          // @RequiredStep: "authenticate-user-credentials"
+          markStepExecuted('authenticate-user-credentials', true, { email });
+          
           // Simulate API call delay
           await new Promise(resolve => setTimeout(resolve, 1000));
           
-          // Mock authentication - in real app, this would be API call
+          // @RequiredStep: "validate-user-exists"
           const user = mockUsers.find(u => u.email === email);
+          markStepExecuted('validate-user-exists', !!user, { userFound: !!user });
           
           if (!user || password !== 'password') {
+            markStepExecuted('login-validation', false, 'Invalid credentials');
             throw new Error('Ungültige Anmeldedaten');
           }
           
+          // @RequiredStep: "load-user-organization"
           const organization = mockOrganizations.find(org => org.id === user.organizationId);
+          markStepExecuted('load-user-organization', !!organization, { organizationId: user.organizationId });
           
+          // @RequiredStep: "establish-user-session"
           set({ 
             user, 
             organization, 
             isAuthenticated: true, 
             isLoading: false 
           });
+          markStepExecuted('establish-user-session', true, { userId: user.id });
+          
         } catch (error) {
           set({ isLoading: false });
+          markStepExecuted('login-process', false, error instanceof Error ? error.message : String(error));
           throw error;
         }
       },

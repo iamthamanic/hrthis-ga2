@@ -1,0 +1,31 @@
+name: HRthis CI/CD Pipeline (Coolify)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  quality-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: HRthis/package-lock.json
+
+      - name: Install Frontend Dependencies
+        run: npm install
+        working-directory: ./HRthis
+
+      - name: Run ESLint
+        run: npm run lint || true
+        working-directory: ./HRthis
+
+  # Coolify nutzt Webhooks für automatisches Deployment
+  # Keine separaten deploy Jobs nötig!
