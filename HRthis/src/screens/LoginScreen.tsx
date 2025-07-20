@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { useAuthStore } from '../state/auth';
 import { cn } from '../utils/cn';
+import { RequiredStep } from '../pipeline/annotations';
 
 export const LoginScreen = () => {
   const [email, setEmail] = useState('max.mustermann@hrthis.de');
@@ -9,11 +10,17 @@ export const LoginScreen = () => {
   const [error, setError] = useState('');
   const { login, isLoading } = useAuthStore();
 
+  // @RequiredStep: "validate-login-input"
+  const validateLoginInput = (email: string, password: string): boolean => {
+    return !(!email || !password);
+  };
+
+  // @RequiredStep: "handle-user-authentication"
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     
-    if (!email || !password) {
+    if (!validateLoginInput(email, password)) {
       setError('Bitte füllen Sie alle Felder aus.');
       return;
     }
