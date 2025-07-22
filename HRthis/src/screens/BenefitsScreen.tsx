@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-import { EarnTab, HistoryTab, ManageTab, ShopTab } from '../components/benefits';
+import { EarnTab } from '../components/benefits/EarnTab';
+import { HistoryTab } from '../components/benefits/HistoryTab';
+import { ManageTab } from '../components/benefits/ManageTab';
+import { ShopTab } from '../components/benefits/ShopTab';
 import { useAuthStore } from '../state/auth';
 import { useCoinEventsStore, EventsStore } from '../state/coinEvents';
 import { useCoinsStore, CoinsStore } from '../state/coins';
