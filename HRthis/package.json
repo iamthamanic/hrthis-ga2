@@ -2,6 +2,9 @@
   "name": "hrthis",
   "version": "2.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
     "@testing-library/jest-dom": "^6.1.5",
