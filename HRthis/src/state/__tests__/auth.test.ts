@@ -1,6 +1,12 @@
 import { User } from '../../types';
 import { useAuthStore } from '../auth';
 
+// Mock the pipeline annotations to avoid errors in tests
+jest.mock('../../pipeline/annotations', () => ({
+  RequiredStep: () => () => {},
+  markStepExecuted: jest.fn(),
+}));
+
 describe('Auth Store', () => {
   beforeEach(() => {
     // Reset store state before each test
@@ -19,19 +25,19 @@ describe('Auth Store', () => {
     it('should successfully login with valid credentials', async () => {
       const { login } = useAuthStore.getState();
       
-      await login('admin@hrthis.de', 'admin123');
+      await login('anna.admin@hrthis.de', 'password');
       
       const state = useAuthStore.getState();
       expect(state.isAuthenticated).toBe(true);
       expect(state.user).toBeDefined();
-      expect(state.user?.email).toBe('admin@hrthis.de');
+      expect(state.user?.email).toBe('anna.admin@hrthis.de');
       expect(state.organization).toBeDefined();
     });
 
     it('should fail login with invalid credentials', async () => {
       const { login } = useAuthStore.getState();
       
-      await expect(login('invalid@email.com', 'wrongpassword')).rejects.toThrow('Invalid credentials');
+      await expect(login('invalid@email.com', 'wrongpassword')).rejects.toThrow('Ungültige Anmeldedaten');
       
       const state = useAuthStore.getState();
       expect(state.isAuthenticated).toBe(false);
@@ -41,7 +47,7 @@ describe('Auth Store', () => {
     it('should set loading state during login', async () => {
       const { login } = useAuthStore.getState();
       
-      const loginPromise = login('admin@hrthis.de', 'admin123');
+      const loginPromise = login('anna.admin@hrthis.de', 'password');
       
       // Check loading state immediately
       expect(useAuthStore.getState().isLoading).toBe(true);
@@ -57,7 +63,7 @@ describe('Auth Store', () => {
     it('should clear user data on logout', async () => {
       // First login
       const { login, logout } = useAuthStore.getState();
-      await login('admin@hrthis.de', 'admin123');
+      await login('anna.admin@hrthis.de', 'password');
       
       // Verify logged in
       expect(useAuthStore.getState().isAuthenticated).toBe(true);
@@ -77,7 +83,7 @@ describe('Auth Store', () => {
     beforeEach(async () => {
       // Login as admin
       const { login } = useAuthStore.getState();
-      await login('admin@hrthis.de', 'admin123');
+      await login('anna.admin@hrthis.de', 'password');
     });
 
     it('should create a new user with required fields', async () => {
@@ -168,7 +174,7 @@ describe('Auth Store', () => {
   describe('updateUser', () => {
     beforeEach(async () => {
       const { login } = useAuthStore.getState();
-      await login('admin@hrthis.de', 'admin123');
+      await login('anna.admin@hrthis.de', 'password');
     });
 
     it('should update user data', async () => {
@@ -205,7 +211,7 @@ describe('Auth Store', () => {
   describe('getAllUsers', () => {
     it('should return all users', async () => {
       const { login, getAllUsers } = useAuthStore.getState();
-      await login('admin@hrthis.de', 'admin123');
+      await login('anna.admin@hrthis.de', 'password');
       
       const users = getAllUsers();
       

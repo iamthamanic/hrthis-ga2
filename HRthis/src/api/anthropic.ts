@@ -9,12 +9,16 @@ claude-3-5-haiku-latest
 */
 import Anthropic from "@anthropic-ai/sdk";
 
-export const getAnthropicClient = () => {
+import { logSecurityWarning } from './security-warning';
+
+export const getAnthropicClient = (): Anthropic => {
+  logSecurityWarning('Anthropic');
+  
   const apiKey = process.env.EXPO_PUBLIC_VIBECODE_ANTHROPIC_API_KEY;
   if (!apiKey) {
-    console.warn("Anthropic API key not found in environment variables");
+    throw new Error("Anthropic API key not found in environment variables");
   }
   return new Anthropic({
-    apiKey: apiKey,
+    apiKey,
   });
 };

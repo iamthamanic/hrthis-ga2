@@ -5,9 +5,9 @@ import { HistoryTab } from '../components/benefits/HistoryTab';
 import { ManageTab } from '../components/benefits/ManageTab';
 import { ShopTab } from '../components/benefits/ShopTab';
 import { useAuthStore } from '../state/auth';
-import { useCoinEventsStore } from '../state/coinEvents';
-import { useCoinsStore } from '../state/coins';
-import { useShopStore } from '../state/shop';
+import { useCoinEventsStore, EventsStore } from '../state/coinEvents';
+import { useCoinsStore, CoinsStore } from '../state/coins';
+import { useShopStore, ShopStore } from '../state/shop';
 import { User } from '../types';
 import { cn } from '../utils/cn';
 
@@ -19,7 +19,7 @@ const TAB_STYLES = {
   INACTIVE: "bg-transparent text-gray-700 hover:bg-gray-100"
 } as const;
 
-const ADMIN_ROLES = ['ADMIN', 'SUPERADMIN'] as const;
+const ADMIN_ROLES: ReadonlyArray<'ADMIN' | 'SUPERADMIN'> = ['ADMIN', 'SUPERADMIN'] as const;
 
 /**
  * Main benefits management screen
@@ -31,7 +31,7 @@ const ADMIN_ROLES = ['ADMIN', 'SUPERADMIN'] as const;
  */
 interface InitializeUserDataParams {
   user: User;
-  coinsStore: ReturnType<typeof useCoinsStore>;
+  coinsStore: CoinsStore;
   handlers: {
     setUserBalance: (balance: number) => void;
     setIsAdmin: (isAdmin: boolean) => void;
@@ -47,7 +47,7 @@ const initializeUserData = ({
   const balance = coinsStore.getUserBalance(user.id);
   setUserBalance(balance.currentBalance);
   
-  const adminStatus = ADMIN_ROLES.includes(user.role);
+  const adminStatus = (ADMIN_ROLES as readonly string[]).includes(user.role);
   setIsAdmin(adminStatus);
   
   // Default to shop for regular users, manage for admins
@@ -62,8 +62,8 @@ interface PurchaseBenefitParams {
   user: User;
   userBalance: number;
   stores: {
-    shopStore: ReturnType<typeof useShopStore>;
-    coinsStore: ReturnType<typeof useCoinsStore>;
+    shopStore: ShopStore;
+    coinsStore: CoinsStore;
   };
   handlers: {
     setUserBalance: (balance: number) => void;
@@ -101,9 +101,9 @@ interface TabContentProps {
   isAdmin: boolean;
   user: User;
   stores: {
-    shopStore: ReturnType<typeof useShopStore>;
-    coinsStore: ReturnType<typeof useCoinsStore>;
-    eventsStore: ReturnType<typeof useCoinEventsStore>;
+    shopStore: ShopStore;
+    coinsStore: CoinsStore;
+    eventsStore: EventsStore;
   };
   handlers: {
     onPurchaseBenefit: (benefitId: string, coinCost: number) => Promise<void>;
@@ -236,7 +236,7 @@ export const BenefitsScreen = () => {
     await handlePurchaseBenefit({
       benefitId,
       coinCost,
-      user,
+      user: user!,
       userBalance,
       stores: { shopStore, coinsStore },
       handlers: { setUserBalance, setError }

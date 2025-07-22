@@ -18,7 +18,22 @@ interface TeamCalendarViewProps {
   showLegend?: boolean;
 }
 
-const useTeamCalendarLogic = (view: 'monat' | 'jahr', entries: CalendarEntry[]) => {
+interface TeamCalendarLogicReturn {
+  dateRange: Date[];
+  entriesByUserAndDate: Map<string, CalendarEntry>;
+  selectedMonth: Date;
+  setSelectedMonth: (date: Date) => void;
+  hoveredCell: { userId: string; date: string } | null;
+  setHoveredCell: (cell: { userId: string; date: string } | null) => void;
+  filterType: string;
+  setFilterType: (type: string) => void;
+  selectedWeek: number;
+  setSelectedWeek: (week: number) => void;
+  handleNavigate: (direction: 'prev' | 'next') => void;
+  userEntries: Map<string, CalendarEntry[]>;
+}
+
+const useTeamCalendarLogic = (view: 'monat' | 'jahr', entries: CalendarEntry[]): TeamCalendarLogicReturn => {
   const [selectedMonth, setSelectedMonth] = useState(new Date());
   const [hoveredCell, setHoveredCell] = useState<{ userId: string; date: string } | null>(null);
   const [filterType, setFilterType] = useState<string>('all');
@@ -48,30 +63,37 @@ const useTeamCalendarLogic = (view: 'monat' | 'jahr', entries: CalendarEntry[]) 
     return filtered;
   }, [entriesByUserAndDate, filterType]);
 
-  const navigateMonth = (direction: number) => {
+  const navigateMonth = (direction: number): void => {
     const newDate = new Date(selectedMonth);
     newDate.setMonth(newDate.getMonth() + direction);
     setSelectedMonth(newDate);
   };
 
-  const handleCellHover = (userId: string, date: string) => {
-    setHoveredCell({ userId, date });
+  const [selectedWeek, setSelectedWeek] = useState(0);
+  
+  const handleNavigate = (direction: 'prev' | 'next'): void => {
+    navigateMonth(direction === 'prev' ? -1 : 1);
   };
-
-  const handleCellLeave = () => {
-    setHoveredCell(null);
-  };
+  
+  const userEntries = new Map<string, CalendarEntry[]>();
+  entries.forEach(entry => {
+    const existing = userEntries.get(entry.userId) || [];
+    userEntries.set(entry.userId, [...existing, entry]);
+  });
 
   return {
-    selectedMonth,
-    hoveredCell,
-    filterType,
     dateRange,
-    filteredEntries,
-    navigateMonth,
-    handleCellHover,
-    handleCellLeave,
-    setFilterType
+    entriesByUserAndDate: filteredEntries,
+    selectedMonth,
+    setSelectedMonth,
+    hoveredCell,
+    setHoveredCell,
+    filterType,
+    setFilterType,
+    selectedWeek,
+    setSelectedWeek,
+    handleNavigate,
+    userEntries
   };
 };
 
@@ -96,7 +118,7 @@ export const TeamCalendarView: React.FC<TeamCalendarViewProps> = ({
         view={view}
         selectedMonth={calendarLogic.selectedMonth}
         filterType={calendarLogic.filterType}
-        onNavigateMonth={calendarLogic.navigateMonth}
+        onNavigateMonth={(direction: number) => calendarLogic.handleNavigate(direction > 0 ? 'next' : 'prev')}
         onFilterChange={calendarLogic.setFilterType}
       />
       
@@ -104,12 +126,12 @@ export const TeamCalendarView: React.FC<TeamCalendarViewProps> = ({
         view={view}
         dateRange={calendarLogic.dateRange}
         users={users}
-        filteredEntries={calendarLogic.filteredEntries}
+        filteredEntries={calendarLogic.entriesByUserAndDate}
         selectedMonth={calendarLogic.selectedMonth}
         hoveredCell={calendarLogic.hoveredCell}
         onCellClick={onCellClick}
-        onCellHover={calendarLogic.handleCellHover}
-        onCellLeave={calendarLogic.handleCellLeave}
+        onCellHover={(userId: string, date: string) => calendarLogic.setHoveredCell({ userId, date })}
+        onCellLeave={() => calendarLogic.setHoveredCell(null)}
       />
       
       <TeamCalendarLegend showLegend={showLegend} />

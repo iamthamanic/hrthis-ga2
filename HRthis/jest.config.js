@@ -2,8 +2,14 @@ module.exports = {
   preset: 'react-scripts',
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+  transformIgnorePatterns: [
+    'node_modules/(?!(date-fns|@testing-library|react-router|react-router-dom)/)'
+  ],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '^react-router-dom$': '<rootDir>/node_modules/react-router-dom/dist/index.js',
+    '^date-fns/locale$': '<rootDir>/node_modules/date-fns/locale/index.js',
+    '^date-fns/(.*)$': '<rootDir>/node_modules/date-fns/$1'
   },
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',

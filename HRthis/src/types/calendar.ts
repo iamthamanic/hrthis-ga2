@@ -1,3 +1,7 @@
+import { VacationReminder } from './reminders';
+
+import { LeaveRequest } from './index';
+
 /**
  * Calendar entry type for tracking absences and work times
  */
@@ -32,6 +36,7 @@ export interface UserLeave {
   endDate: string;
   type: 'VACATION' | 'SICK';
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  comment?: string;
 }
 
 /**
@@ -58,6 +63,7 @@ export interface LeaveEntry {
   endDate: string;
   type: 'VACATION' | 'SICK';
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  comment?: string;
 }
 
 /**
@@ -83,8 +89,8 @@ export type CalendarDay = {
   isCurrentMonth?: boolean;
   userLeaves?: UserLeave[];
   userTimeRecord?: UserTimeRecord;
-  leaves?: LeaveEntry[];
-  reminders?: ReminderEntry[];
+  leaves?: LeaveRequest[];
+  reminders?: VacationReminder[];
 };
 
 /**

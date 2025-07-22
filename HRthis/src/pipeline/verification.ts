@@ -5,9 +5,9 @@
  * das KI-Agenten zwingt, alle kritischen Aspekte zu validieren.
  */
 
-import { VerificationChecklist, AgentValidationResult } from './types';
 import { stepRegistry, stepValidator } from './annotations';
 import { checkpointManager } from './checkpoints';
+import { VerificationChecklist, AgentValidationResult } from './types';
 
 /**
  * Verification Manager für Selbstvalidierung

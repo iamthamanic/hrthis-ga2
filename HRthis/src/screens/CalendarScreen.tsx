@@ -210,7 +210,7 @@ export const CalendarScreen = () => {
         
         // Find time records for this date
         const _dayTimeRecords = teamTimeRecords.filter(record => record.date === dateString);
-        const userTimeRecord = userTimeRecords.find(record => record.date === dateString) || null;
+        const userTimeRecord = userTimeRecords.find(record => record.date === dateString) || undefined;
         
         // Find reminders for this date
         const dayReminders = reminders.filter(reminder => 

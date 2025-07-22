@@ -1,4 +1,5 @@
 import { UserAvatar, Skill, Level, XPEvent, LevelUpEvent, calculateXPProgress, calculateLevelFromXP } from '../types/avatar';
+import { XPEventType } from '../types/gamification';
 
 // Helper function to calculate new level based on XP
 export const calculateLevel = (totalXP: number, levels: Level[]): number => {
@@ -21,7 +22,7 @@ export const createXPEvent = (params: {
 }): XPEvent => ({
   id: `${params.userId}-${Date.now()}`,
   userId: params.userId,
-  type: params.metadata.type as string || 'manual',
+  type: (params.metadata.type as XPEventType) || 'manual',
   skillId: params.skillId || undefined,
   xpAmount: params.xpAmount,
   description: params.description,

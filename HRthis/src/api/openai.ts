@@ -9,10 +9,10 @@ gpt-4o-2024-11-20
 */
 import OpenAI from "openai";
 
-export const getOpenAIClient = () => {
+export const getOpenAIClient = (): OpenAI => {
   const apiKey = process.env.EXPO_PUBLIC_VIBECODE_OPENAI_API_KEY;
   if (!apiKey) {
-    console.warn("OpenAI API key not found in environment variables");
+    throw new Error("OpenAI API key not found in environment variables");
   }
   return new OpenAI({
     apiKey: apiKey,

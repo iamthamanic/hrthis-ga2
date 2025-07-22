@@ -7,6 +7,19 @@
  */
 
 // Core Pipeline Components
+/**
+ * Pipeline Orchestrator - Hauptklasse für KI-Agent Integration
+ * 
+ * Diese Klasse orchestriert alle Pipeline-Komponenten und stellt sicher,
+ * dass KI-Agenten das vollständige System verwenden müssen.
+ */
+import { stepRegistry, stepValidator } from './annotations';
+import { checkpointManager, CommonCheckpoints } from './checkpoints';
+import { failLoudlyManager, FailLoudlyUtils } from './failLoudly';
+import { StepRunner } from './StepRunner';
+import { PipelineConfig, AgentValidationResult } from './types';
+import { verificationManager, VerificationUtils } from './verification';
+
 export { StepRunner } from './StepRunner';
 export { 
   RequiredStep, 
@@ -42,19 +55,6 @@ export {
 
 // Types
 export * from './types';
-
-/**
- * Pipeline Orchestrator - Hauptklasse für KI-Agent Integration
- * 
- * Diese Klasse orchestriert alle Pipeline-Komponenten und stellt sicher,
- * dass KI-Agenten das vollständige System verwenden müssen.
- */
-import { StepRunner } from './StepRunner';
-import { stepRegistry, stepValidator } from './annotations';
-import { checkpointManager, CommonCheckpoints } from './checkpoints';
-import { verificationManager, VerificationUtils } from './verification';
-import { failLoudlyManager, FailLoudlyUtils } from './failLoudly';
-import { PipelineConfig, AgentValidationResult } from './types';
 
 export class PipelineOrchestrator {
   private stepRunner: StepRunner;
@@ -359,28 +359,24 @@ export const PipelineUtils = {
    * Quick Setup für Standard-Projekt-Pipeline
    */
   setupStandardPipeline(): PipelineOrchestrator {
-    const pipeline = new PipelineOrchestrator({
+    return new PipelineOrchestrator({
       failLoud: true,
       enableLogging: true,
       enforceRequiredSteps: true,
       allowPartialExecution: false
     });
-
-    return pipeline;
   },
 
   /**
    * Quick Setup für Test-Umgebung
    */
   setupTestPipeline(): PipelineOrchestrator {
-    const pipeline = new PipelineOrchestrator({
+    return new PipelineOrchestrator({
       failLoud: false,
       enableLogging: false,
       enforceRequiredSteps: true,
       allowPartialExecution: true
     });
-
-    return pipeline;
   },
 
   /**
