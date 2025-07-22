@@ -160,3 +160,6 @@ export const useCoinEventsStore = create<CoinEventsState>()(
     }
   )
 );
+
+// Export type alias for components
+export type EventsStore = CoinEventsState;

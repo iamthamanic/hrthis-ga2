@@ -1,18 +1,43 @@
 import React, { useState } from 'react';
+import { z } from 'zod';
 
+import { RequiredStep as _RequiredStep } from '../pipeline/annotations';
 import { useAuthStore } from '../state/auth';
 import { cn } from '../utils/cn';
-import { RequiredStep } from '../pipeline/annotations';
 
 export const LoginScreen = () => {
   const [email, setEmail] = useState('max.mustermann@hrthis.de');
-  const [password, setPassword] = useState('password');
+  const [password, setPassword] = useState('demo');
   const [error, setError] = useState('');
   const { login, isLoading } = useAuthStore();
 
   // @RequiredStep: "validate-login-input"
+  const loginSchema = z.object({
+    email: z
+      .string()
+      .min(1, 'E-Mail ist erforderlich')
+      .email('Ungültige E-Mail-Adresse')
+      .max(255, 'E-Mail ist zu lang'),
+    password: z
+      .string()
+      .min(1, 'Passwort ist erforderlich')
+      .min(3, 'Passwort muss mindestens 3 Zeichen lang sein')
+      .max(128, 'Passwort ist zu lang')
+  });
+
   const validateLoginInput = (email: string, password: string): boolean => {
-    return !(!email || !password);
+    try {
+      loginSchema.parse({ email, password });
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const firstError = error.errors[0];
+        setError(firstError?.message || 'Eingabedaten sind ungültig');
+      } else {
+        setError('Unbekannter Validierungsfehler');
+      }
+      return false;
+    }
   };
 
   // @RequiredStep: "handle-user-authentication"
@@ -92,12 +117,14 @@ export const LoginScreen = () => {
           </button>
         </form>
 
-        <div className="mt-8 p-4 bg-gray-50 rounded-lg">
-          <p className="text-sm text-gray-600 mb-2 font-medium">Demo-Anmeldedaten:</p>
-          <p className="text-xs text-gray-500">Mitarbeiter: max.mustermann@hrthis.de</p>
-          <p className="text-xs text-gray-500">Admin: anna.admin@hrthis.de</p>
-          <p className="text-xs text-gray-500">Passwort: password</p>
-        </div>
+        {(process.env.NODE_ENV === 'development' || process.env.REACT_APP_DEMO_MODE === 'true') && (
+          <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-sm text-blue-800 mb-2 font-medium">🚀 Demo-Modus aktiv</p>
+            <p className="text-xs text-blue-700">Mitarbeiter: max.mustermann@hrthis.de</p>
+            <p className="text-xs text-blue-700">Admin: anna.admin@hrthis.de</p>
+            <p className="text-xs text-blue-700">Passwort: <code className="bg-blue-100 px-1 rounded">demo</code></p>
+          </div>
+        )}
       </div>
     </div>
   );

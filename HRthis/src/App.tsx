@@ -1,13 +1,16 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { AppNavigator } from './navigation/AppNavigator';
 
-function App() {
+function App(): React.JSX.Element {
   return (
-    <Router>
-      <AppNavigator />
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <AppNavigator />
+      </Router>
+    </ErrorBoundary>
   );
 }
 

@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
+import { RequiredStep as _RequiredStep, markStepExecuted } from '../pipeline/annotations';
 import { User, Organization } from '../types';
-import { RequiredStep, markStepExecuted } from '../pipeline/annotations';
 
 // Helper to create basic user fields
 const createBasicUserFields = (userData: Partial<User>) => ({
@@ -77,7 +77,7 @@ const mockUsers: User[] = [
     organizationId: 'org1',
     firstName: 'Max',
     lastName: 'Mustermann',
-    privateEmail: 'max.privat@gmail.com',
+    privateEmail: 'max.demo@example.com',
     position: 'Senior Developer',
     department: 'IT',
     weeklyHours: 40,
@@ -92,8 +92,8 @@ const mockUsers: User[] = [
     },
     phone: '+49 30 12345678',
     bankDetails: {
-      iban: 'DE89 3704 0044 0532 0130 00',
-      bic: 'COBADEFFXXX'
+      iban: 'DE00 0000 0000 0000 0000 00',
+      bic: 'DEMOCEFF'
     },
     coinWallet: 1500,
     coinProgress: 2200,
@@ -109,7 +109,7 @@ const mockUsers: User[] = [
     organizationId: 'org1',
     firstName: 'Anna',
     lastName: 'Admin',
-    privateEmail: 'anna.privat@gmail.com',
+    privateEmail: 'anna.demo@example.com',
     position: 'HR Manager',
     department: 'Human Resources',
     weeklyHours: 40,
@@ -131,7 +131,7 @@ const mockUsers: User[] = [
     organizationId: 'org1',
     firstName: 'Tom',
     lastName: 'Teilzeit',
-    privateEmail: 'tom.privat@gmail.com',
+    privateEmail: 'tom.demo@example.com',
     position: 'Designer',
     department: 'Marketing',
     weeklyHours: 20,
@@ -209,7 +209,11 @@ export const useAuthStore = create<AuthState>()(
           const user = mockUsers.find(u => u.email === email);
           markStepExecuted('validate-user-exists', !!user, { userFound: !!user });
           
-          if (!user || password !== 'password') {
+          // For demo purposes, accept 'demo' or 'password'. In production, use proper auth.
+          const isDemoMode = process.env.NODE_ENV === 'development' || process.env.REACT_APP_DEMO_MODE === 'true';
+          const validPassword = isDemoMode && (password === 'demo' || password === 'password');
+          
+          if (!user || !validPassword) {
             markStepExecuted('login-validation', false, 'Invalid credentials');
             throw new Error('Ungültige Anmeldedaten');
           }

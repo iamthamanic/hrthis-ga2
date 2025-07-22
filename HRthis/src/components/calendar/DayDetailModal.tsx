@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { LeaveRequest, TimeRecord } from '../../types';
-import { CalendarDay, CalendarViewMode } from '../../types/calendar';
+import { LeaveRequest, TimeRecord as _TimeRecord } from '../../types';
+import { CalendarDay, CalendarViewMode, UserLeave, UserTimeRecord, LeaveEntry as _LeaveEntry, ReminderEntry as _ReminderEntry } from '../../types/calendar';
+import { VacationReminder } from '../../types/reminders';
 
-interface Reminder {
+interface _Reminder {
   id: string;
   message: string;
   date: string;
@@ -41,7 +42,7 @@ const ModalHeader: React.FC<{ selectedDay: CalendarDay; onClose: () => void }> =
   </div>
 );
 
-const UserLeaveEvents: React.FC<{ leaves: LeaveRequest[] }> = ({ leaves }) => (
+const UserLeaveEvents: React.FC<{ leaves: UserLeave[] }> = ({ leaves }) => (
   <>
     {leaves.map(leave => (
       <div key={leave.id} className="p-3 bg-blue-50 rounded-lg">
@@ -63,7 +64,7 @@ const UserLeaveEvents: React.FC<{ leaves: LeaveRequest[] }> = ({ leaves }) => (
   </>
 );
 
-const TimeRecordEvent: React.FC<{ timeRecord: TimeRecord }> = ({ timeRecord }) => (
+const TimeRecordEvent: React.FC<{ timeRecord: UserTimeRecord }> = ({ timeRecord }) => (
   <div className="p-3 bg-green-50 rounded-lg">
     <div className="flex items-center">
       <span className="text-2xl mr-3">⏰</span>
@@ -104,7 +105,7 @@ const TeamLeaveEvents: React.FC<{ leaves: LeaveRequest[]; getUserName: (userId: 
   </>
 );
 
-const ReminderEvents: React.FC<{ reminders: Reminder[] }> = ({ reminders }) => (
+const ReminderEvents: React.FC<{ reminders: VacationReminder[] }> = ({ reminders }) => (
   <>
     {reminders.map(reminder => (
       <div key={reminder.id} className="p-3 bg-orange-50 rounded-lg">

@@ -81,7 +81,7 @@ export interface UserAchievement {
 export interface XPEvent {
   id: string;
   userId: string;
-  type: 'training_completed' | 'punctual_checkin' | 'coins_earned' | 'feedback_given' | 'manual';
+  type: 'training_completed' | 'training_passed' | 'punctual_checkin' | 'coins_earned' | 'feedback_given' | 'daily_login' | 'manual';
   skillId?: string; // Which skill gets the XP
   xpAmount: number;
   description: string;

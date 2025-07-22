@@ -5,8 +5,8 @@
  * die sicherstellen, dass KI-Agenten alle kritischen Validierungen durchführen.
  */
 
-import { StepValidationCheckpoint, PipelineCheckpoint, StepResult } from './types';
-import { stepRegistry, stepValidator } from './annotations';
+import { stepRegistry, stepValidator as _stepValidator } from './annotations';
+import { StepValidationCheckpoint as _StepValidationCheckpoint, PipelineCheckpoint, StepResult } from './types';
 
 /**
  * Checkpoint Manager für Pipeline-Validierung
@@ -85,7 +85,7 @@ export class CheckpointManager {
   validateAllCheckpoints(): boolean {
     const failedCheckpoints: string[] = [];
     
-    Array.from(this.checkpoints.entries()).forEach(([name, checkpoint]) => {
+    Array.from(this.checkpoints.entries()).forEach(([name, _checkpoint]) => {
       try {
         this.validateCheckpoint(name);
       } catch (error) {

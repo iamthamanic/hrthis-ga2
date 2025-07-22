@@ -1,6 +1,26 @@
 import { CalendarEntry } from '../types/calendar';
-
 import { exportToCSV, exportToPDF } from './exportCalendar';
+
+// Mock date-fns and jsPDF to avoid ES module issues
+jest.mock('date-fns', () => ({
+  format: jest.fn((_date: Date | string, _formatStr: string) => '2025-01-06')
+}));
+
+jest.mock('date-fns/locale', () => ({
+  de: {}
+}));
+
+jest.mock('jspdf', () => {
+  return jest.fn().mockImplementation(() => ({
+    text: jest.fn(),
+    save: jest.fn(),
+    internal: {
+      pageSize: { width: 210 }
+    }
+  }));
+});
+
+jest.mock('jspdf-autotable', () => jest.fn());
 
 // Test data
 const testEntries: CalendarEntry[] = [
@@ -27,13 +47,13 @@ const testDateRange = [
 ];
 
 // Manual test functions (to be run in browser console)
-export const testCSVExport = () => {
-  console.log('Testing CSV export...');
+export const testCSVExport = (): void => {
+  // Test CSV export functionality
   exportToCSV(testEntries, testDateRange, testUsers, 'monat', new Date('2025-01-01'));
 };
 
-export const testPDFExport = () => {
-  console.log('Testing PDF export...');
+export const testPDFExport = (): void => {
+  // Test PDF export functionality
   exportToPDF(testEntries, testDateRange, testUsers, 'monat', new Date('2025-01-01'));
 };
 

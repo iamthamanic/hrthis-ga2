@@ -63,7 +63,7 @@ export class FailLoudlyManager {
       console.error(`💥 ERROR ID: ${this.generateErrorId()}`);
       
       // Zeige Stack Trace falls verfügbar
-      const stack = new Error().stack;
+      const {stack} = new Error();
       if (stack) {
         console.error(`💥 STACK TRACE:\n${stack}`);
       }

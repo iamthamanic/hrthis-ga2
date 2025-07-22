@@ -7,10 +7,13 @@ import { AddEmployeeScreen } from '../AddEmployeeScreen';
 
 // Mock useNavigate
 const mockNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
-}));
+jest.mock('react-router-dom', () => {
+  const originalModule = jest.requireActual<typeof import('react-router-dom')>('react-router-dom');
+  return {
+    ...originalModule,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 describe('AddEmployeeScreen', () => {
   beforeEach(() => {

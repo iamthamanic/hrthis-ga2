@@ -10,6 +10,35 @@ Does not support video and audio generation.
 const baseUrl = "https://api.vibecodeapp.com";
 const endpoint = "/api/storage/generate-image";
 
+interface ImageOptions {
+  size?: "1024x1024" | "1536x1024" | "1024x1536" | "auto";
+  quality?: "low" | "medium" | "high" | "auto";
+  format?: "png" | "jpeg" | "webp";
+  background?: undefined | "transparent";
+}
+
+// Helper function to create request body
+const createRequestBody = (prompt: string, options?: ImageOptions): object => ({
+  projectId: process.env.EXPO_PUBLIC_VIBECODE_PROJECT_ID,
+  prompt,
+  options: { ...options },
+});
+
+// Helper function to handle API response
+const processApiResponse = async (response: Response): Promise<string> => {
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(`Image generation API error: ${response.status} ${JSON.stringify(errorData)}`);
+  }
+
+  const result = await response.json();
+  if (result.success && result.data) {
+    return result.data.imageUrl as string;
+  } else {
+    throw new Error("Invalid response format from API");
+  }
+};
+
 /**
  * Generate an image using the custom API endpoint
  * @param prompt The text prompt to generate an image from
@@ -18,51 +47,20 @@ const endpoint = "/api/storage/generate-image";
  */
 export async function generateImage(
   prompt: string,
-  options?: {
-    size?: "1024x1024" | "1536x1024" | "1024x1536" | "auto";
-    quality?: "low" | "medium" | "high" | "auto";
-    format?: "png" | "jpeg" | "webp";
-    background?: undefined | "transparent";
-  }
+  options?: ImageOptions
 ): Promise<string> {
   try {
-    // Create request body
-    const requestBody = {
-      projectId: process.env.EXPO_PUBLIC_VIBECODE_PROJECT_ID,
-      prompt,
-      options: {
-        ...options,
-      },
-    };
-
-    // Make API request
+    const requestBody = createRequestBody(prompt, options);
+    
     const response = await fetch(`${baseUrl}${endpoint}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("[AssetGenerationService] Error response:", errorData);
-      throw new Error(`Image generation API error: ${response.status} ${JSON.stringify(errorData)}`);
-    }
-
-    const result = await response.json();
-    console.log("[AssetGenerationService] Image generated successfully");
-
-    // Return the image data from the response
-    if (result.success && result.data) {
-      return result.data.imageUrl as string;
-    } else {
-      console.error("[AssetGenerationService] Invalid response format:", result);
-      throw new Error("Invalid response format from API");
-    }
+    return await processApiResponse(response);
   } catch (error) {
-    console.error("Image Generation Error:", error);
-    throw error;
+    throw new Error(`Image Generation Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 

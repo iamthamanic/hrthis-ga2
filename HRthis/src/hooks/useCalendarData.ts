@@ -234,7 +234,7 @@ export const useCalendarData = (viewMode: CalendarViewMode, currentDate: Date) =
         });
         
         const _dayTimeRecords = teamTimeRecords.filter(record => record.date === dateString);
-        const userTimeRecord = userTimeRecords.find(record => record.date === dateString) || null;
+        const userTimeRecord = userTimeRecords.find(record => record.date === dateString) || undefined;
         
         const dayReminders = reminders.filter(reminder => 
           reminder.reminderDate === dateString && reminder.isActive &&

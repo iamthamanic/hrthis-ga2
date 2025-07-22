@@ -6,11 +6,12 @@
  * wie das Pipeline-System in realen Projekten verwendet werden sollte.
  */
 
-import { PipelineOrchestrator, PipelineUtils } from './index';
 import { RequiredStep, markStepExecuted, stepValidator } from './annotations';
 import { checkpointManager, CommonCheckpoints } from './checkpoints';
-import { verificationManager, VerificationUtils } from './verification';
 import { failLoudlyManager, FailLoudlyUtils } from './failLoudly';
+import { verificationManager, VerificationUtils } from './verification';
+
+import { PipelineOrchestrator, PipelineUtils } from './index';
 
 /**
  * Agent Integration Manager für verschiedene KI-Systeme
@@ -81,7 +82,7 @@ export class AgentIntegrationManager {
       'setup-logging'
     ];
 
-    let stepsToRegister = [...commonSteps];
+    const stepsToRegister = [...commonSteps];
     
     if (this.projectType === 'frontend' || this.projectType === 'fullstack') {
       stepsToRegister.push(...frontendSteps);

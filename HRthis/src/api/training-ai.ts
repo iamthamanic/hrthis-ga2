@@ -7,12 +7,14 @@ import { getOpenAITextResponse } from './chat-service';
  * Uses OpenAI GPT-4o to generate training content, lessons, and quizzes
  */
 
+const getDifficultyText = (difficulty: string): string => {
+  if (difficulty === 'BEGINNER') return 'Anfänger: Grundlagen erklären';
+  if (difficulty === 'INTERMEDIATE') return 'Fortgeschritten: Vertiefte Kenntnisse vermitteln';
+  return 'Experte: Spezialisiertes Fachwissen';
+};
+
 const buildTrainingPrompt = (request: AIGenerationRequest): string => {
-  const difficultyText = request.difficulty === 'BEGINNER' 
-    ? 'Anfänger: Grundlagen erklären' 
-    : request.difficulty === 'INTERMEDIATE' 
-    ? 'Fortgeschritten: Vertiefte Kenntnisse vermitteln' 
-    : 'Experte: Spezialisiertes Fachwissen';
+  const difficultyText = getDifficultyText(request.difficulty);
 
   const quizSection = request.includeQuiz 
     ? '- Quiz mit 2-3 Multiple-Choice-Fragen pro Lektion\n   - Jede Frage mit 4 Antwortmöglichkeiten, korrekter Antwort und Erklärung'
@@ -62,9 +64,7 @@ ${buildJsonFormat(request)}
 Erstelle jetzt die Schulung:`;
 };
 
-const buildJsonFormat = (request: AIGenerationRequest): string => {
-  const quizFormat = request.includeQuiz 
-    ? `"quiz": {
+const getQuizFormat = (): string => `"quiz": {
         "questions": [
           {
             "question": "Frage?",
@@ -74,11 +74,9 @@ const buildJsonFormat = (request: AIGenerationRequest): string => {
           }
         ],
         "passingScore": 80
-      }`
-    : '';
+      }`;
 
-  const finalQuizFormat = request.includeQuiz 
-    ? `,
+const getFinalQuizFormat = (): string => `,
   "finalQuiz": {
     "questions": [
       {
@@ -89,8 +87,11 @@ const buildJsonFormat = (request: AIGenerationRequest): string => {
       }
     ],
     "passingScore": 70
-  }`
-    : '';
+  }`;
+
+const buildJsonFormat = (request: AIGenerationRequest): string => {
+  const quizFormat = request.includeQuiz ? getQuizFormat() : '';
+  const finalQuizFormat = request.includeQuiz ? getFinalQuizFormat() : '';
 
   return `Antworte ausschließlich in folgendem JSON-Format:
 
@@ -111,9 +112,9 @@ const buildJsonFormat = (request: AIGenerationRequest): string => {
 const parseAIResponse = (response: string, request: AIGenerationRequest): AIGeneratedContent => {
   try {
     const jsonMatch = response.match(/\{[\s\S]*\}/);
-    const jsonString = jsonMatch ? jsonMatch[0] : response;
+    const jsonString = jsonMatch?.[0] ?? response;
     return JSON.parse(jsonString);
-  } catch (parseError) {
+  } catch {
     return createFallbackContent(response, request);
   }
 };
@@ -132,7 +133,19 @@ const createFallbackContent = (response: string, request: AIGenerationRequest): 
   };
 };
 
-const createDefaultQuiz = (topic: string) => ({
+interface QuizQuestion {
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
+}
+
+interface Quiz {
+  questions: QuizQuestion[];
+  passingScore: number;
+}
+
+const createDefaultQuiz = (topic: string): Quiz => ({
   questions: [
     {
       question: `Was ist das wichtigste Prinzip bei ${topic}?`,
@@ -149,7 +162,7 @@ const createDefaultQuiz = (topic: string) => ({
   passingScore: 80
 });
 
-const createDefaultFinalQuiz = (topic: string) => ({
+const createDefaultFinalQuiz = (topic: string): Quiz => ({
   questions: [
     {
       question: `Was haben Sie in dieser ${topic} Schulung gelernt?`,
@@ -192,7 +205,6 @@ export const generateTrainingContent = async (request: AIGenerationRequest): Pro
     
     return parsedContent;
   } catch (error) {
-    console.error('AI Training Generation Error:', error);
     throw new Error('Fehler bei der KI-Generierung. Bitte versuchen Sie es erneut.');
   }
 };
@@ -261,8 +273,7 @@ export const generateCertificateText = async (
     ], { model: 'gpt-4o' });
 
     return aiResponse.content;
-  } catch (error) {
-    console.error('Certificate Generation Error:', error);
+  } catch {
     return createFallbackCertificate(trainingTitle, userName, completionDate, score);
   }
 };
@@ -351,8 +362,7 @@ export const generateTrainingNotificationEmail = async (
     ], { model: 'gpt-4o' });
     
     return extractEmailContent(aiResponse.content, trainingTitle);
-  } catch (error) {
-    console.error('Email Generation Error:', error);
+  } catch {
     return createFallbackEmail(type, userName, trainingTitle);
   }
 };

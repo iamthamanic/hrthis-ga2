@@ -1,4 +1,4 @@
-import { RequiredStepMetadata, StepResult, StepValidationCheckpoint, PipelineCheckpoint } from './types';
+import { RequiredStepMetadata as _RequiredStepMetadata, StepResult, StepValidationCheckpoint, PipelineCheckpoint } from './types';
 
 /**
  * StepRunner - Zentrale Pipeline-Klasse für erzwungene Ausführung aller Arbeitsschritte

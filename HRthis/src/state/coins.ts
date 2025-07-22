@@ -30,7 +30,7 @@ export interface UserCoinBalance {
   lastUpdated: string;
 }
 
-interface CoinsState {
+export interface CoinsState {
   transactions: CoinTransaction[];
   rules: CoinRule[];
   balances: UserCoinBalance[];
@@ -274,3 +274,6 @@ export const useCoinsStore = create<CoinsState>()(
     }
   )
 );
+
+// Export type alias for components
+export type CoinsStore = CoinsState;

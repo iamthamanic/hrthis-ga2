@@ -9,7 +9,7 @@ You can use this function to transcribe audio files, and it will return the text
  * @param localAudioUri - The local URI of the audio file to transcribe. Obtained via the expo-av library.
  * @returns The text of the audio file
  */
-export const transcribeAudio = async (localAudioUri: string) => {
+export const transcribeAudio = async (localAudioUri: string): Promise<{ success: boolean; transcript?: string; error?: string }> => {
   try {
     // Create FormData for the audio file
     const formData = new FormData();

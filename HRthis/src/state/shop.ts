@@ -297,3 +297,6 @@ export const useShopStore = create<ShopState>()(
     }
   )
 );
+
+// Export type alias for components
+export type ShopStore = ShopState;

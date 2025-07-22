@@ -7,8 +7,8 @@
 
 import { stepRegistry, markStepExecuted, stepValidator } from './annotations';
 import { checkpointManager, CommonCheckpoints } from './checkpoints';
-import { verificationManager, VerificationUtils } from './verification';
 import { failLoudlyManager } from './failLoudly';
+import { verificationManager, VerificationUtils } from './verification';
 
 /**
  * Production Pipeline Manager - 100% Compatible
