@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-// Direct imports to avoid module resolution issues - v2
+// Direct imports with explicit paths - v3
 import { EarnTab } from '../components/benefits/EarnTab';
 import { HistoryTab } from '../components/benefits/HistoryTab';
 import { ManageTab } from '../components/benefits/ManageTab';
