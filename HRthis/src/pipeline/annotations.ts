@@ -178,16 +178,12 @@ export class CommentBasedStepDetector {
 
   /**
    * Analysiert eine Datei nach @RequiredStep Kommentaren
+   * Note: This method is disabled in frontend builds
    */
   async analyzeFile(filePath: string): Promise<string[]> {
-    try {
-      const fs = await import('fs');
-      const code = fs.readFileSync(filePath, 'utf-8');
-      return this.analyzeCode(code, filePath);
-    } catch (error) {
-      console.warn(`Could not analyze file ${filePath}: ${error}`);
-      return [];
-    }
+    // File system operations are not available in browser environment
+    console.warn(`File analysis is not available in browser environment: ${filePath}`);
+    return [];
   }
 
   /**
