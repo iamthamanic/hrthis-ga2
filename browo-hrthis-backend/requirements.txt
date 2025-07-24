@@ -26,6 +26,7 @@ aiofiles==24.1.0
 pydantic==2.10.3
 httpx==0.28.1
 aiofiles==24.1.0
+email-validator
 
 # Development
 pytest==8.3.4
