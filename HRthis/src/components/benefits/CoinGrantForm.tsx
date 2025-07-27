@@ -7,7 +7,7 @@ import {
   validateGrantForm, 
   getAmountAndReason, 
   resetFormState, 
-  renderUserSelection, 
+  UserSelection, 
   renderCustomReasonOption, 
   renderSubmitButton,
   type FormState 
@@ -222,7 +222,10 @@ export const CoinGrantForm: React.FC<CoinGrantFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-xl p-6 shadow-sm space-y-4">
-      {renderUserSelection(formState.selectedUserId, formState.setSelectedUserId)}
+      <UserSelection 
+        selectedUserId={formState.selectedUserId} 
+        setSelectedUserId={formState.setSelectedUserId} 
+      />
       {renderReasonSection(formState, coinsStore)}
       {renderCustomFields({
         isCustomReason: formState.isCustomReason,

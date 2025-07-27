@@ -65,7 +65,11 @@ export const resetFormState = (setters: {
   setters.setIsCustomReason(false);
 };
 
-export const renderUserSelection = (selectedUserId: string, setSelectedUserId: (value: string) => void) => {
+// React Component für User Selection
+export const UserSelection: React.FC<{
+  selectedUserId: string;
+  setSelectedUserId: (value: string) => void;
+}> = ({ selectedUserId, setSelectedUserId }) => {
   const { employees, loading, error, isUsingRealAPI } = useEmployees();
 
   return (
