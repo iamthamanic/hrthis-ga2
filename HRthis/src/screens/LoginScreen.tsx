@@ -7,7 +7,7 @@ import { cn } from '../utils/cn';
 
 export const LoginScreen = () => {
   const [email, setEmail] = useState('max.mustermann@hrthis.de');
-  const [password, setPassword] = useState('demo');
+  const [password, setPassword] = useState('password');
   const [error, setError] = useState('');
   const { login, isLoading } = useAuthStore();
 
