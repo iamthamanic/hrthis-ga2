@@ -213,12 +213,9 @@ export const useAuthStore = create<AuthState>()(
           const user = mockUsers.find(u => u.email === email);
           markStepExecuted('validate-user-exists', !!user, { userFound: !!user });
           
-          // For demo purposes, accept 'demo' or 'password'. In production, use proper auth.
-          // Allow demo logins in development or when REACT_APP_DEMO_MODE is true, or for demo app
-          const isDemoMode = process.env.NODE_ENV === 'development' || 
-                            process.env.REACT_APP_DEMO_MODE === 'true' ||
-                            window.location.hostname.includes('hrthis.kibutubot.com') ||
-                            window.location.hostname.includes('localhost');
+          // Simple demo mode logic: If API URL is not set, we're in demo mode
+          const USE_REAL_API = process.env.REACT_APP_API_URL && process.env.REACT_APP_API_URL.trim() !== '';
+          const isDemoMode = !USE_REAL_API;
           const validPassword = isDemoMode && (password === 'demo' || password === 'password');
           
           // Debug information for development
@@ -227,9 +224,8 @@ export const useAuthStore = create<AuthState>()(
             userFound: !!user,
             isDemoMode,
             validPassword,
-            hostname: window.location.hostname,
-            nodeEnv: process.env.NODE_ENV,
-            demoModeEnv: process.env.REACT_APP_DEMO_MODE
+            USE_REAL_API,
+            apiUrl: process.env.REACT_APP_API_URL
           });
           
           if (!user || !validPassword) {
