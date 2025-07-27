@@ -214,8 +214,23 @@ export const useAuthStore = create<AuthState>()(
           markStepExecuted('validate-user-exists', !!user, { userFound: !!user });
           
           // For demo purposes, accept 'demo' or 'password'. In production, use proper auth.
-          const isDemoMode = process.env.NODE_ENV === 'development' || process.env.REACT_APP_DEMO_MODE === 'true';
+          // Allow demo logins in development or when REACT_APP_DEMO_MODE is true, or for demo app
+          const isDemoMode = process.env.NODE_ENV === 'development' || 
+                            process.env.REACT_APP_DEMO_MODE === 'true' ||
+                            window.location.hostname.includes('hrthis.kibutubot.com') ||
+                            window.location.hostname.includes('localhost');
           const validPassword = isDemoMode && (password === 'demo' || password === 'password');
+          
+          // Debug information for development
+          console.log('Login Debug:', {
+            email,
+            userFound: !!user,
+            isDemoMode,
+            validPassword,
+            hostname: window.location.hostname,
+            nodeEnv: process.env.NODE_ENV,
+            demoModeEnv: process.env.REACT_APP_DEMO_MODE
+          });
           
           if (!user || !validPassword) {
             markStepExecuted('login-validation', false, 'Invalid credentials');
