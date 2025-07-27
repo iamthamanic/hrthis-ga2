@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 
 import { RequiredStep as _RequiredStep, markStepExecuted } from '../pipeline/annotations';
 import { User, Organization } from '../types';
+import apiClient, { apiUtils } from '../api/api-client';
 
 // Helper to create basic user fields
 const createBasicUserFields = (userData: Partial<User>) => ({
@@ -58,6 +59,7 @@ interface AuthState {
   organization: Organization | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  token: string | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   setUser: (user: User) => void;
@@ -65,6 +67,7 @@ interface AuthState {
   updateUser: (userId: string, updates: Partial<User>) => Promise<void>;
   createUser: (userData: Partial<User>) => Promise<User>;
   getAllUsers: () => User[];
+  loadEmployees: () => Promise<User[]>;
 }
 
 // Mock authentication data
@@ -194,6 +197,7 @@ export const useAuthStore = create<AuthState>()(
       organization: null,
       isAuthenticated: false,
       isLoading: false,
+      token: null,
 
       login: async (email: string, password: string) => {
         set({ isLoading: true });
@@ -242,7 +246,8 @@ export const useAuthStore = create<AuthState>()(
         set({ 
           user: null, 
           organization: null, 
-          isAuthenticated: false 
+          isAuthenticated: false,
+          token: null
         });
       },
 
@@ -284,16 +289,53 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true });
         
         try {
-          await simulateApiCall();
-          
-          const newUser = createUserWithDefaults(userData);
-          mockUsers.push(newUser);
-          
-          set({ isLoading: false });
-          return newUser;
+          if (apiUtils.isRealAPIEnabled()) {
+            // Use real API
+            const token = get().token;
+            const newUser = await apiClient.employees.create(userData, token || undefined);
+            const transformedUser = apiUtils.transformBackendUser(newUser);
+            
+            set({ isLoading: false });
+            return transformedUser;
+          } else {
+            // Use mock data
+            await simulateApiCall();
+            
+            const newUser = createUserWithDefaults(userData);
+            mockUsers.push(newUser);
+            
+            set({ isLoading: false });
+            return newUser;
+          }
         } catch (error) {
           set({ isLoading: false });
           throw error;
+        }
+      },
+
+      // New function to load all employees
+      loadEmployees: async (): Promise<User[]> => {
+        set({ isLoading: true });
+        
+        try {
+          if (apiUtils.isRealAPIEnabled()) {
+            // Use real API
+            const token = get().token;
+            const employees = await apiClient.employees.getAll(token || undefined);
+            const transformedEmployees = employees.map(apiUtils.transformBackendUser);
+            
+            set({ isLoading: false });
+            return transformedEmployees;
+          } else {
+            // Use mock data
+            await simulateApiCall();
+            set({ isLoading: false });
+            return mockUsers;
+          }
+        } catch (error) {
+          console.warn('Failed to load employees from API, falling back to mock data:', error);
+          set({ isLoading: false });
+          return mockUsers;
         }
       },
 
@@ -307,7 +349,8 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => ({ 
         user: state.user, 
         organization: state.organization,
-        isAuthenticated: state.isAuthenticated 
+        isAuthenticated: state.isAuthenticated,
+        token: state.token
       }),
     }
   )

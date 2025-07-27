@@ -2,6 +2,7 @@ import React from 'react';
 
 import type { CoinRule } from '../../state/coins';
 import { cn } from '../../utils/cn';
+import { useEmployees } from '../../hooks/useEmployees';
 
 interface CoinsStore {
   getCoinRules: () => CoinRule[];
@@ -16,14 +17,7 @@ interface FormState {
   isCustomReason: boolean;
 }
 
-const availableUsers = [
-  { id: '1', name: 'Max M.' },
-  { id: '2', name: 'Anna A.' },
-  { id: '3', name: 'Tom K.' },
-  { id: '4', name: 'Lisa S.' },
-  { id: '5', name: 'Julia B.' },
-  { id: '6', name: 'Marco L.' }
-];
+// Moved to useEmployees hook - no longer needed
 
 export const validateGrantForm = (formState: FormState): string | null => {
   if (!formState.selectedUserId) {
@@ -71,26 +65,48 @@ export const resetFormState = (setters: {
   setters.setIsCustomReason(false);
 };
 
-export const renderUserSelection = (selectedUserId: string, setSelectedUserId: (value: string) => void) => (
-  <div>
-    <label className="text-sm font-medium text-gray-700 mb-2 block">
-      Mitarbeiter auswählen
-    </label>
-    <select
-      value={selectedUserId}
-      onChange={(e) => setSelectedUserId(e.target.value)}
-      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      required
-    >
-      <option value="">Mitarbeiter auswählen...</option>
-      {availableUsers.map((user) => (
-        <option key={user.id} value={user.id}>
-          {user.name}
+export const renderUserSelection = (selectedUserId: string, setSelectedUserId: (value: string) => void) => {
+  const { employees, loading, error, isUsingRealAPI } = useEmployees();
+
+  return (
+    <div>
+      <label className="text-sm font-medium text-gray-700 mb-2 block">
+        Mitarbeiter auswählen
+        {isUsingRealAPI && (
+          <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded">
+            Live API
+          </span>
+        )}
+      </label>
+      <select
+        value={selectedUserId}
+        onChange={(e) => setSelectedUserId(e.target.value)}
+        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        required
+        disabled={loading}
+      >
+        <option value="">
+          {loading ? 'Lade Mitarbeiter...' : 'Mitarbeiter auswählen...'}
         </option>
-      ))}
-    </select>
-  </div>
-);
+        {employees.map((user) => (
+          <option key={user.id} value={user.id}>
+            {user.name} ({user.department || 'Keine Abteilung'})
+          </option>
+        ))}
+      </select>
+      {error && (
+        <p className="mt-1 text-sm text-red-600">
+          {error} - Fallback zu Mock-Daten
+        </p>
+      )}
+      {!isUsingRealAPI && (
+        <p className="mt-1 text-xs text-gray-500">
+          Verwende Mock-Daten (REACT_APP_API_URL nicht gesetzt)
+        </p>
+      )}
+    </div>
+  );
+};
 
 export const renderCustomReasonOption = (
   isCustomReason: boolean,
