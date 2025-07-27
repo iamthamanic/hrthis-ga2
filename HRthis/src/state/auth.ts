@@ -206,45 +206,82 @@ export const useAuthStore = create<AuthState>()(
           // @RequiredStep: "authenticate-user-credentials"
           markStepExecuted('authenticate-user-credentials', true, { email });
           
-          // Simulate API call delay
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          
-          // @RequiredStep: "validate-user-exists"
-          const user = mockUsers.find(u => u.email === email);
-          markStepExecuted('validate-user-exists', !!user, { userFound: !!user });
-          
           // Simple demo mode logic: If API URL is not set, we're in demo mode
           const USE_REAL_API = process.env.REACT_APP_API_URL && process.env.REACT_APP_API_URL.trim() !== '';
           const isDemoMode = !USE_REAL_API;
-          const validPassword = isDemoMode && (password === 'demo' || password === 'password');
           
           // Debug information for development
           console.log('Login Debug:', {
             email,
-            userFound: !!user,
             isDemoMode,
-            validPassword,
             USE_REAL_API,
             apiUrl: process.env.REACT_APP_API_URL
           });
           
-          if (!user || !validPassword) {
-            markStepExecuted('login-validation', false, 'Invalid credentials');
-            throw new Error('Ungültige Anmeldedaten');
+          if (USE_REAL_API) {
+            // Real API login
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ email, password }),
+            });
+            
+            if (!response.ok) {
+              const errorData = await response.json().catch(() => ({}));
+              throw new Error(errorData.message || 'Login fehlgeschlagen');
+            }
+            
+            const { user: backendUser, access_token } = await response.json();
+            
+            // Transform backend user to frontend format
+            const user = apiUtils.transformBackendUser(backendUser);
+            
+            // @RequiredStep: "load-user-organization"
+            const organization = mockOrganizations.find(org => org.id === user.organizationId) || mockOrganizations[0];
+            markStepExecuted('load-user-organization', !!organization, { organizationId: user.organizationId });
+            
+            // @RequiredStep: "establish-user-session"
+            set({ 
+              user, 
+              organization, 
+              isAuthenticated: true, 
+              isLoading: false,
+              token: access_token
+            });
+            markStepExecuted('establish-user-session', true, { userId: user.id });
+            
+          } else {
+            // Demo mode login
+            // Simulate API call delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // @RequiredStep: "validate-user-exists"
+            const user = mockUsers.find(u => u.email === email);
+            markStepExecuted('validate-user-exists', !!user, { userFound: !!user });
+            
+            const validPassword = password === 'demo' || password === 'password';
+            
+            if (!user || !validPassword) {
+              markStepExecuted('login-validation', false, 'Invalid credentials');
+              throw new Error('Ungültige Anmeldedaten');
+            }
+            
+            // @RequiredStep: "load-user-organization"
+            const organization = mockOrganizations.find(org => org.id === user.organizationId);
+            markStepExecuted('load-user-organization', !!organization, { organizationId: user.organizationId });
+            
+            // @RequiredStep: "establish-user-session"
+            set({ 
+              user, 
+              organization, 
+              isAuthenticated: true, 
+              isLoading: false,
+              token: null
+            });
+            markStepExecuted('establish-user-session', true, { userId: user.id });
           }
-          
-          // @RequiredStep: "load-user-organization"
-          const organization = mockOrganizations.find(org => org.id === user.organizationId);
-          markStepExecuted('load-user-organization', !!organization, { organizationId: user.organizationId });
-          
-          // @RequiredStep: "establish-user-session"
-          set({ 
-            user, 
-            organization, 
-            isAuthenticated: true, 
-            isLoading: false 
-          });
-          markStepExecuted('establish-user-session', true, { userId: user.id });
           
         } catch (error) {
           set({ isLoading: false });
