@@ -10,6 +10,7 @@ export interface User {
   lastName?: string;
   privateEmail?: string; // Private email address
   avatarUrl?: string; // Profile picture URL
+  birthDate?: string; // Birth date in ISO format
   address?: {
     street?: string;
     postalCode?: string;

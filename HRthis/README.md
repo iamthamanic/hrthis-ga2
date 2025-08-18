@@ -2,7 +2,29 @@
 
 A modern React web application converted from Expo/React Native. HRthis is a comprehensive employee portal with personalized dashboards, time tracking, leave management, gamification, and administrative tools.
 
+## 🚀 Lokale Entwicklung
+
+### Standard Ports:
+- **Frontend**: http://localhost:4173
+- **Backend API**: http://localhost:8002
+- **API Dokumentation**: http://localhost:8002/docs
+
 🚀 **Live Demo**: [Coming soon on Vercel]
+
+## 🚀 Quick Start
+
+### Frontend starten:
+```bash
+cd HRthis
+npm install
+npm start  # Startet automatisch auf Port 4173
+```
+
+### Backend starten (falls vorhanden):
+```bash
+cd backend
+python -m uvicorn main:app --host 0.0.0.0 --port 8002 --reload
+```
 
 ## 📊 Project Status
 

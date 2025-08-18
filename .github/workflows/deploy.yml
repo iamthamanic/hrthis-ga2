@@ -1,0 +1,193 @@
+name: 🚀 Deploy HRthis to Production
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: hrthis
+
+jobs:
+  deploy:
+    name: 🎯 Deploy to Hetzner Server
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🔧 Setup deployment environment
+      run: |
+        echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" > .env.production
+        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env.production
+        echo "REACT_APP_API_URL=https://hrthis-api.kibubot.com" >> .env.production
+        echo "MAX_UPLOAD_SIZE=50MB" >> .env.production
+        echo "ALLOWED_FILE_TYPES=pdf,doc,docx,jpg,jpeg,png" >> .env.production
+        echo "LOG_LEVEL=INFO" >> .env.production
+        
+    - name: 🔑 Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.HETZNER_SSH_KEY }}" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan -H ${{ secrets.HETZNER_HOST }} >> ~/.ssh/known_hosts
+        
+    - name: 📦 Deploy to server
+      run: |
+        # Create deployment package
+        tar -czf deployment.tar.gz \
+          --exclude='.git' \
+          --exclude='node_modules' \
+          --exclude='*.tar.gz' \
+          --exclude='.github' \
+          .
+          
+        # Copy to server
+        scp deployment.tar.gz root@${{ secrets.HETZNER_HOST }}:/tmp/
+        
+        # Deploy on server
+        ssh root@${{ secrets.HETZNER_HOST }} << 'EOF'
+          set -e
+          
+          echo "🚀 Starting deployment on server..."
+          
+          # Backup current version
+          if [ -d "/root/hrthis" ]; then
+            echo "📦 Creating backup..."
+            mv /root/hrthis /root/hrthis.backup.$(date +%Y%m%d_%H%M%S)
+          fi
+          
+          # Extract new version
+          mkdir -p /root/hrthis
+          cd /root/hrthis
+          tar -xzf /tmp/deployment.tar.gz
+          rm /tmp/deployment.tar.gz
+          
+          echo "⏬ Stopping current services..."
+          docker-compose -f docker-compose.prod.yml down 2>/dev/null || true
+          
+          echo "🏗️ Building and starting services..."
+          docker-compose -f docker-compose.prod.yml up -d --build
+          
+          echo "⏳ Waiting for services to start..."
+          sleep 30
+          
+          # Health check
+          echo "🏥 Performing health checks..."
+          
+          # Check if containers are running
+          if ! docker-compose -f docker-compose.prod.yml ps | grep -q "Up"; then
+            echo "❌ Containers failed to start!"
+            docker-compose -f docker-compose.prod.yml logs
+            exit 1
+          fi
+          
+          # Wait for backend to be ready
+          for i in {1..30}; do
+            if curl -f -s http://localhost:8000/health > /dev/null 2>&1; then
+              echo "✅ Backend health check passed"
+              break
+            fi
+            if [ $i -eq 30 ]; then
+              echo "❌ Backend health check failed after 30 attempts"
+              docker-compose -f docker-compose.prod.yml logs hrthis-backend
+              exit 1
+            fi
+            echo "⏳ Waiting for backend... ($i/30)"
+            sleep 10
+          done
+          
+          # Check frontend
+          if curl -f -s http://localhost:3000 > /dev/null 2>&1; then
+            echo "✅ Frontend health check passed"
+          else
+            echo "❌ Frontend health check failed"
+            docker-compose -f docker-compose.prod.yml logs hrthis-frontend
+            exit 1
+          fi
+          
+          echo "🎉 Deployment successful!"
+          
+          # Show status
+          echo "📊 Service Status:"
+          docker-compose -f docker-compose.prod.yml ps
+          
+        EOF
+        
+    - name: 🌐 Test live endpoints
+      run: |
+        echo "🧪 Testing live endpoints..."
+        
+        # Wait a bit more for nginx to catch up
+        sleep 10
+        
+        # Test frontend
+        if curl -f -s https://hrthis.kibubot.com > /dev/null; then
+          echo "✅ Frontend (https://hrthis.kibubot.com) is accessible"
+        else
+          echo "⚠️ Frontend might still be starting up"
+        fi
+        
+        # Test backend API
+        if curl -f -s https://hrthis-api.kibubot.com/docs > /dev/null; then
+          echo "✅ Backend API (https://hrthis-api.kibubot.com) is accessible"
+        else
+          echo "⚠️ Backend API might still be starting up"
+        fi
+        
+    - name: 📧 Notify on success
+      if: success()
+      run: |
+        echo "🎉 HRthis successfully deployed!"
+        echo "Frontend: https://hrthis.kibubot.com"
+        echo "API: https://hrthis-api.kibubot.com/docs"
+        
+        # Optional: Send notification to Discord/Slack
+        # curl -X POST "${{ secrets.DISCORD_WEBHOOK }}" \
+        #   -H "Content-Type: application/json" \
+        #   -d '{"content":"🎉 HRthis deployed successfully!\n✅ Frontend: https://hrthis.kibubot.com\n✅ API: https://hrthis-api.kibubot.com"}'
+        
+    - name: 🔄 Rollback on failure
+      if: failure()
+      run: |
+        echo "❌ Deployment failed! Attempting rollback..."
+        
+        ssh root@${{ secrets.HETZNER_HOST }} << 'EOF'
+          set -e
+          
+          echo "🔄 Rolling back to previous version..."
+          
+          # Stop failed deployment
+          cd /root/hrthis
+          docker-compose -f docker-compose.prod.yml down 2>/dev/null || true
+          
+          # Find most recent backup
+          BACKUP_DIR=$(ls -1dt /root/hrthis.backup.* | head -1)
+          
+          if [ ! -z "$BACKUP_DIR" ] && [ -d "$BACKUP_DIR" ]; then
+            echo "📦 Restoring from: $BACKUP_DIR"
+            
+            # Remove failed deployment
+            rm -rf /root/hrthis
+            
+            # Restore backup
+            mv "$BACKUP_DIR" /root/hrthis
+            
+            # Start previous version
+            cd /root/hrthis
+            docker-compose -f docker-compose.prod.yml up -d
+            
+            echo "✅ Rollback completed"
+          else
+            echo "❌ No backup found for rollback!"
+            exit 1
+          fi
+          
+        EOF
+        
+        # Optional: Send failure notification
+        # curl -X POST "${{ secrets.DISCORD_WEBHOOK }}" \
+        #   -H "Content-Type: application/json" \
+        #   -d '{"content":"❌ HRthis deployment failed and was rolled back!"}'

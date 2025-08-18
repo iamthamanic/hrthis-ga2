@@ -20,9 +20,14 @@ app = FastAPI(
 )
 
 # CORS Configuration
+cors_origins = os.getenv(
+    "CORS_ORIGINS", 
+    "http://localhost:4173,http://localhost:3000,http://localhost:3001"
+).split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:1996", "http://localhost:3001"],  # Frontend URLs
+    allow_origins=cors_origins,  # Frontend URLs from environment
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -47,10 +52,19 @@ def health_check():
 from app.api import employees, auth, files
 from app.core.database import create_tables
 
-# Create tables on startup
+# Create tables and initialize demo users on startup
 @app.on_event("startup")
 def startup_event():
     create_tables()
+    
+    # Initialize demo users if in development mode
+    import os
+    if os.getenv("INIT_DEMO_USERS", "true").lower() == "true":
+        try:
+            from init_demo_users import create_demo_users
+            create_demo_users()
+        except Exception as e:
+            print(f"Warning: Could not initialize demo users: {e}")
 
 # Include routers
 app.include_router(auth.router, prefix="/api/auth", tags=["authentication"])

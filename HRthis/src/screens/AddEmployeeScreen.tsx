@@ -25,6 +25,7 @@ export const AddEmployeeScreen = () => {
     // Personal details
     privateEmail: '',
     phone: '',
+    birthDate: '',
     
     // Address
     street: '',
@@ -151,6 +152,7 @@ export const AddEmployeeScreen = () => {
         role: formData.role,
         privateEmail: formData.privateEmail.trim() || undefined,
         phone: formData.phone.trim() || undefined,
+        birthDate: formData.birthDate || undefined,
         position: formData.position.trim(),
         department: formData.department.trim(),
         weeklyHours: parseInt(formData.weeklyHours),
@@ -355,6 +357,19 @@ export const AddEmployeeScreen = () => {
                   onChange={handleInputChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="+49 30 12345678"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Geburtsdatum
+                </label>
+                <input
+                  type="date"
+                  name="birthDate"
+                  value={formData.birthDate}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 

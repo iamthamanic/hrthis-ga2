@@ -1,3 +1,33 @@
+# HRthis Development Configuration
+
+## 🚀 Standard Entwicklungs-Ports
+
+### Festgelegte Ports für lokale Entwicklung:
+- **Frontend (React)**: `http://localhost:4173`
+- **Backend (FastAPI)**: `http://localhost:8002`
+- **API Dokumentation**: `http://localhost:8002/docs`
+
+### Start-Befehle:
+
+#### Frontend starten:
+```bash
+cd /Users/halteverbotsocialmacpro/Desktop/arsvivai/HRthis/HRthis
+npm start  # Startet automatisch auf Port 4173
+```
+
+#### Backend starten (falls implementiert):
+```bash
+cd /Users/halteverbotsocialmacpro/Desktop/arsvivai/HRthis/backend
+python -m uvicorn main:app --host 0.0.0.0 --port 8002 --reload
+```
+
+### Port-Konfiguration:
+- Frontend `.env`: `PORT=4173`
+- Backend `.env`: `PORT=8002`
+- CORS erlaubt: `http://localhost:4173`
+
+---
+
 # Claude Code Configuration for Claude Flow
 
 ## 🚨 CRITICAL: PARALLEL EXECUTION AFTER SWARM INIT

@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  # Frontend Service - React App
+  frontend:
+    build:
+      context: ./HRthis
+      dockerfile: Dockerfile
+    container_name: hrthis-frontend
+    ports:
+      - "4173:80"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8002
+      - REACT_APP_DEMO_MODE=false
+    depends_on:
+      - backend
+    networks:
+      - hrthis-network
+    restart: unless-stopped
+
+  # Backend Service - FastAPI
+  backend:
+    build:
+      context: ./browo-hrthis-backend
+      dockerfile: Dockerfile
+    container_name: hrthis-backend
+    ports:
+      - "8002:8000"
+    environment:
+      # Using SQLite for simplicity (no extra DB container needed)
+      - DATABASE_URL=sqlite:///./data/hrthis.db
+      - SECRET_KEY=your-super-secret-key-change-in-production
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      # CORS Settings
+      - CORS_ORIGINS=http://localhost:4173,http://localhost:3000
+    volumes:
+      - ./backend-data:/app/data
+      - ./uploads:/app/uploads
+    networks:
+      - hrthis-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Optional: PostgreSQL for production-like setup
+  # Uncomment if you want to use PostgreSQL instead of SQLite
+  # postgres:
+  #   image: postgres:16-alpine
+  #   container_name: hrthis-db
+  #   environment:
+  #     - POSTGRES_DB=hrthis
+  #     - POSTGRES_USER=hrthis
+  #     - POSTGRES_PASSWORD=hrthis123
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+  #   networks:
+  #     - hrthis-network
+  #   restart: unless-stopped
+
+networks:
+  hrthis-network:
+    driver: bridge
+
+volumes:
+  backend-data:
+  uploads:
+  # postgres_data:  # Uncomment if using PostgreSQL

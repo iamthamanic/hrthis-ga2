@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  hrthis-db:
+    image: postgres:16-alpine
+    container_name: hrthis-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: hrthis
+      POSTGRES_USER: hrthis
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - hrthis-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hrthis -d hrthis"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API (FastAPI)
+  hrthis-backend:
+    build: 
+      context: ./browo-hrthis-backend
+      dockerfile: Dockerfile
+    container_name: hrthis-backend
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://hrthis:${POSTGRES_PASSWORD}@hrthis-db:5432/hrthis
+      - SECRET_KEY=${SECRET_KEY}
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      - CORS_ORIGINS=["https://hrthis.kibubot.com"]
+    depends_on:
+      hrthis-db:
+        condition: service_healthy
+    volumes:
+      - ./browo-hrthis-backend/uploads:/app/uploads
+    networks:
+      - hrthis-net
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend (React)
+  hrthis-frontend:
+    build:
+      context: ./HRthis
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_API_URL=https://hrthis-api.kibubot.com
+    container_name: hrthis-frontend
+    restart: unless-stopped
+    networks:
+      - hrthis-net
+    ports:
+      - "3000:80"
+    depends_on:
+      - hrthis-backend
+
+networks:
+  hrthis-net:
+    driver: bridge
+    name: hrthis-network
+
+volumes:
+  postgres_data:
+    name: hrthis-postgres-data

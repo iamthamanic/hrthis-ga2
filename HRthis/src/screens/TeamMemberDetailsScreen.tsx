@@ -6,7 +6,8 @@ import { useLeavesStore } from '../state/leaves';
 import { useTeamsStore } from '../state/teams';
 // import { useCoinsStore } from '../state/coins';
 // import { cn } from '../utils/cn';
-import { User, UserRole, EmploymentStatus } from '../types';
+import { User, UserRole, EmploymentStatus, EmploymentType } from '../types';
+import { getEmploymentTypeLabel, EMPLOYMENT_TYPE_OPTIONS } from '../utils/employment-utils';
 
 /**
  * Team Member Details Screen Component
@@ -293,6 +294,118 @@ export const TeamMemberDetailsScreen = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Eintrittsdatum</label>
                 <p className="py-2 text-gray-500">{targetUser.joinDate || 'Nicht angegeben'}</p>
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Geburtsdatum</label>
+                {isEditing ? (
+                  <input
+                    type="date"
+                    value={editedUser.birthDate || ''}
+                    onChange={(e) => setEditedUser(prev => ({ ...prev, birthDate: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                ) : (
+                  <p className="py-2 text-gray-900">{targetUser.birthDate || 'Nicht angegeben'}</p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Address Information */}
+          <div className="bg-white p-6 rounded-lg border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Adresse</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Straße und Hausnummer</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editedUser.address?.street || ''}
+                    onChange={(e) => setEditedUser(prev => ({ 
+                      ...prev, 
+                      address: { ...prev.address, street: e.target.value }
+                    }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Musterstraße 123"
+                  />
+                ) : (
+                  <p className="py-2 text-gray-900">{targetUser.address?.street || 'Nicht angegeben'}</p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Postleitzahl</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editedUser.address?.postalCode || ''}
+                    onChange={(e) => setEditedUser(prev => ({ 
+                      ...prev, 
+                      address: { ...prev.address, postalCode: e.target.value }
+                    }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="12345"
+                  />
+                ) : (
+                  <p className="py-2 text-gray-900">{targetUser.address?.postalCode || 'Nicht angegeben'}</p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Stadt</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editedUser.address?.city || ''}
+                    onChange={(e) => setEditedUser(prev => ({ 
+                      ...prev, 
+                      address: { ...prev.address, city: e.target.value }
+                    }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Berlin"
+                  />
+                ) : (
+                  <p className="py-2 text-gray-900">{targetUser.address?.city || 'Nicht angegeben'}</p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Bank Details */}
+          <div className="bg-white p-6 rounded-lg border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Bankverbindung</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">IBAN</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editedUser.bankDetails?.iban || ''}
+                    onChange={(e) => setEditedUser(prev => ({ 
+                      ...prev, 
+                      bankDetails: { ...prev.bankDetails, iban: e.target.value }
+                    }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="DE89 3704 0044 0532 0130 00"
+                  />
+                ) : (
+                  <p className="py-2 text-gray-900">{targetUser.bankDetails?.iban || 'Nicht angegeben'}</p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">BIC</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editedUser.bankDetails?.bic || ''}
+                    onChange={(e) => setEditedUser(prev => ({ 
+                      ...prev, 
+                      bankDetails: { ...prev.bankDetails, bic: e.target.value }
+                    }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="COBADEFFXXX"
+                  />
+                ) : (
+                  <p className="py-2 text-gray-900">{targetUser.bankDetails?.bic || 'Nicht angegeben'}</p>
+                )}
+              </div>
             </div>
           </div>
 
@@ -324,6 +437,41 @@ export const TeamMemberDetailsScreen = () => {
                   />
                 ) : (
                   <p className="py-2 text-gray-900">{targetUser.department || 'Nicht angegeben'}</p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Beschäftigungsart</label>
+                {isEditing ? (
+                  <div>
+                    <select
+                      value={editedUser.employmentType || 'FULL_TIME'}
+                      onChange={(e) => setEditedUser(prev => ({ 
+                        ...prev, 
+                        employmentType: e.target.value as EmploymentType,
+                        employmentTypeCustom: e.target.value !== 'OTHER' ? undefined : prev.employmentTypeCustom 
+                      }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      {EMPLOYMENT_TYPE_OPTIONS.map(option => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                    {editedUser.employmentType === 'OTHER' && (
+                      <input
+                        type="text"
+                        value={editedUser.employmentTypeCustom || ''}
+                        onChange={(e) => setEditedUser(prev => ({ ...prev, employmentTypeCustom: e.target.value }))}
+                        placeholder="Bitte spezifizieren..."
+                        className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      />
+                    )}
+                  </div>
+                ) : (
+                  <p className="py-2 text-gray-900">
+                    {getEmploymentTypeLabel(targetUser.employmentType || 'FULL_TIME', targetUser.employmentTypeCustom)}
+                  </p>
                 )}
               </div>
               <div>

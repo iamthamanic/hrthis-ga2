@@ -1,0 +1,24 @@
+# Railway Configuration for HRthis Backend
+[build]
+  builder = "dockerfile"
+  dockerfilePath = "Dockerfile"
+
+[variables]
+  PORT = "8000"
+
+[deploy]
+  healthcheckPath = "/docs"
+  healthcheckTimeout = 300
+  restartPolicyType = "ON_FAILURE"
+  restartPolicyMaxRetries = 3
+
+# Optional: Custom start command (Railway will use Dockerfile CMD by default)
+# startCommand = "uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 2"
+
+# Database migration (if using Railway's database addon)
+[environments.production]
+  variables = { }  # Production-specific variables go here
+
+# Development environment (optional)
+[environments.development]
+  variables = { }  # Development-specific variables go here

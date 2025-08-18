@@ -7,6 +7,7 @@ export interface AIRequestOptions {
   temperature?: number;
   maxTokens?: number;
   model?: string;
+  functions?: any[];  // Optional function calling support for OpenAI
 }
 
 export interface AIResponse {
