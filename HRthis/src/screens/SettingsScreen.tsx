@@ -30,6 +30,10 @@ export const SettingsScreen = () => {
     city: user?.address?.city || '',
     iban: user?.bankDetails?.iban || '',
     bic: user?.bankDetails?.bic || '',
+    // Clothing sizes
+    clothingSizeTop: user?.clothingSizes?.top || '',
+    clothingSizePants: user?.clothingSizes?.pants || '',
+    clothingSizeShoes: user?.clothingSizes?.shoes || '',
     // Work information (admin editable)
     email: user?.email || '', // Work email
     position: user?.position || '',
@@ -173,6 +177,11 @@ export const SettingsScreen = () => {
       bankDetails: {
         iban: formData.iban,
         bic: formData.bic
+      },
+      clothingSizes: {
+        top: formData.clothingSizeTop || undefined,
+        pants: formData.clothingSizePants || undefined,
+        shoes: formData.clothingSizeShoes || undefined
       }
     };
 
@@ -426,6 +435,62 @@ export const SettingsScreen = () => {
                 />
               </div>
             </div>
+          </div>
+
+          {/* Clothing Sizes */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              Arbeitskleidung Größen
+            </h2>
+            
+            <div className="grid md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Oberteil
+                </label>
+                <select
+                  value={formData.clothingSizeTop}
+                  onChange={(e) => setFormData({...formData, clothingSizeTop: e.target.value})}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Bitte wählen</option>
+                  <option value="XS">XS</option>
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                  <option value="XXL">XXL</option>
+                  <option value="XXXL">XXXL</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Hose
+                </label>
+                <input
+                  type="text"
+                  value={formData.clothingSizePants}
+                  onChange={(e) => setFormData({...formData, clothingSizePants: e.target.value})}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="z.B. 32, W32/L34"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Schuhe
+                </label>
+                <input
+                  type="text"
+                  value={formData.clothingSizeShoes}
+                  onChange={(e) => setFormData({...formData, clothingSizeShoes: e.target.value})}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="z.B. 42, 9.5"
+                />
+              </div>
+            </div>
+            <p className="text-xs text-gray-500 mt-2">Diese Angaben helfen bei der Bestellung von Arbeitskleidung</p>
           </div>
 
           {/* Work Information */}
