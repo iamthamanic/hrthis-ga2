@@ -88,13 +88,13 @@ def get_employee(employee_id: str, db: Session = Depends(get_db)):
     return EmployeeResponse.from_orm(employee)
 
 def generate_employee_number(db: Session) -> str:
-    """Generate unique employee number in format EMP-YYYY-XXXX"""
+    """Generate unique employee number in format PN-YYYYXXXX (e.g., PN-20250001)"""
     from datetime import datetime
     
     year = datetime.now().year
     
     # Find the highest employee number for this year
-    prefix = f"EMP-{year}-"
+    prefix = f"PN-{year}"
     last_employee = db.query(Employee).filter(
         Employee.employee_number.like(f"{prefix}%")
     ).order_by(Employee.employee_number.desc()).first()
@@ -102,14 +102,15 @@ def generate_employee_number(db: Session) -> str:
     if last_employee and last_employee.employee_number:
         # Extract the number part and increment
         try:
-            last_num = int(last_employee.employee_number.split('-')[-1])
+            # PN-20250001 -> extract 0001
+            last_num = int(last_employee.employee_number.replace(prefix, ''))
             next_num = last_num + 1
         except (ValueError, IndexError):
             next_num = 1
     else:
         next_num = 1
     
-    # Format with leading zeros (4 digits)
+    # Format with leading zeros (4 digits) - PN-YYYYXXXX
     return f"{prefix}{next_num:04d}"
 
 @router.post("/", response_model=EmployeeResponse, status_code=status.HTTP_201_CREATED)

@@ -28,10 +28,10 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base.metadata.create_all(bind=engine)
 
 def generate_employee_number(db, index):
-    """Generate unique employee number for demo data"""
+    """Generate unique employee number for demo data in format PN-YYYYXXXX"""
     from datetime import datetime
     year = datetime.now().year
-    return f"EMP-{year}-{index:04d}"
+    return f"PN-{year}{index:04d}"
 
 def create_demo_users():
     """Create demo users if they don't exist"""
