@@ -17,7 +17,6 @@ export const AddEmployeeScreen = () => {
   const [formData, setFormData] = useState({
     // Required fields
     email: '',
-    employeeNumber: '',
     firstName: '',
     lastName: '',
     role: 'EMPLOYEE' as UserRole,
@@ -84,10 +83,6 @@ export const AddEmployeeScreen = () => {
       newErrors.email = 'Ungültige E-Mail-Adresse';
     }
 
-    if (!formData.employeeNumber.trim()) {
-      newErrors.employeeNumber = 'Personalnummer ist erforderlich';
-    }
-
     if (!formData.firstName.trim()) {
       newErrors.firstName = 'Vorname ist erforderlich';
     }
@@ -143,9 +138,8 @@ export const AddEmployeeScreen = () => {
     
     try {
       // Prepare user data
-      const userData: Omit<User, 'id' | 'organizationId'> = {
+      const userData: Omit<User, 'id' | 'organizationId' | 'employeeNumber'> = {
         email: formData.email.trim(),
-        employeeNumber: formData.employeeNumber.trim(),
         name: `${formData.firstName.trim()} ${formData.lastName.trim()}`,
         firstName: formData.firstName.trim(),
         lastName: formData.lastName.trim(),
@@ -246,26 +240,6 @@ export const AddEmployeeScreen = () => {
                 />
                 {errors.email && (
                   <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Personalnummer *
-                </label>
-                <input
-                  type="text"
-                  name="employeeNumber"
-                  value={formData.employeeNumber}
-                  onChange={handleInputChange}
-                  className={cn(
-                    "w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
-                    errors.employeeNumber ? "border-red-500" : "border-gray-300"
-                  )}
-                  placeholder="z.B. EMP001"
-                />
-                {errors.employeeNumber && (
-                  <p className="mt-1 text-sm text-red-600">{errors.employeeNumber}</p>
                 )}
               </div>
 

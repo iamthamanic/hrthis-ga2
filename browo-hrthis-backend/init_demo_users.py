@@ -27,6 +27,12 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # Create tables if they don't exist
 Base.metadata.create_all(bind=engine)
 
+def generate_employee_number(db, index):
+    """Generate unique employee number for demo data"""
+    from datetime import datetime
+    year = datetime.now().year
+    return f"EMP-{year}-{index:04d}"
+
 def create_demo_users():
     """Create demo users if they don't exist"""
     db = SessionLocal()
@@ -37,7 +43,6 @@ def create_demo_users():
             "password": "password",
             "first_name": "Max",
             "last_name": "Mustermann",
-            "employee_number": "EMP001",
             "role": "EMPLOYEE",
             "position": "Software Developer",
             "department": "IT",
@@ -62,7 +67,6 @@ def create_demo_users():
             "password": "password",
             "first_name": "Anna",
             "last_name": "Admin",
-            "employee_number": "ADM001",
             "role": "ADMIN",
             "position": "HR Manager",
             "department": "Human Resources",
@@ -87,7 +91,6 @@ def create_demo_users():
             "password": "password",
             "first_name": "Tom",
             "last_name": "Test",
-            "employee_number": "EMP002",
             "role": "EMPLOYEE",
             "position": "QA Engineer",
             "department": "Quality Assurance",
@@ -104,7 +107,7 @@ def create_demo_users():
         }
     ]
     
-    for user_data in demo_users:
+    for index, user_data in enumerate(demo_users, start=1):
         # Check if user already exists
         existing_user = db.query(Employee).filter(
             Employee.email == user_data["email"]
@@ -114,14 +117,17 @@ def create_demo_users():
             # Hash the password
             hashed_password = get_password_hash(user_data["password"])
             
+            # Generate employee number
+            employee_number = generate_employee_number(db, index)
+            
             # Create new employee
             new_employee = Employee(
-                id=f"emp-{user_data['employee_number'].lower()}",
+                id=f"emp-{index:03d}",
                 email=user_data["email"],
                 password_hash=hashed_password,  # Corrected field name
                 first_name=user_data["first_name"],
                 last_name=user_data["last_name"],
-                employee_number=user_data["employee_number"],
+                employee_number=employee_number,
                 role=user_data["role"].upper(),  # Ensure uppercase
                 position=user_data["position"],
                 department=user_data["department"],

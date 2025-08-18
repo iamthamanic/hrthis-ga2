@@ -87,6 +87,31 @@ def get_employee(employee_id: str, db: Session = Depends(get_db)):
     
     return EmployeeResponse.from_orm(employee)
 
+def generate_employee_number(db: Session) -> str:
+    """Generate unique employee number in format EMP-YYYY-XXXX"""
+    from datetime import datetime
+    
+    year = datetime.now().year
+    
+    # Find the highest employee number for this year
+    prefix = f"EMP-{year}-"
+    last_employee = db.query(Employee).filter(
+        Employee.employee_number.like(f"{prefix}%")
+    ).order_by(Employee.employee_number.desc()).first()
+    
+    if last_employee and last_employee.employee_number:
+        # Extract the number part and increment
+        try:
+            last_num = int(last_employee.employee_number.split('-')[-1])
+            next_num = last_num + 1
+        except (ValueError, IndexError):
+            next_num = 1
+    else:
+        next_num = 1
+    
+    # Format with leading zeros (4 digits)
+    return f"{prefix}{next_num:04d}"
+
 @router.post("/", response_model=EmployeeResponse, status_code=status.HTTP_201_CREATED)
 def create_employee(employee_data: EmployeeCreate, db: Session = Depends(get_db)):
     """Create new employee"""
@@ -99,20 +124,13 @@ def create_employee(employee_data: EmployeeCreate, db: Session = Depends(get_db)
             detail="Email already registered"
         )
     
-    # Check if employee number already exists
-    existing_number = db.query(Employee).filter(
-        Employee.employee_number == employee_data.employee_number
-    ).first()
-    if existing_number:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Employee number already exists"
-        )
+    # Generate unique employee number automatically
+    employee_number = generate_employee_number(db)
     
     # Create employee
     employee = Employee(
         id=str(uuid.uuid4()),
-        employee_number=employee_data.employee_number,
+        employee_number=employee_number,
         email=employee_data.email,
         password_hash=get_password_hash(employee_data.password),
         first_name=employee_data.first_name,

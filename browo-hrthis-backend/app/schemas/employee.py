@@ -86,7 +86,7 @@ class EmployeeBase(BaseModel):
 # Create Employee Schema
 class EmployeeCreate(EmployeeBase):
     password: str = Field(..., min_length=8, description="Passwort (min. 8 Zeichen)")
-    employee_number: str = Field(..., description="Eindeutige Mitarbeiternummer")
+    # employee_number is now auto-generated, so removed from create schema
     
     # Onboarding
     send_onboarding_email: bool = Field(False, description="Onboarding Email versenden")

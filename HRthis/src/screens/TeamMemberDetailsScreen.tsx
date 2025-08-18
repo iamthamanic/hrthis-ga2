@@ -253,16 +253,7 @@ export const TeamMemberDetailsScreen = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Personalnummer</label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={editedUser.employeeNumber || ''}
-                    onChange={(e) => setEditedUser(prev => ({ ...prev, employeeNumber: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                ) : (
-                  <p className="py-2 text-gray-900">{targetUser.employeeNumber || 'Nicht angegeben'}</p>
-                )}
+                <p className="py-2 text-gray-500">{targetUser.employeeNumber || 'Automatisch generiert'}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Private E-Mail</label>
