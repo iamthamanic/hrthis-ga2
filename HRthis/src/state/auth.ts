@@ -60,6 +60,7 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   token: string | null;
+  cachedEmployees: User[] | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   setUser: (user: User) => void;
@@ -78,6 +79,7 @@ const mockUsers: User[] = [
     name: 'Max Mustermann',
     role: 'EMPLOYEE',
     organizationId: 'org1',
+    employeeNumber: 'PN-20250001',
     firstName: 'Max',
     lastName: 'Mustermann',
     privateEmail: 'max.demo@example.com',
@@ -110,6 +112,7 @@ const mockUsers: User[] = [
     name: 'Anna Admin',
     role: 'ADMIN',
     organizationId: 'org1',
+    employeeNumber: 'PN-20250002',
     firstName: 'Anna',
     lastName: 'Admin',
     privateEmail: 'anna.demo@example.com',
@@ -132,6 +135,7 @@ const mockUsers: User[] = [
     name: 'Tom Teilzeit',
     role: 'EMPLOYEE',
     organizationId: 'org1',
+    employeeNumber: 'PN-20250003',
     firstName: 'Tom',
     lastName: 'Teilzeit',
     privateEmail: 'tom.demo@example.com',
@@ -154,6 +158,7 @@ const mockUsers: User[] = [
     name: 'Test User',
     role: 'EMPLOYEE',
     organizationId: 'org1',
+    employeeNumber: 'PN-20250004',
     firstName: 'Test',
     lastName: 'User',
     privateEmail: 'test.user@gmail.com',
@@ -198,6 +203,7 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       isLoading: false,
       token: null,
+      cachedEmployees: null,
 
       login: async (email: string, password: string) => {
         set({ isLoading: true });
@@ -219,13 +225,17 @@ export const useAuthStore = create<AuthState>()(
           });
           
           if (USE_REAL_API) {
-            // Real API login
+            // Real API login - use form-encoded data for OAuth2 compatibility
+            const formData = new URLSearchParams();
+            formData.append('username', email);  // Backend accepts email as username
+            formData.append('password', password);
+            
             const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
               method: 'POST',
               headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
               },
-              body: JSON.stringify({ email, password }),
+              body: formData.toString(),
             });
             
             if (!response.ok) {
@@ -372,22 +382,28 @@ export const useAuthStore = create<AuthState>()(
             const employees = await apiClient.employees.getAll(token || undefined);
             const transformedEmployees = employees.map(apiUtils.transformBackendUser);
             
-            set({ isLoading: false });
+            // Cache the employees for getAllUsers
+            set({ isLoading: false, cachedEmployees: transformedEmployees });
             return transformedEmployees;
           } else {
             // Use mock data
             await simulateApiCall();
-            set({ isLoading: false });
+            set({ isLoading: false, cachedEmployees: mockUsers });
             return mockUsers;
           }
         } catch (error) {
           console.warn('Failed to load employees from API, falling back to mock data:', error);
-          set({ isLoading: false });
+          set({ isLoading: false, cachedEmployees: mockUsers });
           return mockUsers;
         }
       },
 
       getAllUsers: () => {
+        // Check if we're using real API and have loaded employees
+        if (apiUtils.isRealAPIEnabled()) {
+          // Return cached employees or empty array - loadEmployees should be called first
+          return get().cachedEmployees || [];
+        }
         return mockUsers;
       }
     }),

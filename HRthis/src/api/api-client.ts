@@ -9,7 +9,7 @@ import { User } from '../types';
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 const USE_REAL_API = Boolean(API_BASE_URL && API_BASE_URL.trim() !== '');
 
-// API endpoints
+// API endpoints (base path is already included in API_BASE_URL)
 const ENDPOINTS = {
   employees: '/api/employees',
   auth: '/api/auth',
@@ -141,6 +141,7 @@ export const apiUtils = {
       name: `${backendUser.first_name || ''} ${backendUser.last_name || ''}`.trim(),
       firstName: backendUser.first_name || '',
       lastName: backendUser.last_name || '',
+      employeeNumber: backendUser.employee_number || backendUser.employeeNumber || '',
       role: backendUser.role || 'EMPLOYEE',
       organizationId: backendUser.organization_id || 'org1',
       position: backendUser.position || '',
@@ -155,6 +156,11 @@ export const apiUtils = {
       level: backendUser.level || 1,
       teamIds: backendUser.team_ids || [],
       primaryTeamId: backendUser.primary_team_id,
+      address: backendUser.address,
+      phone: backendUser.phone,
+      birthDate: backendUser.birth_date,
+      bankDetails: backendUser.bank_details,
+      clothingSizes: backendUser.clothing_sizes,
     };
   },
 };

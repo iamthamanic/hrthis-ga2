@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
+import { ROUTES } from '../utils/navigation';
 
 // Removed unused imports for requests functionality
 
@@ -14,6 +15,7 @@ import { DocumentsScreen } from '../screens/DocumentsScreen';
 import { LearningAdmin } from '../screens/LearningAdmin';
 import { LearningDashboard } from '../screens/LearningDashboard';
 import { LoginScreen } from '../screens/LoginScreen';
+import { NotFoundScreen } from '../screens/NotFoundScreen';
 import { RequestLeaveScreen } from '../screens/RequestLeaveScreen';
 // import { TimeRecordsScreen } from '../screens/TimeRecordsScreen';
 // import { MyRequestsScreen } from '../screens/MyRequestsScreen';
@@ -117,6 +119,7 @@ export const AppNavigator = () => {
   return (
     <Routes>
       <Route path="/" element={<MainLayout><Navigate to="/dashboard" /></MainLayout>} />
+      <Route path="/login" element={<Navigate to="/dashboard" />} />
       <Route path="/dashboard" element={<MainLayout><DashboardScreen /></MainLayout>} />
       {/* Route removed: Requests functionality moved to Zeit & Urlaub */}
       <Route path="/time-vacation" element={<MainLayout><TimeAndVacationScreen /></MainLayout>} />
@@ -131,7 +134,8 @@ export const AppNavigator = () => {
       
       {/* Modal-like routes */}
       <Route path="/request-leave" element={<RequestLeaveScreen />} />
-      <Route path="/settings" element={<SettingsScreen />} />
+      <Route path="/settings" element={<Navigate to="/user/personal-file" replace />} /> {/* Redirect old route */}
+      <Route path="/user/personal-file" element={<SettingsScreen />} />
       <Route path="/coin-history" element={<CoinHistoryScreen />} />
       <Route path="/admin-coins" element={<AdminCoinsScreen />} />
       <Route path="/learning/video/:videoId" element={<VideoLearningScreen />} />
@@ -143,7 +147,8 @@ export const AppNavigator = () => {
       <Route path="/team-management/user/:userId" element={<TeamMemberDetailsScreen />} />
       <Route path="/team-management/teams" element={<TeamsOverviewScreen />} />
       
-      <Route path="*" element={<Navigate to="/dashboard" />} />
+      {/* 404 Not Found */}
+      <Route path="*" element={<MainLayout><NotFoundScreen /></MainLayout>} />
     </Routes>
   );
 };

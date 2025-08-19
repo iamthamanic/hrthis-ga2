@@ -37,25 +37,48 @@ app.add_middleware(
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 @app.get("/")
+def root_redirect():
+    """Redirect root to /hrthis"""
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse(url="/hrthis")
+
+@app.get("/hrthis")
 def root():
     return {
         "message": "HRthis Backend API",
         "version": "1.0.0",
-        "status": "running"
+        "status": "running",
+        "base_path": "/hrthis"
     }
 
-@app.get("/health")
+@app.get("/hrthis/health")
 def health_check():
     return {"status": "healthy"}
 
 # Import routers
 from app.api import employees, auth, files
 from app.core.database import create_tables
+from app.hooks.database_hooks import DatabaseHooks
+from app.middleware.request_hooks import RequestHooksMiddleware
+
+# Add request hooks middleware
+app.add_middleware(
+    RequestHooksMiddleware,
+    log_requests=True,
+    add_security_headers=True,
+    enable_rate_limiting=True,
+    rate_limit=100,  # 100 requests per minute
+    enable_performance_tracking=True
+)
 
 # Create tables and initialize demo users on startup
 @app.on_event("startup")
 def startup_event():
     create_tables()
+    
+    # Register all database hooks
+    DatabaseHooks.register_all_hooks()
+    print("✅ Database hooks registered")
     
     # Initialize demo users if in development mode
     import os
@@ -66,10 +89,10 @@ def startup_event():
         except Exception as e:
             print(f"Warning: Could not initialize demo users: {e}")
 
-# Include routers
-app.include_router(auth.router, prefix="/api/auth", tags=["authentication"])
-app.include_router(employees.router, prefix="/api/employees", tags=["employees"])
-app.include_router(files.router, prefix="/api/files", tags=["file-management"])
+# Include routers with /hrthis prefix
+app.include_router(auth.router, prefix="/hrthis/api/auth", tags=["authentication"])
+app.include_router(employees.router, prefix="/hrthis/api/employees", tags=["employees"])
+app.include_router(files.router, prefix="/hrthis/api/files", tags=["file-management"])
 
 if __name__ == "__main__":
     import uvicorn

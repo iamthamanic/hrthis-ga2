@@ -23,56 +23,45 @@ from app.services.auth import get_password_hash, verify_password
 
 router = APIRouter()
 
-@router.get("/", response_model=EmployeeList)
+# IMPORTANT: Specific routes must come BEFORE generic ones like /{employee_id}
+
+@router.get("/", response_model=None)  # Temporarily remove response_model for debugging
 def get_employees(
-    search: Optional[str] = Query(None, description="Suche in Name, Email, Mitarbeiternummer"),
-    department: Optional[str] = Query(None),
-    status: Optional[EmployeeStatus] = Query(None),
-    employment_type: Optional[EmploymentType] = Query(None),
-    role: Optional[UserRole] = Query(None),
-    page: int = Query(1, ge=1),
-    size: int = Query(50, ge=1, le=100),
     db: Session = Depends(get_db)
 ):
-    """Get all employees with optional filters"""
+    """Get all employees - simplified for debugging"""
     
-    query = db.query(Employee)
-    
-    # Apply filters
-    if search:
-        search_filter = or_(
-            Employee.first_name.ilike(f"%{search}%"),
-            Employee.last_name.ilike(f"%{search}%"),
-            Employee.email.ilike(f"%{search}%"),
-            Employee.employee_number.ilike(f"%{search}%")
-        )
-        query = query.filter(search_filter)
-    
-    if department:
-        query = query.filter(Employee.department == department)
-    
-    if status:
-        query = query.filter(Employee.status == status)
-    
-    if employment_type:
-        query = query.filter(Employee.employment_type == employment_type)
-    
-    if role:
-        query = query.filter(Employee.role == role)
-    
-    # Count total
-    total = query.count()
-    
-    # Apply pagination
-    offset = (page - 1) * size
-    employees = query.offset(offset).limit(size).all()
-    
-    return EmployeeList(
-        employees=[EmployeeResponse.from_orm(emp) for emp in employees],
-        total=total,
-        page=page,
-        size=size
-    )
+    # Simplified version to debug
+    try:
+        employees = db.query(Employee).all()
+        
+        # Simple response to test
+        return {
+            "total": len(employees),
+            "employees": [
+                {
+                    "id": emp.id,
+                    "email": emp.email,
+                    "name": f"{emp.first_name} {emp.last_name}",
+                    "employee_number": emp.employee_number
+                }
+                for emp in employees
+            ]
+        }
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return {"error": str(e), "type": str(type(e))}
+
+@router.get("/test")
+def test_endpoint():
+    """Simple test endpoint"""
+    return {"message": "Employees router is working!"}
+
+@router.get("/simple")
+def simple_test():
+    """Super simple test - no dependencies"""
+    return {"message": "Simple test works!", "time": str(datetime.now())}
 
 @router.get("/{employee_id}", response_model=EmployeeResponse)
 def get_employee(employee_id: str, db: Session = Depends(get_db)):

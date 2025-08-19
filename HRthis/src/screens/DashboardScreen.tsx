@@ -6,21 +6,31 @@ import { useCoinEventsStore } from '../state/coinEvents';
 import { useCoinsStore } from '../state/coins';
 import { useLeavesStore } from '../state/leaves';
 import { useTimeRecordsStore } from '../state/timeRecords';
+import { usePermission, useLocalStorage, useToast } from '../hooks';
 import { cn } from '../utils/cn';
 
 /**
  * Main dashboard screen showing personalized information
- * Different views for employees and admins
+ * Different views for employees and admins - now with hooks!
  */
 export const DashboardScreen = () => {
   const navigate = useNavigate();
+  const toast = useToast();
+  const { hasPermission, isAdmin, canEdit } = usePermission();
+  
   const { user, organization, logout, updateUser, getAllUsers } = useAuthStore();
   const { getAllLeaveRequests } = useLeavesStore();
   const { getTimeRecords, getMonthlyStats, getWeeklyStats } = useTimeRecordsStore();
   const { getUserBalance } = useCoinsStore();
   const { getNextEvent, getUnlockedEvents } = useCoinEventsStore();
 
-  const [selectedUserId, setSelectedUserId] = useState(user?.id || '');
+  // Use localStorage for dashboard preferences
+  const [dashboardPrefs, setDashboardPrefs] = useLocalStorage('dashboard-preferences', {
+    selectedUserId: user?.id || '',
+    showDetailedStats: false,
+    compactMode: false
+  });
+
   const [isEditingUser, setIsEditingUser] = useState(false);
   const [editForm, setEditForm] = useState({
     position: '',
@@ -28,10 +38,9 @@ export const DashboardScreen = () => {
     vacationDays: ''
   });
 
-  const isAdmin = user?.role === 'ADMIN' || user?.role === 'SUPERADMIN';
   const allUsers = isAdmin ? getAllUsers() : [];
-  const displayUser = isAdmin && selectedUserId !== user.id 
-    ? allUsers.find(u => u.id === selectedUserId) || user 
+  const displayUser = isAdmin && dashboardPrefs.selectedUserId !== user?.id 
+    ? allUsers.find(u => u.id === dashboardPrefs.selectedUserId) || user 
     : user;
 
   useEffect(() => {
@@ -75,7 +84,7 @@ export const DashboardScreen = () => {
   }, 0);
 
   // Calculate working hours based on employment type
-  const expectedMonthlyHours = displayUser.weeklyHours ? (displayUser.weeklyHours * 4.33) : 0; // Average weeks per month
+  const expectedMonthlyHours = displayUser.weeklyHours ? (displayUser.weeklyHours * 4.33) : 0;
   const expectedWeeklyHours = displayUser.weeklyHours || 0;
 
   // Get coin level info
@@ -85,10 +94,13 @@ export const DashboardScreen = () => {
   const currentLevel = unlockedEvents.length > 0 ? unlockedEvents[unlockedEvents.length - 1] : null;
 
   /**
-   * Handles saving user edits (admin only)
+   * Handles saving user edits (admin only) - now with toast notifications!
    */
   const handleSaveUserEdit = async () => {
-    if (!isAdmin || !displayUser) return;
+    if (!hasPermission('edit:employees') || !displayUser) {
+      toast.error('Keine Berechtigung', 'Sie haben keine Berechtigung, Mitarbeiterdaten zu bearbeiten.');
+      return;
+    }
 
     try {
       await updateUser(displayUser.id, {
@@ -97,9 +109,18 @@ export const DashboardScreen = () => {
         vacationDays: parseInt(editForm.vacationDays) || undefined
       });
       setIsEditingUser(false);
+      toast.success('Gespeichert', 'Mitarbeiterdaten wurden erfolgreich aktualisiert.');
     } catch (error) {
       console.error('Error updating user:', error);
+      toast.error('Fehler', 'Beim Speichern ist ein Fehler aufgetreten.');
     }
+  };
+
+  /**
+   * Handle user selection change
+   */
+  const handleUserChange = (userId: string) => {
+    setDashboardPrefs(prev => ({ ...prev, selectedUserId: userId }));
   };
 
   /**
@@ -130,8 +151,8 @@ export const DashboardScreen = () => {
               )}
               {isAdmin && displayUser.id !== user.id && (
                 <select
-                  value={selectedUserId}
-                  onChange={(e) => setSelectedUserId(e.target.value)}
+                  value={dashboardPrefs.selectedUserId}
+                  onChange={(e) => handleUserChange(e.target.value)}
                   className="mt-2 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value={user.id}>Meine Ansicht</option>
@@ -143,14 +164,17 @@ export const DashboardScreen = () => {
             </div>
             <div className="flex items-center gap-3">
               <button 
-                onClick={() => navigate('/settings')}
+                onClick={() => navigate('/user/personal-file')}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                title="Einstellungen"
+                title="Personalakte"
               >
                 ⚙️
               </button>
               <button 
-                onClick={logout}
+                onClick={() => {
+                  logout();
+                  toast.info('Abgemeldet', 'Sie wurden erfolgreich abgemeldet.');
+                }}
                 className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
               >
                 <span className="text-gray-700">Abmelden</span>
@@ -162,7 +186,7 @@ export const DashboardScreen = () => {
           <div className="mt-4 grid md:grid-cols-3 gap-4">
             <div>
               <p className="text-sm text-gray-500">Position</p>
-              {isEditingUser ? (
+              {isEditingUser && canEdit(displayUser) ? (
                 <input
                   type="text"
                   value={editForm.position}
@@ -183,8 +207,8 @@ export const DashboardScreen = () => {
             </div>
           </div>
 
-          {/* Admin Edit Controls */}
-          {isAdmin && displayUser.id !== user.id && (
+          {/* Admin Edit Controls - Now with permission check */}
+          {hasPermission('edit:employees') && displayUser.id !== user.id && (
             <div className="mt-4 flex justify-end">
               {isEditingUser ? (
                 <>
@@ -282,7 +306,7 @@ export const DashboardScreen = () => {
               <span className="text-2xl">🏖️</span>
             </div>
             <div>
-              {isEditingUser ? (
+              {isEditingUser && canEdit(displayUser) ? (
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
@@ -341,14 +365,14 @@ export const DashboardScreen = () => {
           </div>
         </div>
 
-        {/* Employment Details (Admin editable) */}
-        {isAdmin && (
+        {/* Employment Details (Admin editable) - Now with permission check */}
+        {hasPermission('view:employees') && (
           <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Beschäftigungsdetails</h2>
             <div className="grid md:grid-cols-4 gap-4">
               <div>
                 <p className="text-sm text-gray-500">Wochenarbeitszeit</p>
-                {isEditingUser ? (
+                {isEditingUser && canEdit(displayUser) ? (
                   <div className="flex items-center gap-2">
                     <input
                       type="number"
@@ -418,7 +442,6 @@ export const DashboardScreen = () => {
             <p className="text-sm text-gray-500 mt-1">Shop & Coins</p>
           </button>
 
-
           <button
             onClick={() => navigate('/documents')}
             className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow text-left"
@@ -432,15 +455,40 @@ export const DashboardScreen = () => {
           </button>
 
           <button
-            onClick={() => navigate('/settings')}
+            onClick={() => navigate('/user/personal-file')}
             className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow text-left"
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="text-3xl">⚙️</span>
+              <span className="text-3xl">📋</span>
               <span className="text-gray-400">→</span>
             </div>
-            <h3 className="font-semibold text-gray-900">Einstellungen</h3>
-            <p className="text-sm text-gray-500 mt-1">Profil & Daten</p>
+            <h3 className="font-semibold text-gray-900">Personalakte</h3>
+            <p className="text-sm text-gray-500 mt-1">Meine Daten</p>
+          </button>
+
+          {/* Show Admin panel only if user has permission */}
+          {hasPermission('manage:system') && (
+            <button
+              onClick={() => navigate('/admin')}
+              className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow text-left"
+            >
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-3xl">👨‍💼</span>
+                <span className="text-white opacity-75">→</span>
+              </div>
+              <h3 className="font-semibold">Admin Panel</h3>
+              <p className="text-sm opacity-90 mt-1">System-Verwaltung</p>
+            </button>
+          )}
+        </div>
+
+        {/* Preferences Toggle */}
+        <div className="mt-6 flex justify-end">
+          <button
+            onClick={() => setDashboardPrefs(prev => ({ ...prev, compactMode: !prev.compactMode }))}
+            className="text-sm text-gray-500 hover:text-gray-700"
+          >
+            {dashboardPrefs.compactMode ? '📐 Standard-Ansicht' : '📦 Kompakt-Ansicht'}
           </button>
         </div>
       </div>

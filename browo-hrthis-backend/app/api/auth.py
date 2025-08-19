@@ -3,7 +3,7 @@ Authentication API Endpoints
 Login, Register, Token management
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
@@ -37,7 +37,7 @@ def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
-    """Login with email/password"""
+    """Login with OAuth2 form data (username/password)"""
     
     # Find user by email or employee number
     employee = db.query(Employee).filter(
@@ -54,6 +54,75 @@ def login(
     
     # Verify password
     if not verify_password(form_data.password, employee.password_hash):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    # Check if employee is active
+    if not employee.is_active or employee.status == EmployeeStatus.TERMINATED:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Account is inactive",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    # Create access token
+    access_token = create_access_token(
+        data={"sub": employee.id, "email": employee.email, "role": employee.role.value}
+    )
+    
+    return LoginResponse(
+        access_token=access_token,
+        token_type="bearer",
+        expires_in=1800,  # 30 minutes
+        user=UserInfo(
+            id=employee.id,
+            email=employee.email,
+            first_name=employee.first_name,
+            last_name=employee.last_name,
+            full_name=employee.full_name,
+            role=employee.role.value,
+            is_admin=employee.is_admin,
+            employee_number=employee.employee_number,
+            position=employee.position,
+            department=employee.department
+        )
+    )
+
+@router.post("/login-json", response_model=LoginResponse)
+def login_json(
+    login_data: dict,
+    db: Session = Depends(get_db)
+):
+    """Login with JSON payload (email/password)"""
+    
+    # Extract email and password from JSON
+    email = login_data.get('email')
+    password = login_data.get('password')
+    
+    if not email or not password:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email and password are required"
+        )
+    
+    # Find user by email or employee number
+    employee = db.query(Employee).filter(
+        (Employee.email == email) | 
+        (Employee.employee_number == email)
+    ).first()
+    
+    if not employee:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    # Verify password
+    if not verify_password(password, employee.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials",

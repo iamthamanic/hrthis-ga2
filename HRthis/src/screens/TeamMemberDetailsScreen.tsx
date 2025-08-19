@@ -17,7 +17,7 @@ import { getEmploymentTypeLabel, EMPLOYMENT_TYPE_OPTIONS } from '../utils/employ
 export const TeamMemberDetailsScreen = () => {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
-  const { user: currentUser, getAllUsers, updateUser } = useAuthStore();
+  const { user: currentUser, getAllUsers, updateUser, loadEmployees } = useAuthStore();
   const { 
     getAllTeams, 
     getTeamsByUserId, 
@@ -36,11 +36,20 @@ export const TeamMemberDetailsScreen = () => {
   const [coinReason, setCoinReason] = useState<string>('');
   const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
   const [leadTeams, setLeadTeams] = useState<string[]>([]);
+  const [allUsers, setAllUsers] = useState<User[]>([]);
 
   // Check if current user is admin
   const isAdmin = currentUser?.role === 'ADMIN' || currentUser?.role === 'SUPERADMIN';
 
-  const allUsers = getAllUsers();
+  // Load employees on mount
+  useEffect(() => {
+    const loadData = async () => {
+      const employees = await loadEmployees();
+      setAllUsers(employees);
+    };
+    loadData();
+  }, [loadEmployees]);
+
   const allTeams = getAllTeams();
   const targetUser = allUsers.find(u => u.id === userId);
 

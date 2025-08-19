@@ -13,22 +13,22 @@ from typing import Optional
 Base = declarative_base()
 
 class EmploymentType(PyEnum):
-    FULLTIME = "fulltime"
-    PARTTIME = "parttime"
-    MINIJOB = "minijob"
-    INTERN = "intern"          # NEU
-    OTHER = "other"            # NEU mit custom field
+    FULLTIME = "FULLTIME"
+    PARTTIME = "PARTTIME"
+    MINIJOB = "MINIJOB"
+    INTERN = "INTERN"          # NEU
+    OTHER = "OTHER"            # NEU mit custom field
 
 class EmployeeStatus(PyEnum):
-    ACTIVE = "active"
-    PROBATION = "probation"
-    INACTIVE = "inactive"
-    TERMINATED = "terminated"
+    ACTIVE = "ACTIVE"
+    PROBATION = "PROBATION"
+    INACTIVE = "INACTIVE"
+    TERMINATED = "TERMINATED"
 
 class UserRole(PyEnum):
-    USER = "user"
-    ADMIN = "admin"
-    SUPERADMIN = "superadmin"
+    USER = "USER"
+    ADMIN = "ADMIN"
+    SUPERADMIN = "SUPERADMIN"
 
 class Employee(Base):
     __tablename__ = "employees"

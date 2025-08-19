@@ -10,22 +10,22 @@ from enum import Enum
 
 # Enums for validation
 class EmploymentType(str, Enum):
-    FULLTIME = "fulltime"
-    PARTTIME = "parttime"
-    MINIJOB = "minijob"
-    INTERN = "intern"
-    OTHER = "other"
+    FULLTIME = "FULLTIME"
+    PARTTIME = "PARTTIME"
+    MINIJOB = "MINIJOB"
+    INTERN = "INTERN"
+    OTHER = "OTHER"
 
 class EmployeeStatus(str, Enum):
-    ACTIVE = "active"
-    PROBATION = "probation"
-    INACTIVE = "inactive"
-    TERMINATED = "terminated"
+    ACTIVE = "ACTIVE"
+    PROBATION = "PROBATION"
+    INACTIVE = "INACTIVE"
+    TERMINATED = "TERMINATED"
 
 class UserRole(str, Enum):
-    USER = "user"
-    ADMIN = "admin"
-    SUPERADMIN = "superadmin"
+    USER = "USER"
+    ADMIN = "ADMIN"
+    SUPERADMIN = "SUPERADMIN"
 
 # Clothing Sizes Schema
 class ClothingSizes(BaseModel):
@@ -138,8 +138,8 @@ class EmployeeResponse(EmployeeBase):
     onboarding_email_sent: Optional[datetime] = None
     onboarding_preset: Optional[str] = None
     
-    # Documents
-    documents: List[str] = Field(default_factory=list, description="Liste von Dokument IDs")
+    # Documents - Fixed to handle None values from database
+    documents: Optional[List[str]] = Field(default_factory=list, description="Liste von Dokument IDs")
     
     # Metadata
     created_at: datetime
@@ -148,6 +148,14 @@ class EmployeeResponse(EmployeeBase):
     
     class Config:
         from_attributes = True
+        
+    @classmethod
+    def from_orm(cls, obj):
+        """Custom from_orm to handle None documents field"""
+        # Ensure documents is always a list
+        if obj.documents is None:
+            obj.documents = []
+        return cls.model_validate(obj)
 
 # List Response
 class EmployeeList(BaseModel):

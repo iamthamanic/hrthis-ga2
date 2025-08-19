@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { AvatarUpload } from '../components/avatar/AvatarUpload';
@@ -43,6 +43,24 @@ export const SettingsScreen = () => {
     employmentType: user?.employmentType || 'FULL_TIME',
     employmentStatus: user?.employmentStatus || 'ACTIVE'
   });
+
+  // Ensure user has employeeNumber from mock data if not already present
+  useEffect(() => {
+    if (user && !user.employeeNumber) {
+      // Map of email to employee numbers for demo users
+      const employeeNumbers: Record<string, string> = {
+        'max.mustermann@hrthis.de': 'PN-20250001',
+        'anna.admin@hrthis.de': 'PN-20250002',
+        'tom.teilzeit@hrthis.de': 'PN-20250003',
+        'test@hrthis.de': 'PN-20250004'
+      };
+      
+      if (employeeNumbers[user.email]) {
+        // Update the user with their employee number
+        updateUser(user.id, { employeeNumber: employeeNumbers[user.email] });
+      }
+    }
+  }, [user, updateUser]);
 
   if (!user) return null;
 
