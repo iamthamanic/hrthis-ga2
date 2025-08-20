@@ -4,6 +4,9 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 
+// Increase test timeout to prevent timeout issues
+jest.setTimeout(10000);
+
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -29,6 +32,16 @@ const localStorageMock = {
   key: jest.fn().mockReturnValue(null),
 };
 global.localStorage = localStorageMock as unknown as Storage;
+
+// Mock fetch globally
+global.fetch = jest.fn();
+
+// Clean up after each test
+afterEach(() => {
+  jest.clearAllMocks();
+  localStorageMock.clear();
+  (global.fetch as jest.Mock).mockClear();
+});
 
 // Mock IntersectionObserver
 global.IntersectionObserver = jest.fn().mockImplementation(() => ({

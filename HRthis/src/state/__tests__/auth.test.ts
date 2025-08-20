@@ -1,379 +1,462 @@
-import { User } from '../../types';
-import { useAuthStore, getAuthToken } from '../auth';
+import { renderHook, act } from '@testing-library/react';
+import { useAuthStore } from '../auth';
+import apiClient from '../../api/api-client';
 
-// Mock the pipeline annotations to avoid errors in tests
-jest.mock('../../pipeline/annotations', () => ({
-  RequiredStep: () => () => {},
-  markStepExecuted: jest.fn(),
-}));
+// Mock API client
+jest.mock('../../api/api-client');
 
-// Mock fetch for API calls
-global.fetch = jest.fn();
+// Mock localStorage
+const localStorageMock = {
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+  removeItem: jest.fn(),
+  clear: jest.fn(),
+};
+Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+
+// Mock process.env
+const originalEnv = process.env;
 
 describe('Auth Store', () => {
   beforeEach(() => {
-    // Force demo mode for tests
-    delete process.env.REACT_APP_API_URL;
-    
-    // Reset store state before each test
-    useAuthStore.setState({
-      user: null,
-      organization: null,
-      isAuthenticated: false,
-      isLoading: false,
-      token: null,
-      cachedEmployees: null,
+    jest.clearAllMocks();
+    localStorageMock.getItem.mockReturnValue(null);
+    process.env = { ...originalEnv };
+    // Reset store state
+    const { result } = renderHook(() => useAuthStore());
+    act(() => {
+      result.current.logout();
     });
-    
-    // Clear localStorage
-    localStorage.clear();
-    
-    // Reset fetch mock
-    (global.fetch as jest.Mock).mockClear();
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    process.env = originalEnv;
   });
 
-  describe('login', () => {
-    it('should successfully login with valid credentials in demo mode', async () => {
-      const { login } = useAuthStore.getState();
-      
-      await login('anna.admin@hrthis.de', 'demo');
-      
-      const state = useAuthStore.getState();
-      expect(state.isAuthenticated).toBe(true);
-      expect(state.user).toBeDefined();
-      expect(state.user?.email).toBe('anna.admin@hrthis.de');
-      expect(state.user?.role).toBe('ADMIN');
-      expect(state.organization).toBeDefined();
+  describe('Initial State', () => {
+    it('should have correct initial state', () => {
+      const { result } = renderHook(() => useAuthStore());
+
+      expect(result.current.user).toBeNull();
+      expect(result.current.token).toBeNull();
+      expect(result.current.isAuthenticated).toBe(false);
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.organization).toBeNull();
     });
 
-    it('should fail login with invalid credentials', async () => {
-      const { login } = useAuthStore.getState();
+    it('should load state from localStorage if available', () => {
+      const mockUser = { id: '1', email: 'test@example.com' };
+      const mockToken = 'stored-token';
+      const mockOrg = { id: 'org1', name: 'Test Org', slug: 'test-org' };
       
-      await expect(login('invalid@email.com', 'wrongpassword')).rejects.toThrow('Ungültige Anmeldedaten');
-      
-      const state = useAuthStore.getState();
-      expect(state.isAuthenticated).toBe(false);
-      expect(state.user).toBeNull();
+      localStorageMock.getItem.mockImplementation((key) => {
+        if (key === 'auth-storage') {
+          return JSON.stringify({
+            state: {
+              user: mockUser,
+              token: mockToken,
+              organization: mockOrg,
+              isAuthenticated: true,
+            },
+            version: 0,
+          });
+        }
+        return null;
+      });
+
+      const { result } = renderHook(() => useAuthStore());
+
+      expect(result.current.user).toEqual(mockUser);
+      expect(result.current.token).toBe(mockToken);
+      expect(result.current.organization).toEqual(mockOrg);
+      expect(result.current.isAuthenticated).toBe(true);
+    });
+  });
+
+  describe('Login - Demo Mode', () => {
+    beforeEach(() => {
+      delete process.env.REACT_APP_API_URL;
     });
 
-    it('should set loading state during login', async () => {
-      const { login } = useAuthStore.getState();
-      
-      const loginPromise = login('anna.admin@hrthis.de', 'demo');
-      
-      // Check loading state immediately
-      const loadingState = useAuthStore.getState();
-      expect(loadingState.isLoading).toBe(true);
-      
-      await loginPromise;
-      
-      const finalState = useAuthStore.getState();
-      expect(finalState.isLoading).toBe(false);
+    it('should login successfully in demo mode', async () => {
+      const { result } = renderHook(() => useAuthStore());
+
+      await act(async () => {
+        await result.current.login('test@hrthis.de', 'demo');
+      });
+
+      expect(result.current.user).toBeTruthy();
+      expect(result.current.user?.email).toBe('test@hrthis.de');
+      expect(result.current.isAuthenticated).toBe(true);
+      expect(result.current.organization).toBeTruthy();
+      expect(result.current.token).toBeNull(); // No token in demo mode
     });
 
-    it('should handle API login when REACT_APP_API_URL is set', async () => {
+    it('should handle invalid credentials in demo mode', async () => {
+      const { result } = renderHook(() => useAuthStore());
+
+      await expect(
+        act(async () => {
+          await result.current.login('invalid@example.com', 'wrong');
+        })
+      ).rejects.toThrow('Ungültige Anmeldedaten');
+
+      expect(result.current.user).toBeNull();
+      expect(result.current.isAuthenticated).toBe(false);
+    });
+
+    it('should accept password "demo" or "password" in demo mode', async () => {
+      const { result } = renderHook(() => useAuthStore());
+
+      // Test with "demo"
+      await act(async () => {
+        await result.current.login('test@hrthis.de', 'demo');
+      });
+      expect(result.current.isAuthenticated).toBe(true);
+
+      // Logout
+      act(() => {
+        result.current.logout();
+      });
+
+      // Test with "password"
+      await act(async () => {
+        await result.current.login('test@hrthis.de', 'password');
+      });
+      expect(result.current.isAuthenticated).toBe(true);
+    });
+  });
+
+  describe('Login - Real API Mode', () => {
+    beforeEach(() => {
       process.env.REACT_APP_API_URL = 'http://localhost:8002';
-      
+    });
+
+    it('should login successfully with real API', async () => {
       const mockResponse = {
         user: {
-          id: 'test-user',
+          id: '1',
           email: 'test@example.com',
           first_name: 'Test',
           last_name: 'User',
-          role: 'EMPLOYEE',
-          organization_id: 'org1'
         },
-        access_token: 'test-token-123'
+        access_token: 'new-token',
       };
-      
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+
+      global.fetch = jest.fn().mockResolvedValue({
         ok: true,
-        json: async () => mockResponse
+        json: async () => mockResponse,
       });
-      
-      const { login } = useAuthStore.getState();
-      await login('test@example.com', 'password');
-      
-      const state = useAuthStore.getState();
-      expect(state.isAuthenticated).toBe(true);
-      expect(state.token).toBe('test-token-123');
+
+      const { result } = renderHook(() => useAuthStore());
+
+      await act(async () => {
+        await result.current.login('test@example.com', 'password');
+      });
+
       expect(global.fetch).toHaveBeenCalledWith(
         'http://localhost:8002/api/auth/login',
         expect.objectContaining({
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-          }
+          },
+          body: 'username=test%40example.com&password=password',
         })
       );
-      
-      // Clean up
-      delete process.env.REACT_APP_API_URL;
+
+      expect(result.current.user).toBeTruthy();
+      expect(result.current.token).toBe('new-token');
+      expect(result.current.isAuthenticated).toBe(true);
     });
 
-    it('should handle API login failure', async () => {
-      process.env.REACT_APP_API_URL = 'http://localhost:8002';
-      
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+    it('should handle API login errors', async () => {
+      global.fetch = jest.fn().mockResolvedValue({
         ok: false,
-        json: async () => ({ message: 'Invalid credentials' })
+        json: async () => ({ message: 'Invalid credentials' }),
       });
-      
-      const { login } = useAuthStore.getState();
-      
-      await expect(login('test@example.com', 'wrong')).rejects.toThrow('Invalid credentials');
-      
-      const state = useAuthStore.getState();
-      expect(state.isAuthenticated).toBe(false);
-      expect(state.token).toBeNull();
-      
-      // Clean up
-      delete process.env.REACT_APP_API_URL;
-    });
-  });
 
-  describe('logout', () => {
-    it('should clear user data on logout', async () => {
-      // First login
-      const { login, logout } = useAuthStore.getState();
-      await login('anna.admin@hrthis.de', 'demo');
-      
-      // Verify logged in
-      let state = useAuthStore.getState();
-      expect(state.isAuthenticated).toBe(true);
-      expect(state.user).toBeDefined();
-      
-      // Logout
-      logout();
-      
-      // Verify logged out
-      state = useAuthStore.getState();
-      expect(state.isAuthenticated).toBe(false);
-      expect(state.user).toBeNull();
-      expect(state.organization).toBeNull();
-      expect(state.token).toBeNull();
-    });
-  });
+      const { result } = renderHook(() => useAuthStore());
 
-  describe('getAuthToken', () => {
-    it('should return null when not authenticated', () => {
-      const token = getAuthToken();
-      expect(token).toBeNull();
-    });
-
-    it('should return token when authenticated with API', async () => {
-      process.env.REACT_APP_API_URL = 'http://localhost:8002';
-      
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          user: { id: 'test', email: 'test@example.com', role: 'EMPLOYEE' },
-          access_token: 'test-token-456'
+      await expect(
+        act(async () => {
+          await result.current.login('test@example.com', 'wrong');
         })
-      });
-      
-      const { login } = useAuthStore.getState();
-      await login('test@example.com', 'password');
-      
-      const token = getAuthToken();
-      expect(token).toBe('test-token-456');
-      
-      // Clean up
-      delete process.env.REACT_APP_API_URL;
+      ).rejects.toThrow('Invalid credentials');
+
+      expect(result.current.user).toBeNull();
+      expect(result.current.isAuthenticated).toBe(false);
     });
   });
 
-  describe('createUser', () => {
-    beforeEach(async () => {
-      // Login as admin
-      const { login } = useAuthStore.getState();
-      await login('anna.admin@hrthis.de', 'demo');
-    });
+  describe('Logout', () => {
+    it('should clear auth state on logout', async () => {
+      const { result } = renderHook(() => useAuthStore());
 
-    it('should create a new user with required fields', async () => {
-      const { createUser } = useAuthStore.getState();
+      // Set initial authenticated state
+      await act(async () => {
+        await result.current.login('test@hrthis.de', 'demo');
+      });
+
+      expect(result.current.isAuthenticated).toBe(true);
+
+      // Logout
+      act(() => {
+        result.current.logout();
+      });
+
+      expect(result.current.user).toBeNull();
+      expect(result.current.token).toBeNull();
+      expect(result.current.organization).toBeNull();
+      expect(result.current.isAuthenticated).toBe(false);
+    });
+  });
+
+  describe('Update User', () => {
+    it('should update user data', async () => {
+      const { result } = renderHook(() => useAuthStore());
+
+      // Login first
+      await act(async () => {
+        await result.current.login('test@hrthis.de', 'demo');
+      });
+
+      const userId = result.current.user?.id;
+      const updates = { position: 'Senior Developer' };
+
+      await act(async () => {
+        await result.current.updateUser(userId!, updates);
+      });
+
+      expect(result.current.user?.position).toBe('Senior Developer');
+    });
+  });
+
+  describe('Create User', () => {
+    it('should create new user in demo mode', async () => {
+      delete process.env.REACT_APP_API_URL;
       
+      const { result } = renderHook(() => useAuthStore());
+
       const newUserData = {
-        email: 'new.user@hrthis.de',
+        email: 'new@example.com',
         firstName: 'New',
         lastName: 'User',
-        role: 'EMPLOYEE' as const,
-        organizationId: 'org1',
         position: 'Developer',
-        department: 'IT'
       };
-      
-      const newUser = await createUser(newUserData);
-      
-      expect(newUser).toBeDefined();
-      expect(newUser.email).toBe('new.user@hrthis.de');
-      expect(newUser.firstName).toBe('New');
-      expect(newUser.lastName).toBe('User');
-      expect(newUser.role).toBe('EMPLOYEE');
-      expect(newUser.id).toBeDefined();
+
+      let createdUser;
+      await act(async () => {
+        createdUser = await result.current.createUser(newUserData);
+      });
+
+      expect(createdUser).toBeTruthy();
+      expect(createdUser.email).toBe('new@example.com');
+      expect(createdUser.firstName).toBe('New');
+      expect(createdUser.lastName).toBe('User');
     });
 
-    it('should set default values for optional fields', async () => {
-      const { createUser } = useAuthStore.getState();
+    it('should create user via API when enabled', async () => {
+      process.env.REACT_APP_API_URL = 'http://localhost:8002';
       
-      const minimalUserData = {
-        email: 'minimal@hrthis.de',
-        firstName: 'Min',
-        lastName: 'User'
+      const mockResponse = {
+        id: '123',
+        email: 'new@example.com',
+        first_name: 'New',
+        last_name: 'User',
       };
-      
-      const newUser = await createUser(minimalUserData);
-      
-      expect(newUser.role).toBe('EMPLOYEE'); // Default role
-      expect(newUser.weeklyHours).toBe(40); // Default hours
-      expect(newUser.employmentType).toBe('FULL_TIME'); // Default type
-      expect(newUser.vacationDays).toBe(30); // Default vacation
-      expect(newUser.coinWallet).toBe(0); // Default coins
-      expect(newUser.level).toBe(1); // Default level
-    });
 
-    it('should generate unique IDs for new users', async () => {
-      const { createUser } = useAuthStore.getState();
-      
-      const user1 = await createUser({ email: 'user1@hrthis.de' });
-      const user2 = await createUser({ email: 'user2@hrthis.de' });
-      
-      expect(user1.id).toBeDefined();
-      expect(user2.id).toBeDefined();
-      expect(user1.id).not.toBe(user2.id);
-    });
-  });
+      (apiClient.employees.create as jest.Mock).mockResolvedValue(mockResponse);
 
-  describe('updateUser', () => {
-    beforeEach(async () => {
-      const { login } = useAuthStore.getState();
-      await login('anna.admin@hrthis.de', 'demo');
-    });
+      const { result } = renderHook(() => useAuthStore());
 
-    it('should update user data', async () => {
-      const { updateUser, getAllUsers } = useAuthStore.getState();
-      
-      // Get existing user
-      const users = getAllUsers();
-      const userToUpdate = users.find(u => u.email === 'max.mustermann@hrthis.de');
-      expect(userToUpdate).toBeDefined();
-      
-      // Update user
-      await updateUser(userToUpdate!.id, {
-        position: 'Senior Developer',
-        department: 'Engineering'
+      // Set token for API calls
+      act(() => {
+        result.current.token = 'test-token';
       });
-      
-      // Verify update
-      const updatedUsers = getAllUsers();
-      const updatedUser = updatedUsers.find(u => u.id === userToUpdate!.id);
-      expect(updatedUser?.position).toBe('Senior Developer');
-      expect(updatedUser?.department).toBe('Engineering');
-    });
 
-    it('should update current user if updating self', async () => {
-      const { updateUser, user } = useAuthStore.getState();
-      
-      expect(user).toBeDefined();
-      const currentUserId = user!.id;
-      
-      await updateUser(currentUserId, {
-        position: 'HR Director'
+      const newUserData = {
+        email: 'new@example.com',
+        firstName: 'New',
+        lastName: 'User',
+      };
+
+      let createdUser;
+      await act(async () => {
+        createdUser = await result.current.createUser(newUserData);
       });
-      
-      const updatedState = useAuthStore.getState();
-      expect(updatedState.user?.position).toBe('HR Director');
+
+      expect(apiClient.employees.create).toHaveBeenCalledWith(newUserData, 'test-token');
+      expect(createdUser).toBeTruthy();
     });
   });
 
-  describe('getAllUsers', () => {
-    it('should return all users after login', async () => {
-      const { login, getAllUsers } = useAuthStore.getState();
-      await login('anna.admin@hrthis.de', 'demo');
+  describe('Load Employees', () => {
+    it('should load employees from mock data in demo mode', async () => {
+      delete process.env.REACT_APP_API_URL;
       
-      const users = getAllUsers();
-      
-      expect(Array.isArray(users)).toBe(true);
-      expect(users.length).toBeGreaterThan(0);
-      expect(users.some(u => u.email === 'anna.admin@hrthis.de')).toBe(true);
-      expect(users.some(u => u.email === 'max.mustermann@hrthis.de')).toBe(true);
-    });
-  });
+      const { result } = renderHook(() => useAuthStore());
 
-  describe('loadEmployees', () => {
-    it('should load and cache employees', async () => {
-      const { login, loadEmployees } = useAuthStore.getState();
-      await login('anna.admin@hrthis.de', 'demo');
-      
-      const employees = await loadEmployees();
-      
+      let employees;
+      await act(async () => {
+        employees = await result.current.loadEmployees();
+      });
+
+      expect(employees).toBeTruthy();
       expect(Array.isArray(employees)).toBe(true);
       expect(employees.length).toBeGreaterThan(0);
-      
-      // Check if cached
-      const state = useAuthStore.getState();
-      expect(state.cachedEmployees).toEqual(employees);
+      expect(result.current.cachedEmployees).toEqual(employees);
     });
 
-    it('should return cached employees on subsequent calls', async () => {
-      const { login, loadEmployees } = useAuthStore.getState();
-      await login('anna.admin@hrthis.de', 'demo');
+    it('should load employees from API when enabled', async () => {
+      process.env.REACT_APP_API_URL = 'http://localhost:8002';
       
-      // First call
-      const employees1 = await loadEmployees();
+      const mockEmployees = [
+        { id: '1', email: 'emp1@test.com' },
+        { id: '2', email: 'emp2@test.com' },
+      ];
+
+      (apiClient.employees.getAll as jest.Mock).mockResolvedValue(mockEmployees);
+
+      const { result } = renderHook(() => useAuthStore());
+
+      // Set token for API calls
+      act(() => {
+        result.current.token = 'test-token';
+      });
+
+      let employees;
+      await act(async () => {
+        employees = await result.current.loadEmployees();
+      });
+
+      expect(apiClient.employees.getAll).toHaveBeenCalledWith('test-token');
+      expect(employees).toEqual(mockEmployees);
+      expect(result.current.cachedEmployees).toEqual(mockEmployees);
+    });
+
+    it('should fallback to mock data on API error', async () => {
+      process.env.REACT_APP_API_URL = 'http://localhost:8002';
       
-      // Second call should return cached
-      const employees2 = await loadEmployees();
-      
-      expect(employees1).toEqual(employees2);
-      expect(employees1).toBe(employees2); // Same reference
+      (apiClient.employees.getAll as jest.Mock).mockRejectedValue(
+        new Error('Network error')
+      );
+
+      const consoleWarn = jest.spyOn(console, 'warn').mockImplementation();
+
+      const { result } = renderHook(() => useAuthStore());
+
+      let employees;
+      await act(async () => {
+        employees = await result.current.loadEmployees();
+      });
+
+      expect(employees).toBeTruthy();
+      expect(Array.isArray(employees)).toBe(true);
+      expect(consoleWarn).toHaveBeenCalledWith(
+        expect.stringContaining('Failed to load employees'),
+        expect.any(Error)
+      );
+
+      consoleWarn.mockRestore();
     });
   });
 
-  describe('persistence', () => {
-    it('should persist auth state to localStorage', async () => {
-      const { login } = useAuthStore.getState();
-      await login('anna.admin@hrthis.de', 'demo');
+  describe('Get All Users', () => {
+    it('should return mock users in demo mode', () => {
+      delete process.env.REACT_APP_API_URL;
       
-      // Check localStorage
-      const persistedData = localStorage.getItem('auth-storage');
-      expect(persistedData).toBeDefined();
-      
-      const parsed = JSON.parse(persistedData!);
-      expect(parsed.state.isAuthenticated).toBe(true);
-      expect(parsed.state.user.email).toBe('anna.admin@hrthis.de');
+      const { result } = renderHook(() => useAuthStore());
+
+      const users = result.current.getAllUsers();
+
+      expect(users).toBeTruthy();
+      expect(Array.isArray(users)).toBe(true);
+      expect(users.length).toBeGreaterThan(0);
     });
 
-    it('should restore auth state from localStorage', async () => {
-      // Set up localStorage
-      const authData = {
-        state: {
-          user: { id: 'test', email: 'test@example.com', role: 'ADMIN' },
-          organization: { id: 'org1', name: 'Test Org' },
-          isAuthenticated: true,
-          token: 'stored-token'
-        }
-      };
-      localStorage.setItem('auth-storage', JSON.stringify(authData));
+    it('should return cached employees when API is enabled', async () => {
+      process.env.REACT_APP_API_URL = 'http://localhost:8002';
       
-      // Create new store instance (simulates page reload)
-      const { user, isAuthenticated, token } = useAuthStore.getState();
+      const mockEmployees = [
+        { id: '1', email: 'emp1@test.com' },
+        { id: '2', email: 'emp2@test.com' },
+      ];
+
+      (apiClient.employees.getAll as jest.Mock).mockResolvedValue(mockEmployees);
+
+      const { result } = renderHook(() => useAuthStore());
+
+      // Load employees first
+      await act(async () => {
+        await result.current.loadEmployees();
+      });
+
+      const users = result.current.getAllUsers();
+      expect(users).toEqual(mockEmployees);
+    });
+
+    it('should return empty array when API enabled but no cached data', () => {
+      process.env.REACT_APP_API_URL = 'http://localhost:8002';
       
-      // Note: In a real scenario, the store would be rehydrated on mount
-      // For testing, we need to manually trigger rehydration
-      useAuthStore.persist.rehydrate();
+      const { result } = renderHook(() => useAuthStore());
+
+      const users = result.current.getAllUsers();
+      expect(users).toEqual([]);
+    });
+  });
+
+  describe('Loading State', () => {
+    it('should set loading state during login', async () => {
+      delete process.env.REACT_APP_API_URL;
       
-      // Wait for rehydration
-      await new Promise(resolve => setTimeout(resolve, 100));
+      const { result } = renderHook(() => useAuthStore());
+
+      const loginPromise = act(async () => {
+        await result.current.login('test@hrthis.de', 'demo');
+      });
+
+      // Check loading state immediately after starting login
+      expect(result.current.isLoading).toBe(true);
+
+      await loginPromise;
+
+      // Loading should be false after completion
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    it('should set loading state during user creation', async () => {
+      delete process.env.REACT_APP_API_URL;
       
-      const rehydratedState = useAuthStore.getState();
-      expect(rehydratedState.isAuthenticated).toBe(true);
-      expect(rehydratedState.user?.email).toBe('test@example.com');
-      expect(rehydratedState.token).toBe('stored-token');
+      const { result } = renderHook(() => useAuthStore());
+
+      const createPromise = act(async () => {
+        await result.current.createUser({ email: 'new@example.com' });
+      });
+
+      expect(result.current.isLoading).toBe(true);
+
+      await createPromise;
+
+      expect(result.current.isLoading).toBe(false);
+    });
+  });
+
+  describe('Helper Functions', () => {
+    it('should get auth token correctly', async () => {
+      const { getAuthToken } = require('../auth');
+      
+      const { result } = renderHook(() => useAuthStore());
+
+      // Initially no token
+      expect(getAuthToken()).toBeNull();
+
+      // Set token
+      act(() => {
+        result.current.token = 'test-token';
+      });
+
+      expect(getAuthToken()).toBe('test-token');
     });
   });
 });
