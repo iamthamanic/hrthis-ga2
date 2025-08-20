@@ -1,0 +1,175 @@
+{
+  "budgets": {
+    "web-vitals": {
+      "LCP": {
+        "target": 2000,
+        "warning": 2500,
+        "error": 4000,
+        "unit": "ms",
+        "description": "Largest Contentful Paint - Zeit bis größtes Element sichtbar"
+      },
+      "FID": {
+        "target": 100,
+        "warning": 200,
+        "error": 300,
+        "unit": "ms",
+        "description": "First Input Delay - Zeit bis erste Interaktion möglich"
+      },
+      "CLS": {
+        "target": 0.1,
+        "warning": 0.15,
+        "error": 0.25,
+        "unit": "score",
+        "description": "Cumulative Layout Shift - Visuelle Stabilität"
+      },
+      "INP": {
+        "target": 200,
+        "warning": 300,
+        "error": 500,
+        "unit": "ms",
+        "description": "Interaction to Next Paint - Reaktionszeit auf Interaktionen"
+      },
+      "TTFB": {
+        "target": 600,
+        "warning": 800,
+        "error": 1800,
+        "unit": "ms",
+        "description": "Time to First Byte - Server-Antwortzeit"
+      },
+      "FCP": {
+        "target": 1800,
+        "warning": 2400,
+        "error": 3000,
+        "unit": "ms",
+        "description": "First Contentful Paint - Erste sichtbare Inhalte"
+      }
+    },
+    "bundle-sizes": {
+      "main": {
+        "target": 200,
+        "warning": 250,
+        "error": 300,
+        "unit": "KB",
+        "gzipped": true
+      },
+      "vendor": {
+        "target": 150,
+        "warning": 200,
+        "error": 250,
+        "unit": "KB",
+        "gzipped": true
+      },
+      "total": {
+        "target": 400,
+        "warning": 500,
+        "error": 600,
+        "unit": "KB",
+        "gzipped": true
+      },
+      "per-route": {
+        "target": 100,
+        "warning": 150,
+        "error": 200,
+        "unit": "KB",
+        "gzipped": true
+      },
+      "css": {
+        "target": 50,
+        "warning": 75,
+        "error": 100,
+        "unit": "KB",
+        "gzipped": true
+      }
+    },
+    "resources": {
+      "images": {
+        "max-size": 200,
+        "unit": "KB",
+        "formats": ["webp", "avif"],
+        "lazy-loading": true
+      },
+      "fonts": {
+        "max-count": 3,
+        "max-size": 50,
+        "unit": "KB",
+        "preload": true
+      },
+      "third-party-scripts": {
+        "max-count": 5,
+        "async": true,
+        "defer": true
+      }
+    },
+    "runtime": {
+      "long-tasks": {
+        "target": 0,
+        "warning": 2,
+        "error": 5,
+        "max-duration": 50,
+        "unit": "ms"
+      },
+      "memory": {
+        "heap-size": {
+          "warning": 50,
+          "error": 100,
+          "unit": "MB"
+        },
+        "leak-detection": true
+      },
+      "network": {
+        "requests": {
+          "target": 30,
+          "warning": 50,
+          "error": 75
+        },
+        "payload": {
+          "target": 1,
+          "warning": 2,
+          "error": 3,
+          "unit": "MB"
+        }
+      }
+    },
+    "lighthouse-scores": {
+      "performance": {
+        "target": 90,
+        "warning": 80,
+        "error": 70
+      },
+      "accessibility": {
+        "target": 100,
+        "warning": 95,
+        "error": 90
+      },
+      "best-practices": {
+        "target": 100,
+        "warning": 95,
+        "error": 90
+      },
+      "seo": {
+        "target": 100,
+        "warning": 95,
+        "error": 90
+      }
+    }
+  },
+  "monitoring": {
+    "real-user-metrics": true,
+    "synthetic-monitoring": true,
+    "alert-channels": ["email", "slack"],
+    "sample-rate": 0.1,
+    "environments": ["production", "staging"]
+  },
+  "optimization-hints": {
+    "code-splitting": true,
+    "tree-shaking": true,
+    "minification": true,
+    "compression": "brotli",
+    "cdn": true,
+    "http2": true,
+    "service-worker": true,
+    "prefetch": true,
+    "preconnect": ["https://api.hrthis.de"],
+    "dns-prefetch": ["https://cdn.hrthis.de"]
+  }
+}

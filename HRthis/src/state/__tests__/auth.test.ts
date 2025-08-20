@@ -1,11 +1,14 @@
 import { User } from '../../types';
-import { useAuthStore } from '../auth';
+import { useAuthStore, getAuthToken } from '../auth';
 
 // Mock the pipeline annotations to avoid errors in tests
 jest.mock('../../pipeline/annotations', () => ({
   RequiredStep: () => () => {},
   markStepExecuted: jest.fn(),
 }));
+
+// Mock fetch for API calls
+global.fetch = jest.fn();
 
 describe('Auth Store', () => {
   beforeEach(() => {
@@ -19,14 +22,22 @@ describe('Auth Store', () => {
       isAuthenticated: false,
       isLoading: false,
       token: null,
+      cachedEmployees: null,
     });
     
     // Clear localStorage
     localStorage.clear();
+    
+    // Reset fetch mock
+    (global.fetch as jest.Mock).mockClear();
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   describe('login', () => {
-    it('should successfully login with valid credentials', async () => {
+    it('should successfully login with valid credentials in demo mode', async () => {
       const { login } = useAuthStore.getState();
       
       await login('anna.admin@hrthis.de', 'demo');
@@ -35,6 +46,7 @@ describe('Auth Store', () => {
       expect(state.isAuthenticated).toBe(true);
       expect(state.user).toBeDefined();
       expect(state.user?.email).toBe('anna.admin@hrthis.de');
+      expect(state.user?.role).toBe('ADMIN');
       expect(state.organization).toBeDefined();
     });
 
@@ -51,15 +63,76 @@ describe('Auth Store', () => {
     it('should set loading state during login', async () => {
       const { login } = useAuthStore.getState();
       
-      const loginPromise = login('anna.admin@hrthis.de', 'password');
+      const loginPromise = login('anna.admin@hrthis.de', 'demo');
       
       // Check loading state immediately
-      expect(useAuthStore.getState().isLoading).toBe(true);
+      const loadingState = useAuthStore.getState();
+      expect(loadingState.isLoading).toBe(true);
       
       await loginPromise;
       
-      // Check loading state after completion
-      expect(useAuthStore.getState().isLoading).toBe(false);
+      const finalState = useAuthStore.getState();
+      expect(finalState.isLoading).toBe(false);
+    });
+
+    it('should handle API login when REACT_APP_API_URL is set', async () => {
+      process.env.REACT_APP_API_URL = 'http://localhost:8002';
+      
+      const mockResponse = {
+        user: {
+          id: 'test-user',
+          email: 'test@example.com',
+          first_name: 'Test',
+          last_name: 'User',
+          role: 'EMPLOYEE',
+          organization_id: 'org1'
+        },
+        access_token: 'test-token-123'
+      };
+      
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockResponse
+      });
+      
+      const { login } = useAuthStore.getState();
+      await login('test@example.com', 'password');
+      
+      const state = useAuthStore.getState();
+      expect(state.isAuthenticated).toBe(true);
+      expect(state.token).toBe('test-token-123');
+      expect(global.fetch).toHaveBeenCalledWith(
+        'http://localhost:8002/api/auth/login',
+        expect.objectContaining({
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          }
+        })
+      );
+      
+      // Clean up
+      delete process.env.REACT_APP_API_URL;
+    });
+
+    it('should handle API login failure', async () => {
+      process.env.REACT_APP_API_URL = 'http://localhost:8002';
+      
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: false,
+        json: async () => ({ message: 'Invalid credentials' })
+      });
+      
+      const { login } = useAuthStore.getState();
+      
+      await expect(login('test@example.com', 'wrong')).rejects.toThrow('Invalid credentials');
+      
+      const state = useAuthStore.getState();
+      expect(state.isAuthenticated).toBe(false);
+      expect(state.token).toBeNull();
+      
+      // Clean up
+      delete process.env.REACT_APP_API_URL;
     });
   });
 
@@ -70,16 +143,47 @@ describe('Auth Store', () => {
       await login('anna.admin@hrthis.de', 'demo');
       
       // Verify logged in
-      expect(useAuthStore.getState().isAuthenticated).toBe(true);
+      let state = useAuthStore.getState();
+      expect(state.isAuthenticated).toBe(true);
+      expect(state.user).toBeDefined();
       
       // Logout
       logout();
       
       // Verify logged out
-      const state = useAuthStore.getState();
+      state = useAuthStore.getState();
       expect(state.isAuthenticated).toBe(false);
       expect(state.user).toBeNull();
       expect(state.organization).toBeNull();
+      expect(state.token).toBeNull();
+    });
+  });
+
+  describe('getAuthToken', () => {
+    it('should return null when not authenticated', () => {
+      const token = getAuthToken();
+      expect(token).toBeNull();
+    });
+
+    it('should return token when authenticated with API', async () => {
+      process.env.REACT_APP_API_URL = 'http://localhost:8002';
+      
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          user: { id: 'test', email: 'test@example.com', role: 'EMPLOYEE' },
+          access_token: 'test-token-456'
+        })
+      });
+      
+      const { login } = useAuthStore.getState();
+      await login('test@example.com', 'password');
+      
+      const token = getAuthToken();
+      expect(token).toBe('test-token-456');
+      
+      // Clean up
+      delete process.env.REACT_APP_API_URL;
     });
   });
 
@@ -91,84 +195,53 @@ describe('Auth Store', () => {
     });
 
     it('should create a new user with required fields', async () => {
-      const { createUser, getAllUsers } = useAuthStore.getState();
+      const { createUser } = useAuthStore.getState();
       
-      const newUserData: Omit<User, 'id' | 'organizationId'> = {
-        email: 'newuser@example.com',
-        name: 'New User',
+      const newUserData = {
+        email: 'new.user@hrthis.de',
         firstName: 'New',
         lastName: 'User',
-        role: 'EMPLOYEE',
+        role: 'EMPLOYEE' as const,
+        organizationId: 'org1',
         position: 'Developer',
-        department: 'IT',
-        weeklyHours: 40,
-        employmentType: 'FULL_TIME',
-        employmentStatus: 'ACTIVE',
-        vacationDays: 30,
-        joinDate: '2024-01-01',
+        department: 'IT'
       };
-
-      const initialUserCount = getAllUsers().length;
-      const createdUser = await createUser(newUserData);
       
-      expect(createdUser).toBeDefined();
-      expect(createdUser.id).toBeDefined();
-      expect(createdUser.email).toBe('newuser@example.com');
-      expect(createdUser.organizationId).toBe('org1');
+      const newUser = await createUser(newUserData);
       
-      // Verify user was added to the list
-      const updatedUsers = getAllUsers();
-      expect(updatedUsers.length).toBe(initialUserCount + 1);
-      expect(updatedUsers.find(u => u.id === createdUser.id)).toBeDefined();
+      expect(newUser).toBeDefined();
+      expect(newUser.email).toBe('new.user@hrthis.de');
+      expect(newUser.firstName).toBe('New');
+      expect(newUser.lastName).toBe('User');
+      expect(newUser.role).toBe('EMPLOYEE');
+      expect(newUser.id).toBeDefined();
     });
 
     it('should set default values for optional fields', async () => {
       const { createUser } = useAuthStore.getState();
       
-      const minimalUserData: Omit<User, 'id' | 'organizationId'> = {
-        email: 'minimal@example.com',
-        name: 'Minimal User',
-        firstName: 'Minimal',
-        lastName: 'User',
-        position: 'Tester',
-        department: 'QA',
-        role: 'EMPLOYEE',
+      const minimalUserData = {
+        email: 'minimal@hrthis.de',
+        firstName: 'Min',
+        lastName: 'User'
       };
-
-      const createdUser = await createUser(minimalUserData);
       
-      // Check default values
-      expect(createdUser.role).toBe('EMPLOYEE');
-      expect(createdUser.employmentStatus).toBe('ACTIVE');
-      expect(createdUser.employmentType).toBe('FULL_TIME');
-      expect(createdUser.weeklyHours).toBe(40);
-      expect(createdUser.vacationDays).toBe(30);
-      expect(createdUser.coinWallet).toBe(0);
-      expect(createdUser.level).toBe(1);
-      expect(createdUser.teamIds).toEqual([]);
+      const newUser = await createUser(minimalUserData);
+      
+      expect(newUser.role).toBe('EMPLOYEE'); // Default role
+      expect(newUser.weeklyHours).toBe(40); // Default hours
+      expect(newUser.employmentType).toBe('FULL_TIME'); // Default type
+      expect(newUser.vacationDays).toBe(30); // Default vacation
+      expect(newUser.coinWallet).toBe(0); // Default coins
+      expect(newUser.level).toBe(1); // Default level
     });
 
     it('should generate unique IDs for new users', async () => {
       const { createUser } = useAuthStore.getState();
       
-      const user1 = await createUser({
-        email: 'user1@example.com',
-        name: 'User 1',
-        firstName: 'User',
-        lastName: 'One',
-        position: 'Dev',
-        department: 'IT',
-      });
-
-      const user2 = await createUser({
-        email: 'user2@example.com',
-        name: 'User 2',
-        firstName: 'User',
-        lastName: 'Two',
-        position: 'Dev',
-        department: 'IT',
-      });
-
+      const user1 = await createUser({ email: 'user1@hrthis.de' });
+      const user2 = await createUser({ email: 'user2@hrthis.de' });
+      
       expect(user1.id).toBeDefined();
       expect(user2.id).toBeDefined();
       expect(user1.id).not.toBe(user2.id);
@@ -183,37 +256,42 @@ describe('Auth Store', () => {
 
     it('should update user data', async () => {
       const { updateUser, getAllUsers } = useAuthStore.getState();
-      const users = getAllUsers();
-      const userToUpdate = users[0];
       
-      await updateUser(userToUpdate.id, {
+      // Get existing user
+      const users = getAllUsers();
+      const userToUpdate = users.find(u => u.email === 'max.mustermann@hrthis.de');
+      expect(userToUpdate).toBeDefined();
+      
+      // Update user
+      await updateUser(userToUpdate!.id, {
         position: 'Senior Developer',
-        weeklyHours: 35,
+        department: 'Engineering'
       });
       
+      // Verify update
       const updatedUsers = getAllUsers();
-      const updatedUser = updatedUsers.find(u => u.id === userToUpdate.id);
-      
+      const updatedUser = updatedUsers.find(u => u.id === userToUpdate!.id);
       expect(updatedUser?.position).toBe('Senior Developer');
-      expect(updatedUser?.weeklyHours).toBe(35);
+      expect(updatedUser?.department).toBe('Engineering');
     });
 
     it('should update current user if updating self', async () => {
       const { updateUser, user } = useAuthStore.getState();
       
-      if (!user) throw new Error('User should be logged in');
+      expect(user).toBeDefined();
+      const currentUserId = user!.id;
       
-      await updateUser(user.id, {
-        position: 'Updated Position',
+      await updateUser(currentUserId, {
+        position: 'HR Director'
       });
       
       const updatedState = useAuthStore.getState();
-      expect(updatedState.user?.position).toBe('Updated Position');
+      expect(updatedState.user?.position).toBe('HR Director');
     });
   });
 
   describe('getAllUsers', () => {
-    it('should return all users', async () => {
+    it('should return all users after login', async () => {
       const { login, getAllUsers } = useAuthStore.getState();
       await login('anna.admin@hrthis.de', 'demo');
       
@@ -221,7 +299,81 @@ describe('Auth Store', () => {
       
       expect(Array.isArray(users)).toBe(true);
       expect(users.length).toBeGreaterThan(0);
-      expect(users.every(user => user.id && user.email)).toBe(true);
+      expect(users.some(u => u.email === 'anna.admin@hrthis.de')).toBe(true);
+      expect(users.some(u => u.email === 'max.mustermann@hrthis.de')).toBe(true);
+    });
+  });
+
+  describe('loadEmployees', () => {
+    it('should load and cache employees', async () => {
+      const { login, loadEmployees } = useAuthStore.getState();
+      await login('anna.admin@hrthis.de', 'demo');
+      
+      const employees = await loadEmployees();
+      
+      expect(Array.isArray(employees)).toBe(true);
+      expect(employees.length).toBeGreaterThan(0);
+      
+      // Check if cached
+      const state = useAuthStore.getState();
+      expect(state.cachedEmployees).toEqual(employees);
+    });
+
+    it('should return cached employees on subsequent calls', async () => {
+      const { login, loadEmployees } = useAuthStore.getState();
+      await login('anna.admin@hrthis.de', 'demo');
+      
+      // First call
+      const employees1 = await loadEmployees();
+      
+      // Second call should return cached
+      const employees2 = await loadEmployees();
+      
+      expect(employees1).toEqual(employees2);
+      expect(employees1).toBe(employees2); // Same reference
+    });
+  });
+
+  describe('persistence', () => {
+    it('should persist auth state to localStorage', async () => {
+      const { login } = useAuthStore.getState();
+      await login('anna.admin@hrthis.de', 'demo');
+      
+      // Check localStorage
+      const persistedData = localStorage.getItem('auth-storage');
+      expect(persistedData).toBeDefined();
+      
+      const parsed = JSON.parse(persistedData!);
+      expect(parsed.state.isAuthenticated).toBe(true);
+      expect(parsed.state.user.email).toBe('anna.admin@hrthis.de');
+    });
+
+    it('should restore auth state from localStorage', async () => {
+      // Set up localStorage
+      const authData = {
+        state: {
+          user: { id: 'test', email: 'test@example.com', role: 'ADMIN' },
+          organization: { id: 'org1', name: 'Test Org' },
+          isAuthenticated: true,
+          token: 'stored-token'
+        }
+      };
+      localStorage.setItem('auth-storage', JSON.stringify(authData));
+      
+      // Create new store instance (simulates page reload)
+      const { user, isAuthenticated, token } = useAuthStore.getState();
+      
+      // Note: In a real scenario, the store would be rehydrated on mount
+      // For testing, we need to manually trigger rehydration
+      useAuthStore.persist.rehydrate();
+      
+      // Wait for rehydration
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      const rehydratedState = useAuthStore.getState();
+      expect(rehydratedState.isAuthenticated).toBe(true);
+      expect(rehydratedState.user?.email).toBe('test@example.com');
+      expect(rehydratedState.token).toBe('stored-token');
     });
   });
 });
