@@ -1,5 +1,5 @@
-import { secureAIRequest } from '../secure-ai-proxy';
 import { getAuthToken } from '../../state/auth';
+import { secureAIRequest } from '../secure-ai-proxy';
 
 // Mock auth token
 jest.mock('../../state/auth', () => ({

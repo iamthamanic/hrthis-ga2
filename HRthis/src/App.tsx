@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { AppNavigator } from './navigation/AppNavigator';
 import { ToastProvider } from './components/ToastProvider';
+import { AppNavigator } from './navigation/AppNavigator';
 
 // Get base path from environment variable or default to empty string
 const basename = process.env.REACT_APP_BASE_PATH || '';

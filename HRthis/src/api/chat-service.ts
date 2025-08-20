@@ -8,6 +8,9 @@ All API keys are now handled securely on the backend with proper authentication.
 */
 
 // 🔒 SECURE SERVICES - Re-export all services from secure modules
+// 🔒 SECURITY VALIDATION
+import { migrationHelpers } from "./secure-ai-proxy";
+
 export {
   getAnthropicTextResponse,
   getAnthropicChatResponse,
@@ -31,9 +34,6 @@ export {
   secureGrokService,
   migrationHelpers,
 } from "./secure-ai-proxy";
-
-// 🔒 SECURITY VALIDATION
-import { migrationHelpers } from "./secure-ai-proxy";
 
 // Validate secure setup on module load
 const securityCheck = migrationHelpers.validateSecureSetup();

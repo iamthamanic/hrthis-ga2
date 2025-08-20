@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
+import apiClient, { apiUtils } from '../api/api-client';
 import { RequiredStep as _RequiredStep, markStepExecuted } from '../pipeline/annotations';
 import { User, Organization } from '../types';
-import apiClient, { apiUtils } from '../api/api-client';
 
 // Helper to create basic user fields
 const createBasicUserFields = (userData: Partial<User>) => ({
@@ -355,7 +355,7 @@ export const useAuthStore = create<AuthState>()(
         try {
           if (apiUtils.isRealAPIEnabled()) {
             // Use real API
-            const token = get().token;
+            const {token} = get();
             const newUser = await apiClient.employees.create(userData, token || undefined);
             const transformedUser = apiUtils.transformBackendUser(newUser);
             
@@ -384,7 +384,7 @@ export const useAuthStore = create<AuthState>()(
         try {
           if (apiUtils.isRealAPIEnabled()) {
             // Use real API
-            const token = get().token;
+            const {token} = get();
             const employees = await apiClient.employees.getAll(token || undefined);
             const transformedEmployees = employees.map(apiUtils.transformBackendUser);
             

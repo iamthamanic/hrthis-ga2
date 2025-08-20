@@ -1,8 +1,8 @@
 import React from 'react';
 
+import { useEmployees } from '../../hooks/useEmployees';
 import type { CoinRule } from '../../state/coins';
 import { cn } from '../../utils/cn';
-import { useEmployees } from '../../hooks/useEmployees';
 
 interface CoinsStore {
   getCoinRules: () => CoinRule[];

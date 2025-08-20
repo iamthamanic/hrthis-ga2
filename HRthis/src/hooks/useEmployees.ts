@@ -4,9 +4,10 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import { User } from '../types';
-import { useAuthStore } from '../state/auth';
+
 import { apiUtils } from '../api/api-client';
+import { useAuthStore } from '../state/auth';
+import { User } from '../types';
 
 interface UseEmployeesReturn {
   employees: User[];

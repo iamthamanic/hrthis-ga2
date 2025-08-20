@@ -11,6 +11,7 @@
  */
 
 import { AIMessage, AIRequestOptions, AIResponse } from "../types/ai";
+
 import { secureOpenAIService } from "./secure-ai-proxy";
 
 /**

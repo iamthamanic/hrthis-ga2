@@ -14,8 +14,7 @@ const BASE_PATH = process.env.REACT_APP_BASE_PATH || '';
 export function getRoute(route: string): string {
   // Since we're using Router basename, we don't need to prefix routes
   // This function now just ensures the route starts with /
-  const cleanRoute = route.startsWith('/') ? route : `/${route}`;
-  return cleanRoute;
+  return route.startsWith('/') ? route : `/${route}`;
 }
 
 /**

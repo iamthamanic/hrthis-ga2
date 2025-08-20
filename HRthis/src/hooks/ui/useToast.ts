@@ -3,8 +3,8 @@
  * Manages toast notifications with different types and auto-dismiss functionality
  */
 
-import { create } from 'zustand';
 import { useCallback, useEffect } from 'react';
+import { create } from 'zustand';
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 export type ToastPosition = 'top' | 'top-right' | 'top-left' | 'bottom' | 'bottom-right' | 'bottom-left';
