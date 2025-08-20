@@ -1,22 +1,17 @@
-/*
-IMPORTANT NOTICE: DO NOT REMOVE
-This is a custom client for the Grok API. You may update this service, but you should not need to.
-The Grok API can be communicated with the "openai" package, so you can use the same functions as the openai package. It may not support all the same features, so please be careful.
-
-
-grok-3-latest
-grok-3-fast-latest
-grok-3-mini-latest
-*/
+/**
+ * ⚠️ SECURITY WARNING: DEPRECATED - DO NOT USE
+ * 
+ * This file contains insecure API key handling.
+ * Use the secure backend proxy instead:
+ * 
+ * import { getGrokTextResponse } from './secure-grok-service';
+ * 
+ * @deprecated Use secure-grok-service.ts instead
+ */
 import OpenAI from "openai";
 
 export const getGrokClient = (): OpenAI => {
-  const apiKey = process.env.EXPO_PUBLIC_VIBECODE_GROK_API_KEY;
-  if (!apiKey) {
-    throw new Error("Grok API key not found in environment variables");
-  }
-  return new OpenAI({
-    apiKey: apiKey,
-    baseURL: "https://api.x.ai/v1",
-  });
+  throw new Error(
+    "SECURITY: Direct API key usage is disabled. Use secure-grok-service.ts instead."
+  );
 };

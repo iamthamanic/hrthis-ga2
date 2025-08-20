@@ -195,6 +195,12 @@ const mockOrganizations: Organization[] = [
   }
 ];
 
+// Export helper function to get auth token
+export const getAuthToken = (): string | null => {
+  const state = useAuthStore.getState();
+  return state.token;
+};
+
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({

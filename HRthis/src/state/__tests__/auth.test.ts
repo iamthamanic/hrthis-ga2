@@ -9,12 +9,16 @@ jest.mock('../../pipeline/annotations', () => ({
 
 describe('Auth Store', () => {
   beforeEach(() => {
+    // Force demo mode for tests
+    delete process.env.REACT_APP_API_URL;
+    
     // Reset store state before each test
     useAuthStore.setState({
       user: null,
       organization: null,
       isAuthenticated: false,
       isLoading: false,
+      token: null,
     });
     
     // Clear localStorage
@@ -25,7 +29,7 @@ describe('Auth Store', () => {
     it('should successfully login with valid credentials', async () => {
       const { login } = useAuthStore.getState();
       
-      await login('anna.admin@hrthis.de', 'password');
+      await login('anna.admin@hrthis.de', 'demo');
       
       const state = useAuthStore.getState();
       expect(state.isAuthenticated).toBe(true);
@@ -63,7 +67,7 @@ describe('Auth Store', () => {
     it('should clear user data on logout', async () => {
       // First login
       const { login, logout } = useAuthStore.getState();
-      await login('anna.admin@hrthis.de', 'password');
+      await login('anna.admin@hrthis.de', 'demo');
       
       // Verify logged in
       expect(useAuthStore.getState().isAuthenticated).toBe(true);
@@ -83,7 +87,7 @@ describe('Auth Store', () => {
     beforeEach(async () => {
       // Login as admin
       const { login } = useAuthStore.getState();
-      await login('anna.admin@hrthis.de', 'password');
+      await login('anna.admin@hrthis.de', 'demo');
     });
 
     it('should create a new user with required fields', async () => {
@@ -174,7 +178,7 @@ describe('Auth Store', () => {
   describe('updateUser', () => {
     beforeEach(async () => {
       const { login } = useAuthStore.getState();
-      await login('anna.admin@hrthis.de', 'password');
+      await login('anna.admin@hrthis.de', 'demo');
     });
 
     it('should update user data', async () => {
@@ -211,7 +215,7 @@ describe('Auth Store', () => {
   describe('getAllUsers', () => {
     it('should return all users', async () => {
       const { login, getAllUsers } = useAuthStore.getState();
-      await login('anna.admin@hrthis.de', 'password');
+      await login('anna.admin@hrthis.de', 'demo');
       
       const users = getAllUsers();
       
