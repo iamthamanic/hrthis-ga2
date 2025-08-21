@@ -42,6 +42,9 @@
     "test:coverage": "react-scripts test --coverage --watchAll=false",
     "test:ci": "react-scripts test --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter",
     "test:watch": "react-scripts test --watchAll",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
     "eject": "react-scripts eject",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
@@ -53,12 +56,14 @@
     "quality:check": "npm run lint && npm run type-check && npm run test:coverage",
     "quality:summary": "node scripts/quality-summary.js",
     "performance:check": "node scripts/check-performance.js",
+    "lighthouse": "lhci autorun",
     "security:check": "npm audit --audit-level=high",
     "docs:generate": "node scripts/generate-docs.js",
     "readme:update": "node scripts/update-readme.js",
     "pre-commit": "lint-staged",
     "prepare": "husky install || true",
-    "validate": "npm run lint && npm run type-check && npm run test:coverage && npm run performance:check"
+    "validate": "npm run lint && npm run type-check && npm run test:coverage && npm run performance:check",
+    "ci": "npm run validate && npm run build && npm run test:e2e"
   },
   "eslintConfig": {
     "extends": [

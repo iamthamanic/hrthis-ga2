@@ -24,6 +24,8 @@ Ein umfassendes HR-Management-System mit React Frontend und FastAPI Backend für
 - **Recharts** für Datenvisualisierung
 - **Zod** für Schema-Validierung
 - **Custom Hooks System** für wiederverwendbare Logik
+- **Web Vitals** für Performance Monitoring
+- **Playwright** für E2E Testing
 
 ### Backend
 - **FastAPI** (Python)
@@ -32,6 +34,14 @@ Ein umfassendes HR-Management-System mit React Frontend und FastAPI Backend für
 - **JWT** für Authentication
 - **Pydantic** für Datenvalidierung
 - **Custom Middleware** für Request/Response Hooks
+
+### Testing & Quality
+- **Jest** für Unit Testing (~30% Coverage)
+- **React Testing Library** für Component Testing
+- **Playwright** für E2E Testing
+- **ESLint** für Code Linting
+- **TypeScript** Strict Mode aktiviert
+- **GitHub Actions** für CI/CD
 
 ## 📋 Voraussetzungen
 
@@ -331,7 +341,30 @@ pytest
 # Frontend Tests
 cd HRthis
 npm test
+
+# Test Coverage
+npm run test:coverage
+
+# E2E Tests
+npm run test:e2e
+
+# Linting
+npm run lint
+
+# Type Checking
+npm run type-check
 ```
+
+### Performance Monitoring
+
+Die App trackt automatisch Core Web Vitals:
+- **LCP** (Largest Contentful Paint): < 2.5s
+- **FID** (First Input Delay): < 100ms  
+- **CLS** (Cumulative Layout Shift): < 0.1
+- **FCP** (First Contentful Paint): < 1.8s
+- **TTFB** (Time to First Byte): < 800ms
+
+Performance-Daten werden in der Konsole (Development) oder an einen Analytics-Endpoint (Production) gesendet.
 
 ## 🤝 Beitragen
 
