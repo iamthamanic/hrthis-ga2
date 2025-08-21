@@ -7,6 +7,48 @@ und dieses Projekt hält sich an [Semantic Versioning](https://semver.org/spec/v
 
 ## [Unreleased]
 
+### 🚀 Added - 2025-01-21
+- **Komplettes E2E Test-System mit Docker**
+  - `docker-compose.test.yml` für isolierten Test-Stack
+  - PostgreSQL Test-Datenbank mit Seed-Daten
+  - Automatisierte Test-Orchestrierung
+  - Full-Stack Testing mit einem Befehl
+  
+#### E2E Test Features
+- **Test Infrastructure**
+  - Separater Docker-Stack für Tests (DB, Backend, Frontend)
+  - Test-Datenbank mit 5 vordefinierten Test-Usern
+  - Health-Checks für alle Services
+  - Automatisches Cleanup nach Tests
+  
+- **Test Coverage**
+  - Authentication Flow Tests (Login, Logout, Session)
+  - Employee Management Tests (CRUD Operations)
+  - Full User Journey Tests (Complete Workflows)
+  - Role-Based Access Tests (Admin, Manager, Employee)
+  - Mobile Responsive Tests
+  - Performance & Error Handling Tests
+  
+- **Test Automation**
+  - `npm run test:e2e:full` - Kompletter Test mit Docker
+  - `npm run test:e2e:full:keep` - Services laufen lassen für Debugging
+  - Playwright Integration für Browser-Tests
+  - HTML Test-Reports mit Screenshots/Videos
+  
+- **Developer Experience**
+  - Ein-Befehl-Testing: `npm run test:e2e:full`
+  - Separierte Test-Ports (Frontend: 3001, Backend: 8003, DB: 5433)
+  - Debugging-Modus mit persistenten Services
+  - Ausführliche Dokumentation in `E2E-TEST-README.md`
+
+### 🐛 Fixed - 2025-01-21
+- **Test Infrastructure**
+  - Unit-Test Mocks aktualisiert für aktuelle Implementierung
+  - Employment-Utils Test-Berechnungen korrigiert
+  - Fehlende `employees` State-Datei erstellt
+  - API Client Test-Struktur angepasst
+  - ErrorBoundary `window.location.reload` Mock repariert
+
 ## [2.3.0] - 2025-01-19
 
 ### 🎉 Added

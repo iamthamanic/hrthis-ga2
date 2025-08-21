@@ -345,7 +345,7 @@ npm test
 # Test Coverage
 npm run test:coverage
 
-# E2E Tests
+# E2E Tests (Demo Mode)
 npm run test:e2e
 
 # Linting
@@ -354,6 +354,60 @@ npm run lint
 # Type Checking
 npm run type-check
 ```
+
+## 🧪 E2E Testing mit Docker (NEU!)
+
+### Full-Stack Testing mit einem Befehl
+
+```bash
+# Kompletter E2E Test mit Docker Stack
+cd HRthis
+npm run test:e2e:full
+```
+
+Dieser Befehl:
+1. ✅ Startet PostgreSQL Test-Datenbank
+2. ✅ Startet Backend API mit Test-Daten
+3. ✅ Startet Frontend Application
+4. ✅ Führt alle E2E Tests aus
+5. ✅ Generiert HTML Test-Report
+6. ✅ Räumt automatisch auf
+
+### Test-Befehle
+
+```bash
+# Full Stack Test mit automatischem Cleanup
+npm run test:e2e:full
+
+# Services nach Tests laufen lassen (Debugging)
+npm run test:e2e:full:keep
+
+# Tests gegen bereits laufendes Backend
+npm run test:e2e:backend
+
+# Docker Stack manuell verwalten
+npm run docker:test:up    # Starten
+npm run docker:test:down  # Stoppen
+npm run docker:test:logs  # Logs anzeigen
+```
+
+### Test-Infrastruktur
+
+- **Test-Datenbank**: PostgreSQL auf Port 5433
+- **Test-Backend**: FastAPI auf Port 8003
+- **Test-Frontend**: React auf Port 3001
+- **Test-User**: admin@test.com / admin123 (und weitere)
+
+### Test-Coverage
+
+- ✅ Authentication Flow (Login, Logout, Session)
+- ✅ Employee Management (CRUD Operations)
+- ✅ Full User Journeys
+- ✅ Role-Based Access Control
+- ✅ Mobile Responsive Tests
+- ✅ Performance & Error Handling
+
+Detaillierte Dokumentation: [E2E-TEST-README.md](./E2E-TEST-README.md)
 
 ### Performance Monitoring
 

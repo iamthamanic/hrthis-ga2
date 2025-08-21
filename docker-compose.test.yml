@@ -1,0 +1,114 @@
+version: '3.8'
+
+services:
+  # Test Database
+  test-db:
+    image: postgres:16-alpine
+    container_name: hrthis-test-db
+    environment:
+      POSTGRES_DB: hrthis_test
+      POSTGRES_USER: hrthis_test
+      POSTGRES_PASSWORD: test_password
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5433:5432"  # Different port to avoid conflicts
+    volumes:
+      - ./test-data:/docker-entrypoint-initdb.d
+    networks:
+      - hrthis-test
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hrthis_test -d hrthis_test"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+
+  # Test Backend
+  test-backend:
+    build: 
+      context: ./browo-hrthis-backend
+      dockerfile: Dockerfile
+    container_name: hrthis-test-backend
+    environment:
+      - DATABASE_URL=postgresql://hrthis_test:test_password@test-db:5432/hrthis_test
+      - SECRET_KEY=test-secret-key-for-e2e-testing
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      - TESTING=true
+      - CORS_ORIGINS=["http://localhost:4173","http://localhost:3000","http://test-frontend:3000"]
+    ports:
+      - "8003:8000"  # Different port for test backend
+    depends_on:
+      test-db:
+        condition: service_healthy
+    networks:
+      - hrthis-test
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    command: >
+      sh -c "
+        echo 'Waiting for database...' &&
+        sleep 5 &&
+        python -m app.scripts.init_db &&
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+      "
+
+  # Test Frontend
+  test-frontend:
+    build:
+      context: ./HRthis
+      dockerfile: Dockerfile.test
+    container_name: hrthis-test-frontend
+    environment:
+      - REACT_APP_API_URL=http://test-backend:8000
+      - PORT=3000
+      - CI=true
+    ports:
+      - "3001:3000"  # Different port for test frontend
+    depends_on:
+      test-backend:
+        condition: service_healthy
+    networks:
+      - hrthis-test
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+
+  # Playwright Test Runner
+  e2e-tests:
+    build:
+      context: ./HRthis
+      dockerfile: Dockerfile.e2e
+    container_name: hrthis-e2e-tests
+    environment:
+      - BASE_URL=http://test-frontend:3000
+      - API_URL=http://test-backend:8000
+      - CI=true
+    depends_on:
+      test-frontend:
+        condition: service_healthy
+      test-backend:
+        condition: service_healthy
+    networks:
+      - hrthis-test
+    volumes:
+      - ./HRthis/e2e:/app/e2e
+      - ./HRthis/test-results:/app/test-results
+      - ./HRthis/playwright-report:/app/playwright-report
+    command: >
+      sh -c "
+        echo 'Waiting for services to be ready...' &&
+        sleep 10 &&
+        npx playwright test --reporter=html
+      "
+
+networks:
+  hrthis-test:
+    driver: bridge
+
+volumes:
+  test-db-data:
