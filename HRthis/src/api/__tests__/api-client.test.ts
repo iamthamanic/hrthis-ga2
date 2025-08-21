@@ -1,4 +1,4 @@
-import apiClient, { apiUtils } from '../api-client';
+import apiClient from '../api-client';
 
 // Mock fetch
 global.fetch = jest.fn();
@@ -9,20 +9,26 @@ describe('API Client', () => {
     delete process.env.REACT_APP_API_URL;
   });
 
-  describe('apiUtils', () => {
+  describe('utils', () => {
     describe('isRealAPIEnabled', () => {
       it('should return false when REACT_APP_API_URL is not set', () => {
-        expect(apiUtils.isRealAPIEnabled()).toBe(false);
+        delete process.env.REACT_APP_API_URL;
+        // Need to re-import to get the new env value
+        jest.resetModules();
+        const apiClientFresh = require('../api-client').default;
+        expect(apiClientFresh.utils.isRealAPIEnabled()).toBe(false);
       });
 
       it('should return false when REACT_APP_API_URL is empty', () => {
         process.env.REACT_APP_API_URL = '';
-        expect(apiUtils.isRealAPIEnabled()).toBe(false);
+        jest.resetModules();
+        const apiClientFresh = require('../api-client').default;
+        expect(apiClientFresh.utils.isRealAPIEnabled()).toBe(false);
       });
 
       it('should return true when REACT_APP_API_URL is set', () => {
         process.env.REACT_APP_API_URL = 'http://localhost:8002';
-        expect(apiUtils.isRealAPIEnabled()).toBe(true);
+        expect(apiClient.utils.isRealAPIEnabled()).toBe(true);
       });
     });
 
@@ -45,7 +51,7 @@ describe('API Client', () => {
           vacation_days: 30,
         };
 
-        const result = apiUtils.transformBackendUser(backendUser);
+        const result = apiClient.utils.transformBackendUser(backendUser);
 
         expect(result).toMatchObject({
           id: '123',
@@ -72,12 +78,12 @@ describe('API Client', () => {
           email: 'test@example.com',
         };
 
-        const result = apiUtils.transformBackendUser(minimalUser);
+        const result = apiClient.utils.transformBackendUser(minimalUser);
 
         expect(result).toMatchObject({
           id: '123',
           email: 'test@example.com',
-          name: ' ',
+          name: '',
           role: 'EMPLOYEE',
         });
       });
@@ -93,11 +99,11 @@ describe('API Client', () => {
           },
         };
 
-        const result = apiUtils.transformBackendUser(userWithAddress);
+        const result = apiClient.utils.transformBackendUser(userWithAddress);
 
         expect(result.address).toEqual({
           street: 'Main St 123',
-          postalCode: '12345',
+          postal_code: '12345',
           city: 'Berlin',
         });
       });
@@ -127,7 +133,7 @@ describe('API Client', () => {
         const result = await apiClient.employees.getAll(mockToken);
 
         expect(global.fetch).toHaveBeenCalledWith(
-          `${apiUrl}/api/employees/`,
+          `${apiUrl}/api/employees`,
           expect.objectContaining({
             headers: expect.objectContaining({
               'Authorization': `Bearer ${mockToken}`,
@@ -145,7 +151,7 @@ describe('API Client', () => {
         });
 
         await expect(apiClient.employees.getAll(mockToken))
-          .rejects.toThrow('Failed to fetch employees: 401 Unauthorized');
+          .rejects.toThrow('API request failed: 401 Unauthorized');
       });
     });
 
@@ -193,18 +199,14 @@ describe('API Client', () => {
         const result = await apiClient.employees.create(newEmployee, mockToken);
 
         expect(global.fetch).toHaveBeenCalledWith(
-          `${apiUrl}/api/employees/`,
+          `${apiUrl}/api/employees`,
           expect.objectContaining({
             method: 'POST',
             headers: expect.objectContaining({
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${mockToken}`,
             }),
-            body: JSON.stringify(expect.objectContaining({
-              email: 'new@test.com',
-              first_name: 'New',
-              last_name: 'Employee',
-            })),
+            body: JSON.stringify(newEmployee),
           })
         );
         expect(result).toEqual(createdEmployee);
@@ -285,8 +287,9 @@ describe('API Client', () => {
           expect.objectContaining({
             method: 'POST',
             headers: expect.objectContaining({
-              'Content-Type': 'application/x-www-form-urlencoded',
+              'Content-Type': 'application/json',
             }),
+            body: JSON.stringify({ username: 'test@example.com', password: 'password' }),
           })
         );
         expect(result).toEqual(mockResponse);

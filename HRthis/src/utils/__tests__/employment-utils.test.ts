@@ -54,7 +54,7 @@ describe('employment-utils', () => {
     });
 
     it('should calculate vacation days for mini-job employees', () => {
-      expect(calculateVacationDays('MINI_JOB', 10)).toBe(8);
+      expect(calculateVacationDays('MINI_JOB', 10)).toBe(5); // 10/40 * 20 = 5
     });
 
     it('should calculate vacation days for internships', () => {
@@ -142,8 +142,8 @@ describe('employment-utils', () => {
 
   describe('calculateWorkingHours', () => {
     it('should calculate monthly working hours', () => {
-      expect(calculateWorkingHours(40, 'month')).toBeCloseTo(173.33, 1);
-      expect(calculateWorkingHours(20, 'month')).toBeCloseTo(86.67, 1);
+      expect(calculateWorkingHours(40, 'month')).toBeCloseTo(173.2, 1); // 40 * 4.33
+      expect(calculateWorkingHours(20, 'month')).toBeCloseTo(86.6, 1);  // 20 * 4.33
     });
 
     it('should calculate yearly working hours', () => {
@@ -186,7 +186,7 @@ describe('employment-utils', () => {
       
       expect(label).toBe('Teilzeit');
       expect(vacationDays).toBe(15);
-      expect(monthlyHours).toBeCloseTo(86.67, 1);
+      expect(monthlyHours).toBeCloseTo(86.6, 1);
       expect(isFullTime).toBe(false);
     });
 

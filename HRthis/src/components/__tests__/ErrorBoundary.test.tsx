@@ -96,11 +96,15 @@ describe('ErrorBoundary', () => {
   });
 
   it('reloads page when reload button is clicked', () => {
+    // Save original reload
     const originalReload = window.location.reload;
-    Object.defineProperty(window.location, 'reload', {
-      writable: true,
-      value: jest.fn(),
-    });
+    
+    // Create a new mock function
+    const reloadMock = jest.fn();
+    
+    // Replace reload with our mock
+    delete (window.location as any).reload;
+    window.location.reload = reloadMock;
 
     render(
       <ErrorBoundary>
@@ -113,9 +117,7 @@ describe('ErrorBoundary', () => {
 
     expect(window.location.reload).toHaveBeenCalled();
 
-    Object.defineProperty(window.location, 'reload', {
-      writable: true,
-      value: originalReload,
-    });
+    // Restore original reload
+    window.location.reload = originalReload;
   });
 });

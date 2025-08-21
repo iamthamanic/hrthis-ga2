@@ -1,70 +1,107 @@
-import { CalendarEntry } from '../types/calendar';
+import { exportToICS, formatEventDescription, createICSEvent } from './exportCalendar';
 
-import { exportToCSV, exportToPDF } from './exportCalendar';
+describe('Calendar Export Utils', () => {
+  describe('formatEventDescription', () => {
+    it('should format event description correctly', () => {
+      const description = formatEventDescription(
+        'Team Meeting',
+        'Conference Room A',
+        'Discuss Q4 goals'
+      );
+      
+      expect(description).toContain('Team Meeting');
+      expect(description).toContain('Conference Room A');
+      expect(description).toContain('Discuss Q4 goals');
+    });
 
-// Mock date-fns and jsPDF to avoid ES module issues
-jest.mock('date-fns', () => ({
-  format: jest.fn((_date: Date | string, _formatStr: string) => '2025-01-06')
-}));
+    it('should handle missing fields gracefully', () => {
+      const description = formatEventDescription('Meeting');
+      expect(description).toContain('Meeting');
+    });
+  });
 
-jest.mock('date-fns/locale', () => ({
-  de: {}
-}));
+  describe('createICSEvent', () => {
+    it('should create valid ICS event string', () => {
+      const event = {
+        title: 'Test Event',
+        start: new Date('2024-01-15T10:00:00'),
+        end: new Date('2024-01-15T11:00:00'),
+        description: 'Test Description',
+        location: 'Test Location'
+      };
+      
+      const icsEvent = createICSEvent(event);
+      
+      expect(icsEvent).toContain('BEGIN:VEVENT');
+      expect(icsEvent).toContain('END:VEVENT');
+      expect(icsEvent).toContain('SUMMARY:Test Event');
+      expect(icsEvent).toContain('DESCRIPTION:Test Description');
+      expect(icsEvent).toContain('LOCATION:Test Location');
+    });
+  });
 
-jest.mock('jspdf', () => {
-  return jest.fn().mockImplementation(() => ({
-    text: jest.fn(),
-    save: jest.fn(),
-    internal: {
-      pageSize: { width: 210 }
-    }
-  }));
+  describe('exportToICS', () => {
+    // Mock URL.createObjectURL and document.createElement
+    const mockCreateObjectURL = jest.fn(() => 'blob:mock-url');
+    const mockRevokeObjectURL = jest.fn();
+    const mockClick = jest.fn();
+    
+    beforeEach(() => {
+      global.URL.createObjectURL = mockCreateObjectURL;
+      global.URL.revokeObjectURL = mockRevokeObjectURL;
+      
+      jest.spyOn(document, 'createElement').mockImplementation((tagName) => {
+        if (tagName === 'a') {
+          return {
+            click: mockClick,
+            href: '',
+            download: '',
+            style: {},
+          } as any;
+        }
+        return document.createElement(tagName);
+      });
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it('should export single event to ICS file', () => {
+      const event = {
+        id: '1',
+        title: 'Meeting',
+        start: new Date('2024-01-15T10:00:00'),
+        end: new Date('2024-01-15T11:00:00'),
+      };
+      
+      exportToICS([event], 'test-calendar.ics');
+      
+      expect(mockCreateObjectURL).toHaveBeenCalled();
+      expect(mockClick).toHaveBeenCalled();
+      expect(mockRevokeObjectURL).toHaveBeenCalled();
+    });
+
+    it('should export multiple events to ICS file', () => {
+      const events = [
+        {
+          id: '1',
+          title: 'Meeting 1',
+          start: new Date('2024-01-15T10:00:00'),
+          end: new Date('2024-01-15T11:00:00'),
+        },
+        {
+          id: '2',
+          title: 'Meeting 2',
+          start: new Date('2024-01-16T14:00:00'),
+          end: new Date('2024-01-16T15:00:00'),
+        },
+      ];
+      
+      exportToICS(events, 'meetings.ics');
+      
+      expect(mockCreateObjectURL).toHaveBeenCalled();
+      expect(mockClick).toHaveBeenCalled();
+    });
+  });
 });
-
-jest.mock('jspdf-autotable', () => jest.fn());
-
-// Test data
-const testEntries: CalendarEntry[] = [
-  { userId: '1', userName: 'Max Mustermann', date: '2025-01-06', type: 'urlaub', status: 'genehmigt' },
-  { userId: '1', userName: 'Max Mustermann', date: '2025-01-07', type: 'urlaub', status: 'genehmigt' },
-  { userId: '2', userName: 'Anna Admin', date: '2025-01-07', type: 'krank' },
-  { userId: '3', userName: 'Tom Teilzeit', date: '2025-01-08', type: 'meeting' },
-  { userId: '1', userName: 'Max Mustermann', date: '2025-01-09', type: 'zeit', stunden: 8.5 },
-  { userId: '2', userName: 'Anna Admin', date: '2025-01-09', type: 'zeit', stunden: 6.0 },
-  { userId: '3', userName: 'Tom Teilzeit', date: '2025-01-09', type: 'zeit', stunden: 4.0 },
-];
-
-const testUsers = [
-  { userId: '1', userName: 'Max Mustermann' },
-  { userId: '2', userName: 'Anna Admin' },
-  { userId: '3', userName: 'Tom Teilzeit' },
-];
-
-const testDateRange = [
-  new Date('2025-01-06'),
-  new Date('2025-01-07'),
-  new Date('2025-01-08'),
-  new Date('2025-01-09'),
-];
-
-// Manual test functions (to be run in browser console)
-export const testCSVExport = (): void => {
-  // Test CSV export functionality
-  exportToCSV(testEntries, testDateRange, testUsers, 'monat', new Date('2025-01-01'));
-};
-
-export const testPDFExport = (): void => {
-  // Test PDF export functionality
-  exportToPDF(testEntries, testDateRange, testUsers, 'monat', new Date('2025-01-01'));
-};
-
-// Export test functions to window for easy testing
-interface WindowWithTestFunctions extends Window {
-  testCSVExport?: typeof testCSVExport;
-  testPDFExport?: typeof testPDFExport;
-}
-
-if (typeof window !== 'undefined') {
-  (window as WindowWithTestFunctions).testCSVExport = testCSVExport;
-  (window as WindowWithTestFunctions).testPDFExport = testPDFExport;
-}

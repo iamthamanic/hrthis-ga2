@@ -1,5 +1,4 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
 import React from 'react';
 import { LoginScreen } from '../LoginScreen';
 import { useAuthStore } from '../../state/auth';
@@ -7,11 +6,15 @@ import { useAuthStore } from '../../state/auth';
 // Mock the auth store
 jest.mock('../../state/auth');
 
-// Mock navigate
+// Mock navigate and router
 const mockNavigate = jest.fn();
+const mockUseLocation = jest.fn(() => ({ pathname: '/login' }));
+
 jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+  BrowserRouter: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   useNavigate: () => mockNavigate,
+  useLocation: () => mockUseLocation(),
+  Navigate: ({ to }: { to: string }) => <div>Navigate to {to}</div>,
 }));
 
 describe('LoginScreen', () => {
@@ -27,11 +30,7 @@ describe('LoginScreen', () => {
   });
 
   const renderLoginScreen = () => {
-    return render(
-      <BrowserRouter>
-        <LoginScreen />
-      </BrowserRouter>
-    );
+    return render(<LoginScreen />);
   };
 
   it('should render login form', () => {
