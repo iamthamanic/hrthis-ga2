@@ -56,6 +56,7 @@
     "quality:check": "npm run lint && npm run type-check && npm run test:coverage",
     "quality:summary": "node scripts/quality-summary.js",
     "performance:check": "node scripts/check-performance.js",
+    "bundle:analyze": "node scripts/analyze-bundle.js",
     "lighthouse": "lhci autorun",
     "security:check": "npm audit --audit-level=high",
     "docs:generate": "node scripts/generate-docs.js",
