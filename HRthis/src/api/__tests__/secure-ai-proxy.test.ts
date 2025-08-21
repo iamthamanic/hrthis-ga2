@@ -1,8 +1,5 @@
 import { getAuthToken } from '../../state/auth';
-import { secureAIService } from '../secure-ai-proxy';
-
-// Use the service's request method
-const secureAIRequest = secureAIService.makeRequest;
+import { secureAIService, secureAIRequest } from '../secure-ai-proxy';
 
 // Mock auth token
 jest.mock('../../state/auth', () => ({

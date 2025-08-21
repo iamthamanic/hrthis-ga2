@@ -43,8 +43,9 @@ interface SecureAIRequest {
 
 /**
  * Generic secure API request handler for AI services
+ * @internal For testing purposes, this is exported
  */
-async function secureAIRequest<T>(
+export async function secureAIRequest<T>(
   endpoint: string, 
   data: SecureAIRequest,
   token?: string
