@@ -18,7 +18,7 @@ async function globalSetup(config: FullConfig) {
   
   while (retries < maxRetries && !backendReady) {
     try {
-      const response = await fetch(`${testConfig.API_URL}/health`);
+      const response = await fetch(`${testConfig.API_URL}/hrthis/health`);
       if (response.ok) {
         backendReady = true;
         console.log('✅ Backend is ready!');
@@ -46,7 +46,7 @@ async function globalSetup(config: FullConfig) {
     // Login as admin to ensure test data is ready
     console.log('🔐 Verifying admin access...');
     
-    const loginResponse = await page.request.post(`${testConfig.API_URL}/api/auth/login`, {
+    const loginResponse = await page.request.post(`${testConfig.API_URL}/hrthis/api/auth/login`, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },

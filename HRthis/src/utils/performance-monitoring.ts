@@ -1,4 +1,4 @@
-import { getCLS, getFID, getFCP, getLCP, getTTFB, Metric } from 'web-vitals';
+import { onCLS, onINP, onFCP, onLCP, onTTFB, Metric } from 'web-vitals';
 
 /**
  * Performance monitoring configuration for HRthis
@@ -7,7 +7,7 @@ import { getCLS, getFID, getFCP, getLCP, getTTFB, Metric } from 'web-vitals';
 
 interface PerformanceThresholds {
   LCP: { good: number; needsImprovement: number };
-  FID: { good: number; needsImprovement: number };
+  INP: { good: number; needsImprovement: number };
   CLS: { good: number; needsImprovement: number };
   FCP: { good: number; needsImprovement: number };
   TTFB: { good: number; needsImprovement: number };
@@ -16,7 +16,7 @@ interface PerformanceThresholds {
 // Performance thresholds based on Web Vitals standards
 const THRESHOLDS: PerformanceThresholds = {
   LCP: { good: 2500, needsImprovement: 4000 }, // Largest Contentful Paint
-  FID: { good: 100, needsImprovement: 300 },    // First Input Delay
+  INP: { good: 200, needsImprovement: 500 },    // Interaction to Next Paint
   CLS: { good: 0.1, needsImprovement: 0.25 },   // Cumulative Layout Shift
   FCP: { good: 1800, needsImprovement: 3000 },  // First Contentful Paint
   TTFB: { good: 800, needsImprovement: 1800 },  // Time to First Byte
@@ -74,27 +74,27 @@ class PerformanceMonitor {
    */
   private registerWebVitals(enableLogging = false) {
     // Largest Contentful Paint
-    getLCP((metric) => {
+    onLCP((metric) => {
       this.handleMetric(metric, 'LCP', enableLogging);
     });
 
-    // First Input Delay
-    getFID((metric) => {
-      this.handleMetric(metric, 'FID', enableLogging);
+    // Interaction to Next Paint
+    onINP((metric) => {
+      this.handleMetric(metric, 'INP', enableLogging);
     });
 
     // Cumulative Layout Shift
-    getCLS((metric) => {
+    onCLS((metric) => {
       this.handleMetric(metric, 'CLS', enableLogging);
     });
 
     // First Contentful Paint
-    getFCP((metric) => {
+    onFCP((metric) => {
       this.handleMetric(metric, 'FCP', enableLogging);
     });
 
     // Time to First Byte
-    getTTFB((metric) => {
+    onTTFB((metric) => {
       this.handleMetric(metric, 'TTFB', enableLogging);
     });
   }

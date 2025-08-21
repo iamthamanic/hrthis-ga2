@@ -107,7 +107,7 @@ function generateMockAIResponse(request: SecureAIRequest): AIResponse {
   const service = request.service.toUpperCase();
   
   return {
-    content: `🤖 [${service} DEMO MODE] This is a simulated response to: "${lastMessage.content}"\n\nIn production, this would be processed by the secure backend proxy using the ${service} API without exposing client-side keys.`,
+    content: `🤖 [${service} DEMO MODE] This is a simulated response to: "${lastMessage?.content || 'your request'}"\n\nIn production, this would be processed by the secure backend proxy using the ${service} API without exposing client-side keys.`,
     usage: {
       promptTokens: 50,
       completionTokens: 100,

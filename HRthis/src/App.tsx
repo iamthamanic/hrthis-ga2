@@ -13,7 +13,9 @@ const basename = process.env.REACT_APP_BASE_PATH || '';
 function App(): React.JSX.Element {
   useEffect(() => {
     // Initialize error tracking
-    errorTracker.init(process.env.REACT_APP_SENTRY_DSN);
+    if (process.env.REACT_APP_SENTRY_DSN) {
+      errorTracker.init(process.env.REACT_APP_SENTRY_DSN);
+    }
 
     // Initialize performance monitoring
     startPerformanceMonitoring({

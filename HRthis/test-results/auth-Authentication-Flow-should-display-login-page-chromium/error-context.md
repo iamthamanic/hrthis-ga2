@@ -1,0 +1,696 @@
+# Page snapshot
+
+```yaml
+- iframe [ref=e1]:
+  - generic [ref=f1e2]:
+    - generic [ref=f1e3]: "Compiled with problems:"
+    - button "Dismiss" [ref=f1e4] [cursor=pointer]: ×
+    - generic [ref=f1e5]:
+      - generic [ref=f1e6]:
+        - generic [ref=f1e7]: ERROR in src/App.tsx:16:21
+        - generic [ref=f1e8]: "TS4111: Property 'REACT_APP_SENTRY_DSN' comes from an index signature, so it must be accessed with ['REACT_APP_SENTRY_DSN']. 14 | useEffect(() => { 15 | // Initialize error tracking > 16 | if (process.env.REACT_APP_SENTRY_DSN) { | ^^^^^^^^^^^^^^^^^^^^ 17 | errorTracker.init(process.env.REACT_APP_SENTRY_DSN); 18 | } 19 |"
+      - generic [ref=f1e9]:
+        - generic [ref=f1e10]: ERROR in src/App.tsx:17:37
+        - generic [ref=f1e11]: "TS4111: Property 'REACT_APP_SENTRY_DSN' comes from an index signature, so it must be accessed with ['REACT_APP_SENTRY_DSN']. 15 | // Initialize error tracking 16 | if (process.env.REACT_APP_SENTRY_DSN) { > 17 | errorTracker.init(process.env.REACT_APP_SENTRY_DSN); | ^^^^^^^^^^^^^^^^^^^^ 18 | } 19 | 20 | // Initialize performance monitoring"
+      - generic [ref=f1e12]:
+        - generic [ref=f1e13]: ERROR in src/components/avatar/AccessoryTab.tsx:152:5
+        - generic [ref=f1e14]: "TS2532: Object is possibly 'undefined'. 150 | acc[accessory.type] = []; 151 | } > 152 | acc[accessory.type].push(accessory); | ^^^^^^^^^^^^^^^^^^^ 153 | return acc; 154 | }, {} as Record<string, AvatarAccessory[]>); 155 |"
+      - generic [ref=f1e15]:
+        - generic [ref=f1e16]: ERROR in src/components/calendar/DayDetailModal.tsx:7:11
+        - generic [ref=f1e17]: "TS6196: '_Reminder' is declared but never used. 5 | import { VacationReminder } from '../../types/reminders'; 6 | > 7 | interface _Reminder { | ^^^^^^^^^ 8 | id: string; 9 | message: string; 10 | date: string;"
+      - generic [ref=f1e18]:
+        - generic [ref=f1e19]: ERROR in src/components/calendar/TeamCalendarHelpers.tsx:3:1
+        - generic [ref=f1e20]: "TS6133: 'React' is declared but its value is never read. 1 | import { format, isToday, startOfMonth, endOfMonth, eachDayOfInterval, startOfYear, endOfYear } from 'date-fns'; 2 | import { de } from 'date-fns/locale'; > 3 | import React from 'react'; | ^^^^^^^^^^^^^^^^^^^^^^^^^^ 4 | 5 | import { CalendarEntry, colorMap, abbreviationMap, getWorkTimeColor } from '../../types/calendar'; 6 | import { cn } from '../../utils/cn';"
+      - generic [ref=f1e21]:
+        - generic [ref=f1e22]: ERROR in src/components/ErrorBoundary.tsx:1:8
+        - generic [ref=f1e23]: "TS6133: 'React' is declared but its value is never read. > 1 | import React, { Component, ReactNode, ErrorInfo } from 'react'; | ^^^^^ 2 | 3 | interface ErrorBoundaryState { 4 | hasError: boolean;"
+      - generic [ref=f1e24]:
+        - generic [ref=f1e25]: ERROR in src/components/ErrorBoundary.tsx:24:3
+        - generic [ref=f1e26]: "TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Component<ErrorBoundaryProps, ErrorBoundaryState, any>'. 22 | } 23 | > 24 | componentDidCatch(error: Error, errorInfo: ErrorInfo): void { | ^^^^^^^^^^^^^^^^^ 25 | this.setState({ error, errorInfo }); 26 | 27 | // Log error to monitoring service in production"
+      - generic [ref=f1e27]:
+        - generic [ref=f1e28]: ERROR in src/components/ErrorBoundary.tsx:34:3
+        - generic [ref=f1e29]: "TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Component<ErrorBoundaryProps, ErrorBoundaryState, any>'. 32 | } 33 | > 34 | render(): ReactNode { | ^^^^^^ 35 | if (this.state.hasError) { 36 | if (this.props.fallback) { 37 | return this.props.fallback;"
+      - generic [ref=f1e30]:
+        - generic [ref=f1e31]: ERROR in src/components/ErrorBoundaryWithRetry.tsx:1:8
+        - generic [ref=f1e32]: "TS6133: 'React' is declared but its value is never read. > 1 | import React, { Component, ReactNode, ErrorInfo } from 'react'; | ^^^^^ 2 | 3 | interface ErrorBoundaryState { 4 | hasError: boolean;"
+      - generic [ref=f1e33]:
+        - generic [ref=f1e34]: ERROR in src/components/ErrorBoundaryWithRetry.tsx:35:3
+        - generic [ref=f1e35]: "TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Component<ErrorBoundaryProps, ErrorBoundaryState, any>'. 33 | } 34 | > 35 | componentDidCatch(error: Error, errorInfo: ErrorInfo): void { | ^^^^^^^^^^^^^^^^^ 36 | const { onError } = this.props; 37 | const { retryCount } = this.state; 38 |"
+      - generic [ref=f1e36]:
+        - generic [ref=f1e37]: ERROR in src/components/ErrorBoundaryWithRetry.tsx:65:3
+        - generic [ref=f1e38]: "TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Component<ErrorBoundaryProps, ErrorBoundaryState, any>'. 63 | } 64 | > 65 | componentWillUnmount(): void { | ^^^^^^^^^^^^^^^^^^^^ 66 | if (this.resetTimeoutId) { 67 | clearTimeout(this.resetTimeoutId); 68 | }"
+      - generic [ref=f1e39]:
+        - generic [ref=f1e40]: ERROR in src/components/ErrorBoundaryWithRetry.tsx:90:3
+        - generic [ref=f1e41]: "TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Component<ErrorBoundaryProps, ErrorBoundaryState, any>'. 88 | }; 89 | > 90 | render(): ReactNode { | ^^^^^^ 91 | const { hasError, error, retryCount } = this.state; 92 | const { children, fallback, maxRetries = 3 } = this.props; 93 |"
+      - generic [ref=f1e42]:
+        - generic [ref=f1e43]: ERROR in src/components/fileupload/useFileUpload.ts:57:24
+        - generic [ref=f1e44]: "TS2345: Argument of type 'File | undefined' is not assignable to parameter of type 'File'. Type 'undefined' is not assignable to type 'File'. 55 | const files = Array.from(e.dataTransfer.files); 56 | if (files.length > 0) { > 57 | handleFileSelect(files[0]); | ^^^^^^^^ 58 | } 59 | }; 60 |"
+      - generic [ref=f1e45]:
+        - generic [ref=f1e46]: ERROR in src/components/fileupload/useFileUpload.ts:70:24
+        - generic [ref=f1e47]: "TS2345: Argument of type 'File | undefined' is not assignable to parameter of type 'File'. Type 'undefined' is not assignable to type 'File'. 68 | const files = Array.from(e.target.files || []); 69 | if (files.length > 0) { > 70 | handleFileSelect(files[0]); | ^^^^^^^^ 71 | } 72 | }; 73 |"
+      - generic [ref=f1e48]:
+        - generic [ref=f1e49]: ERROR in src/components/lootbox/MultiRewardAnimation.tsx:31:7
+        - generic [ref=f1e50]: "TS2322: Type 'Reward | undefined' is not assignable to type 'Reward'. Type 'undefined' is not assignable to type 'Reward'. 29 | return ( 30 | <LootboxAnimation > 31 | reward={rewards[currentRewardIndex]} | ^^^^^^ 32 | onComplete={handleRewardComplete} 33 | autoStart={currentRewardIndex > 0} 34 | />"
+      - generic [ref=f1e51]:
+        - generic [ref=f1e52]: ERROR in src/components/optimized/MemoizedComponents.tsx:35:14
+        - generic [ref=f1e53]: "TS2678: Type '\"INACTIVE\"' is not comparable to type 'EmploymentStatus | undefined'. 33 | case 'ACTIVE': 34 | return 'bg-green-100 text-green-800'; > 35 | case 'INACTIVE': | ^^^^^^^^^^ 36 | return 'bg-gray-100 text-gray-800'; 37 | case 'ON_LEAVE': 38 | return 'bg-yellow-100 text-yellow-800';"
+      - generic [ref=f1e54]:
+        - generic [ref=f1e55]: ERROR in src/components/optimized/MemoizedComponents.tsx:37:14
+        - generic [ref=f1e56]: "TS2678: Type '\"ON_LEAVE\"' is not comparable to type 'EmploymentStatus | undefined'. 35 | case 'INACTIVE': 36 | return 'bg-gray-100 text-gray-800'; > 37 | case 'ON_LEAVE': | ^^^^^^^^^^ 38 | return 'bg-yellow-100 text-yellow-800'; 39 | default: 40 | return 'bg-gray-100 text-gray-800';"
+      - generic [ref=f1e57]:
+        - generic [ref=f1e58]: ERROR in src/components/Quiz.tsx:43:9
+        - generic [ref=f1e59]: "TS2322: Type 'TestQuestion | undefined' is not assignable to type 'TestQuestion'. Type 'undefined' is not assignable to type 'TestQuestion'. 41 | <div className=\"bg-white rounded-xl shadow-sm p-6\"> 42 | <QuizContent > 43 | currentQuestion={currentQuestion} | ^^^^^^^^^^^^^^^ 44 | currentQuestionIndex={currentQuestionIndex} 45 | totalQuestions={questions.length} 46 | selectedAnswer={selectedAnswer}"
+      - generic [ref=f1e60]:
+        - generic [ref=f1e61]: ERROR in src/components/quiz/useQuiz.ts:45:9
+        - generic [ref=f1e62]: "TS18048: 'currentQuestion' is possibly 'undefined'. 43 | setShowExplanation(false); 44 | > 45 | if (currentQuestion.type === 'sorting' && currentQuestion.options) { | ^^^^^^^^^^^^^^^ 46 | initializeSorting(currentQuestion.options); 47 | } 48 | }, [currentQuestionIndex, currentQuestion, initializeSorting]);"
+      - generic [ref=f1e63]:
+        - generic [ref=f1e64]: ERROR in src/components/quiz/useQuiz.ts:45:47
+        - generic [ref=f1e65]: "TS18048: 'currentQuestion' is possibly 'undefined'. 43 | setShowExplanation(false); 44 | > 45 | if (currentQuestion.type === 'sorting' && currentQuestion.options) { | ^^^^^^^^^^^^^^^ 46 | initializeSorting(currentQuestion.options); 47 | } 48 | }, [currentQuestionIndex, currentQuestion, initializeSorting]);"
+      - generic [ref=f1e66]:
+        - generic [ref=f1e67]: ERROR in src/components/quiz/useQuiz.ts:46:25
+        - generic [ref=f1e68]: "TS18048: 'currentQuestion' is possibly 'undefined'. 44 | 45 | if (currentQuestion.type === 'sorting' && currentQuestion.options) { > 46 | initializeSorting(currentQuestion.options); | ^^^^^^^^^^^^^^^ 47 | } 48 | }, [currentQuestionIndex, currentQuestion, initializeSorting]); 49 |"
+      - generic [ref=f1e69]:
+        - generic [ref=f1e70]: ERROR in src/components/quiz/useQuiz.ts:54:35
+        - generic [ref=f1e71]: "TS2345: Argument of type 'TestQuestion | undefined' is not assignable to parameter of type 'TestQuestion'. Type 'undefined' is not assignable to type 'TestQuestion'. 52 | 53 | const timeSpent = (Date.now() - questionStartTime) / 1000; > 54 | const isCorrect = checkAnswer(currentQuestion, selectedAnswer, dropZones); | ^^^^^^^^^^^^^^^ 55 | const answer = createTestAnswer(currentQuestion, selectedAnswer, timeSpent, isCorrect); 56 | 57 | setAnswers([...answers, answer]);"
+      - generic [ref=f1e72]:
+        - generic [ref=f1e73]: ERROR in src/components/quiz/useQuiz.ts:55:37
+        - generic [ref=f1e74]: "TS2345: Argument of type 'TestQuestion | undefined' is not assignable to parameter of type 'TestQuestion'. Type 'undefined' is not assignable to type 'TestQuestion'. 53 | const timeSpent = (Date.now() - questionStartTime) / 1000; 54 | const isCorrect = checkAnswer(currentQuestion, selectedAnswer, dropZones); > 55 | const answer = createTestAnswer(currentQuestion, selectedAnswer, timeSpent, isCorrect); | ^^^^^^^^^^^^^^^ 56 | 57 | setAnswers([...answers, answer]); 58 | setIsAnswered(true);"
+      - generic [ref=f1e75]:
+        - generic [ref=f1e76]: ERROR in src/components/quiz/useQuiz.ts:80:9
+        - generic [ref=f1e77]: "TS18048: 'currentQuestion' is possibly 'undefined'. 78 | const onDrop = (e: React.DragEvent, dropIndex: number) => { 79 | const newDropZones = handleDrop(e, dropIndex); > 80 | if (currentQuestion.type === 'sorting' && newDropZones.filter(Boolean).length === currentQuestion.options?.length) { | ^^^^^^^^^^^^^^^ 81 | setSelectedAnswer(newDropZones.filter((zone): zone is string => Boolean(zone))); 82 | } 83 | };"
+      - generic [ref=f1e78]:
+        - generic [ref=f1e79]: ERROR in src/components/quiz/useQuiz.ts:80:87
+        - generic [ref=f1e80]: "TS18048: 'currentQuestion' is possibly 'undefined'. 78 | const onDrop = (e: React.DragEvent, dropIndex: number) => { 79 | const newDropZones = handleDrop(e, dropIndex); > 80 | if (currentQuestion.type === 'sorting' && newDropZones.filter(Boolean).length === currentQuestion.options?.length) { | ^^^^^^^^^^^^^^^ 81 | setSelectedAnswer(newDropZones.filter((zone): zone is string => Boolean(zone))); 82 | } 83 | };"
+      - generic [ref=f1e81]:
+        - generic [ref=f1e82]: ERROR in src/components/quiz/useQuiz.ts:90:19
+        - generic [ref=f1e83]: "TS2345: Argument of type 'TestQuestion | undefined' is not assignable to parameter of type 'TestQuestion'. Type 'undefined' is not assignable to type 'TestQuestion'. 88 | 89 | const isCorrect = showExplanation > 90 | ? checkAnswer(currentQuestion, selectedAnswer, dropZones) | ^^^^^^^^^^^^^^^ 91 | : false; 92 | 93 | return {"
+      - generic [ref=f1e84]:
+        - generic [ref=f1e85]: ERROR in src/components/ToastProvider.tsx:18:17
+        - generic [ref=f1e86]: "TS2532: Object is possibly 'undefined'. 16 | const handleKeyDown = (e: KeyboardEvent) => { 17 | if (e.key === 'Escape' && toasts.length > 0) { > 18 | dismiss(toasts[toasts.length - 1].id); | ^^^^^^^^^^^^^^^^^^^^^^^^^ 19 | } 20 | }; 21 |"
+      - generic [ref=f1e87]:
+        - generic [ref=f1e88]: ERROR in src/components/video/useVideoPlayer.ts:156:3
+        - generic [ref=f1e89]: "TS2322: Type 'number | undefined' is not assignable to type 'number'. Type 'undefined' is not assignable to type 'number'. 154 | const currentIndex = speeds.indexOf(currentSpeed); 155 | const nextIndex = (currentIndex + 1) % speeds.length; > 156 | return speeds[nextIndex]; | ^^^^^^^^^^^^^^^^^^^^^^^^^ 157 | };"
+      - generic [ref=f1e90]:
+        - generic [ref=f1e91]: ERROR in src/contexts/OptimizedContext.tsx:148:37
+        - generic [ref=f1e92]: "TS2339: Property 'now' does not exist on type 'PerformanceContextType'. 146 | useEffect(() => { 147 | renderCount.current++; > 148 | const startTime = performance.now(); | ^^^ 149 | 150 | return () => { 151 | renderTime.current = performance.now() - startTime;"
+      - generic [ref=f1e93]:
+        - generic [ref=f1e94]: ERROR in src/contexts/OptimizedContext.tsx:151:42
+        - generic [ref=f1e95]: "TS2339: Property 'now' does not exist on type 'PerformanceContextType'. 149 | 150 | return () => { > 151 | renderTime.current = performance.now() - startTime; | ^^^ 152 | performance.recordMetric(`${componentName}_render_time`, renderTime.current); 153 | 154 | if (process.env.NODE_ENV === 'development' && renderCount.current > 10) {"
+      - generic [ref=f1e96]:
+        - generic [ref=f1e97]: ERROR in src/hooks/api/useApiRequest.ts:365:33
+        - generic [ref=f1e98]: "TS6133: 'execute' is declared but its value is never read. 363 | const [allData, setAllData] = useState<T[]>([]); 364 | > 365 | const { data, loading, error, execute, refetch } = useApiRequest( | ^^^^^^^ 366 | () => requestFn(page, pageSize), 367 | [page, pageSize], 368 | {"
+      - generic [ref=f1e99]:
+        - generic [ref=f1e100]: ERROR in src/hooks/ui/useToast.ts:6:23
+        - generic [ref=f1e101]: "TS6133: 'useEffect' is declared but its value is never read. 4 | */ 5 | > 6 | import { useCallback, useEffect } from 'react'; | ^^^^^^^^^ 7 | import { create } from 'zustand'; 8 | 9 | export type ToastType = 'success' | 'error' | 'warning' | 'info';"
+      - generic [ref=f1e102]:
+        - generic [ref=f1e103]: ERROR in src/hooks/useCalendarData.ts:66:13
+        - generic [ref=f1e104]: "TS2322: Type 'string | undefined' is not assignable to type 'string'. Type 'undefined' is not assignable to type 'string'. 64 | userId: leave.userId, 65 | userName: getUserName(leave.userId), > 66 | date: date.toISOString().split('T')[0], | ^^^^ 67 | type: leave.type === 'VACATION' ? 'urlaub' : 'krank', 68 | status: 'genehmigt' 69 | });"
+      - generic [ref=f1e105]:
+        - generic [ref=f1e106]: ERROR in src/hooks/useCalendarData.ts:75:60
+        - generic [ref=f1e107]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 73 | // Add time records for personal view 74 | if (viewMode === 'personal' && user) { > 75 | const timeRecords = getTimeRecordsForPeriod(user.id, startDateStr, endDateStr); | ^^^^^^^^^^^^ 76 | timeRecords.forEach(record => { 77 | if (record.timeOut) { 78 | events.push({"
+      - generic [ref=f1e108]:
+        - generic [ref=f1e109]: ERROR in src/hooks/useCalendarData.ts:159:9
+        - generic [ref=f1e110]: "TS2532: Object is possibly 'undefined'. 157 | 158 | usersToShow.forEach(u => { > 159 | yearData[u.id][week] = yearLeaves.filter(leave => { | ^^^^^^^^^^^^^^ 160 | if (leave.userId !== u.id) return false; 161 | 162 | const leaveStart = new Date(leave.startDate);"
+      - generic [ref=f1e111]:
+        - generic [ref=f1e112]: ERROR in src/hooks/useCalendarData.ts:200:42
+        - generic [ref=f1e113]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 198 | 199 | const userTimeRecords = user && viewMode === 'personal' ? > 200 | getTimeRecordsForPeriod(user.id, startDateStr, endDateStr) : []; | ^^^^^^^^^^^^ 201 | 202 | const teamTimeRecords = viewMode === 'team' ? 203 | allUsers.flatMap(u => getTimeRecordsForPeriod(u.id, startDateStr, endDateStr)) : [];"
+      - generic [ref=f1e114]:
+        - generic [ref=f1e115]: ERROR in src/hooks/useCalendarData.ts:203:61
+        - generic [ref=f1e116]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 201 | 202 | const teamTimeRecords = viewMode === 'team' ? > 203 | allUsers.flatMap(u => getTimeRecordsForPeriod(u.id, startDateStr, endDateStr)) : []; | ^^^^^^^^^^^^ 204 | 205 | const days: CalendarDay[] = []; 206 | const today = new Date();"
+      - generic [ref=f1e117]:
+        - generic [ref=f1e118]: ERROR in src/hooks/useCalendarData.ts:220:40
+        - generic [ref=f1e119]: "TS2769: No overload matches this call. Overload 1 of 4, '(value: string | number | Date): Date', gave the following error. Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'. Overload 2 of 4, '(value: string | number): Date', gave the following error. Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'. 218 | const startDate = new Date(leave.startDate); 219 | const endDate = new Date(leave.endDate); > 220 | const currentDate = new Date(dateString); | ^^^^^^^^^^ 221 | 222 | return currentDate >= startDate && currentDate <= endDate && 223 | leave.status === 'APPROVED' &&"
+      - generic [ref=f1e120]:
+        - generic [ref=f1e121]: ERROR in src/hooks/useCalendarData.ts:230:40
+        - generic [ref=f1e122]: "TS2769: No overload matches this call. Overload 1 of 4, '(value: string | number | Date): Date', gave the following error. Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'. Overload 2 of 4, '(value: string | number): Date', gave the following error. Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'. 228 | const startDate = new Date(leave.startDate); 229 | const endDate = new Date(leave.endDate); > 230 | const currentDate = new Date(dateString); | ^^^^^^^^^^ 231 | 232 | return currentDate >= startDate && currentDate <= endDate && 233 | leave.userId === user?.id && leave.status === 'APPROVED';"
+      - generic [ref=f1e123]:
+        - generic [ref=f1e124]: ERROR in src/hooks/useCalendarData.ts:236:15
+        - generic [ref=f1e125]: "TS6133: '_dayTimeRecords' is declared but its value is never read. 234 | }); 235 | > 236 | const _dayTimeRecords = teamTimeRecords.filter(record => record.date === dateString); | ^^^^^^^^^^^^^^^ 237 | const userTimeRecord = userTimeRecords.find(record => record.date === dateString) || undefined; 238 | 239 | const dayReminders = reminders.filter(reminder =>"
+      - generic [ref=f1e126]:
+        - generic [ref=f1e127]: ERROR in src/navigation/AppNavigator.tsx:37:1
+        - generic [ref=f1e128]: "TS6133: 'ROUTES' is declared but its value is never read. 35 | import { useAuthStore } from '../state/auth'; 36 | import { cn } from '../utils/cn'; > 37 | import { ROUTES } from '../utils/navigation'; | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 38 | 39 | const MainLayout = ({ children }: { children: React.ReactNode }) => { 40 | const location = useLocation();"
+      - generic [ref=f1e129]:
+        - generic [ref=f1e130]: ERROR in src/navigation/LazyRoutes.tsx:2:32
+        - generic [ref=f1e131]: "TS2307: Cannot find module '../components/LoadingSpinner' or its corresponding type declarations. 1 | import { lazy, Suspense } from 'react'; > 2 | import { LoadingSpinner } from '../components/LoadingSpinner'; | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 3 | 4 | /** 5 | * Lazy-loaded route components for code splitting"
+      - generic [ref=f1e132]:
+        - generic [ref=f1e133]: ERROR in src/navigation/LazyRoutes.tsx:23:10
+        - generic [ref=f1e134]: "TS2307: Cannot find module '../screens/EmployeesScreen' or its corresponding type declarations. 21 | 22 | export const EmployeesScreen = lazy(() => > 23 | import('../screens/EmployeesScreen').then(module => ({ | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 24 | default: module.EmployeesScreen 25 | })) 26 | );"
+      - generic [ref=f1e135]:
+        - generic [ref=f1e136]: ERROR in src/navigation/LazyRoutes.tsx:29:10
+        - generic [ref=f1e137]: "TS2307: Cannot find module '../screens/EmployeeFormScreen' or its corresponding type declarations. 27 | 28 | export const EmployeeFormScreen = lazy(() => > 29 | import('../screens/EmployeeFormScreen').then(module => ({ | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 30 | default: module.EmployeeFormScreen 31 | })) 32 | );"
+      - generic [ref=f1e138]:
+        - generic [ref=f1e139]: ERROR in src/navigation/LazyRoutes.tsx:41:10
+        - generic [ref=f1e140]: "TS2307: Cannot find module '../screens/LeavesScreen' or its corresponding type declarations. 39 | 40 | export const LeavesScreen = lazy(() => > 41 | import('../screens/LeavesScreen').then(module => ({ | ^^^^^^^^^^^^^^^^^^^^^^^^^ 42 | default: module.LeavesScreen 43 | })) 44 | );"
+      - generic [ref=f1e141]:
+        - generic [ref=f1e142]: ERROR in src/navigation/LazyRoutes.tsx:53:10
+        - generic [ref=f1e143]: "TS2307: Cannot find module '../screens/LearningScreen' or its corresponding type declarations. 51 | 52 | export const LearningScreen = lazy(() => > 53 | import('../screens/LearningScreen').then(module => ({ | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ 54 | default: module.LearningScreen 55 | })) 56 | );"
+      - generic [ref=f1e144]:
+        - generic [ref=f1e145]: ERROR in src/navigation/LazyRoutes.tsx:77:10
+        - generic [ref=f1e146]: "TS2307: Cannot find module '../screens/ShopScreen' or its corresponding type declarations. 75 | 76 | export const ShopScreen = lazy(() => > 77 | import('../screens/ShopScreen').then(module => ({ | ^^^^^^^^^^^^^^^^^^^^^^^ 78 | default: module.ShopScreen 79 | })) 80 | );"
+      - generic [ref=f1e147]:
+        - generic [ref=f1e148]: ERROR in src/navigation/LazyRoutes.tsx:83:10
+        - generic [ref=f1e149]: "TS2307: Cannot find module '../screens/ReminderFormScreen' or its corresponding type declarations. 81 | 82 | export const ReminderFormScreen = lazy(() => > 83 | import('../screens/ReminderFormScreen').then(module => ({ | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 84 | default: module.ReminderFormScreen 85 | })) 86 | );"
+      - generic [ref=f1e150]:
+        - generic [ref=f1e151]: ERROR in src/navigation/LazyRoutes.tsx:89:10
+        - generic [ref=f1e152]: "TS2307: Cannot find module '../screens/NotificationsScreen' or its corresponding type declarations. 87 | 88 | export const NotificationsScreen = lazy(() => > 89 | import('../screens/NotificationsScreen').then(module => ({ | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 90 | default: module.NotificationsScreen 91 | })) 92 | );"
+      - generic [ref=f1e153]:
+        - generic [ref=f1e154]: ERROR in src/navigation/LazyRoutes.tsx:95:10
+        - generic [ref=f1e155]: "TS2307: Cannot find module '../screens/ProfileScreen' or its corresponding type declarations. 93 | 94 | export const ProfileScreen = lazy(() => > 95 | import('../screens/ProfileScreen').then(module => ({ | ^^^^^^^^^^^^^^^^^^^^^^^^^^ 96 | default: module.ProfileScreen 97 | })) 98 | );"
+      - generic [ref=f1e156]:
+        - generic [ref=f1e157]: ERROR in src/pipeline/agent-integration.ts:11:29
+        - generic [ref=f1e158]: "TS6133: 'FailLoudlyUtils' is declared but its value is never read. 9 | import { RequiredStep, markStepExecuted, stepValidator } from './annotations'; 10 | import { checkpointManager, CommonCheckpoints } from './checkpoints'; > 11 | import { failLoudlyManager, FailLoudlyUtils } from './failLoudly'; | ^^^^^^^^^^^^^^^ 12 | import { verificationManager, VerificationUtils } from './verification'; 13 | 14 | import { PipelineOrchestrator, PipelineUtils } from './index';"
+      - generic [ref=f1e159]:
+        - generic [ref=f1e160]: ERROR in src/pipeline/agent-integration.ts:12:31
+        - generic [ref=f1e161]: "TS6133: 'VerificationUtils' is declared but its value is never read. 10 | import { checkpointManager, CommonCheckpoints } from './checkpoints'; 11 | import { failLoudlyManager, FailLoudlyUtils } from './failLoudly'; > 12 | import { verificationManager, VerificationUtils } from './verification'; | ^^^^^^^^^^^^^^^^^ 13 | 14 | import { PipelineOrchestrator, PipelineUtils } from './index'; 15 |"
+      - generic [ref=f1e162]:
+        - generic [ref=f1e163]: ERROR in src/pipeline/annotations.ts:73:5
+        - generic [ref=f1e164]: "TS6133: 'target' is declared but its value is never read. 71 | export function RequiredStep(stepName: string, options: Partial<RequiredStepMetadata> = {}) { 72 | return function <T extends (...args: any[]) => any>( > 73 | target: any, | ^^^^^^ 74 | propertyKey: string | symbol, 75 | descriptor: TypedPropertyDescriptor<T> 76 | ) {"
+      - generic [ref=f1e165]:
+        - generic [ref=f1e166]: ERROR in src/pipeline/annotations.ts:166:23
+        - generic [ref=f1e167]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 164 | while ((match = requiredStepPattern.exec(code)) !== null) { 165 | const stepName = match[1]; > 166 | foundSteps.push(stepName); | ^^^^^^^^ 167 | 168 | // Registriere den Schritt 169 | this.registry.registerStep({"
+      - generic [ref=f1e168]:
+        - generic [ref=f1e169]: ERROR in src/pipeline/annotations.ts:170:9
+        - generic [ref=f1e170]: "TS2322: Type 'string | undefined' is not assignable to type 'string'. Type 'undefined' is not assignable to type 'string'. 168 | // Registriere den Schritt 169 | this.registry.registerStep({ > 170 | stepName, | ^^^^^^^^ 171 | description: `Step found in ${filePath}`, 172 | dependencies: [] 173 | });"
+      - generic [ref=f1e171]:
+        - generic [ref=f1e172]: ERROR in src/pipeline/checkpoints.ts:132:24
+        - generic [ref=f1e173]: "TS18048: 'assertion' is possibly 'undefined'. 130 | 131 | try { > 132 | const result = assertion(); | ^^^^^^^^^ 133 | this.assertionResults.set(assertionKey, result); 134 | 135 | if (!result) {"
+      - generic [ref=f1e174]:
+        - generic [ref=f1e175]: ERROR in src/pipeline/checkpoints.ts:132:24
+        - generic [ref=f1e176]: "TS2722: Cannot invoke an object which is possibly 'undefined'. 130 | 131 | try { > 132 | const result = assertion(); | ^^^^^^^^^ 133 | this.assertionResults.set(assertionKey, result); 134 | 135 | if (!result) {"
+      - generic [ref=f1e177]:
+        - generic [ref=f1e178]: ERROR in src/pipeline/checkpoints.ts:158:24
+        - generic [ref=f1e179]: "TS18048: 'validator' is possibly 'undefined'. 156 | 157 | try { > 158 | const result = validator(stepResults); | ^^^^^^^^^ 159 | if (!result) { 160 | throw new Error(`Custom validator ${i + 1} failed for checkpoint '${checkpointName}'`); 161 | }"
+      - generic [ref=f1e180]:
+        - generic [ref=f1e181]: ERROR in src/pipeline/checkpoints.ts:158:24
+        - generic [ref=f1e182]: "TS2722: Cannot invoke an object which is possibly 'undefined'. 156 | 157 | try { > 158 | const result = validator(stepResults); | ^^^^^^^^^ 159 | if (!result) { 160 | throw new Error(`Custom validator ${i + 1} failed for checkpoint '${checkpointName}'`); 161 | }"
+      - generic [ref=f1e183]:
+        - generic [ref=f1e184]: ERROR in src/pipeline/checkpoints.ts:235:25
+        - generic [ref=f1e185]: "TS6133: 'requiredLanguages' is declared but its value is never read. 233 | * Prüft ob Übersetzungsdateien vorhanden sind 234 | */ > 235 | translationFilesExist(requiredLanguages: string[] = ['en', 'de']): AssertionBuilder { | ^^^^^^^^^^^^^^^^^ 236 | this.assertions.push(() => { 237 | console.log('🔍 Checking translation files...'); 238 |"
+      - generic [ref=f1e186]:
+        - generic [ref=f1e187]: ERROR in src/pipeline/failLoudly.ts:217:41
+        - generic [ref=f1e188]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 215 | check: () => { 216 | const nodeVersion = process.version; > 217 | const majorVersion = parseInt(nodeVersion.slice(1).split('.')[0]); | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 218 | return majorVersion >= 16; 219 | }, 220 | error: 'Node.js version 16 or higher required'"
+      - generic [ref=f1e189]:
+        - generic [ref=f1e190]: ERROR in src/pipeline/failLoudly.ts:426:11
+        - generic [ref=f1e191]: "TS6133: 'pipelineFiles' is declared but its value is never read. 424 | 425 | // Prüfe ob Pipeline-System korrekt initialisiert ist > 426 | const pipelineFiles = [ | ^^^^^^^^^^^^^ 427 | 'src/pipeline/StepRunner.ts', 428 | 'src/pipeline/annotations.ts', 429 | 'src/pipeline/checkpoints.ts',"
+      - generic [ref=f1e192]:
+        - generic [ref=f1e193]: ERROR in src/pipeline/failLoudly.ts:450:20
+        - generic [ref=f1e194]: "TS6133: 'target' is declared but its value is never read. 448 | */ 449 | export function FailLoudlyOnError(errorType: 'STEP_FAILED' | 'VALIDATION_FAILED' = 'STEP_FAILED') { > 450 | return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) { | ^^^^^^ 451 | const originalMethod = descriptor.value; 452 | 453 | descriptor.value = function (...args: any[]) {"
+      - generic [ref=f1e195]:
+        - generic [ref=f1e196]: ERROR in src/pipeline/index.ts:211:11
+        - generic [ref=f1e197]: "TS6133: 'executionTime' is declared but its value is never read. 209 | ): AgentValidationResult { 210 | const validation = stepValidator.validateAllStepsExecuted(); > 211 | const executionTime = Date.now() - executionStart; | ^^^^^^^^^^^^^ 212 | 213 | return { 214 | agentName: 'AI-Agent',"
+      - generic [ref=f1e198]:
+        - generic [ref=f1e199]: ERROR in src/pipeline/index.ts:270:11
+        - generic [ref=f1e200]: "TS6133: 'checklist' is declared but its value is never read. 268 | 269 | // 3. Run verification > 270 | const checklist = verificationManager.executeAllChecks(); | ^^^^^^^^^ 271 | 272 | // 4. Generate final report 273 | const validationReport = verificationManager.generateVerificationReport();"
+      - generic [ref=f1e201]:
+        - generic [ref=f1e202]: ERROR in src/pipeline/verification.ts:273:11
+        - generic [ref=f1e203]: "TS6133: 'checkpointStatus' is declared but its value is never read. 271 | generateVerificationReport(): AgentValidationResult { 272 | const validation = stepValidator.validateAllStepsExecuted(); > 273 | const checkpointStatus = checkpointManager.getCheckpointStatus(); | ^^^^^^^^^^^^^^^^ 274 | 275 | const allChecksKeys = Object.keys(this.checklist); 276 | const passedChecks = allChecksKeys.filter(key => this.checklist[key]);"
+      - generic [ref=f1e204]:
+        - generic [ref=f1e205]: ERROR in src/pipeline/verification.ts:276:11
+        - generic [ref=f1e206]: "TS6133: 'passedChecks' is declared but its value is never read. 274 | 275 | const allChecksKeys = Object.keys(this.checklist); > 276 | const passedChecks = allChecksKeys.filter(key => this.checklist[key]); | ^^^^^^^^^^^^ 277 | const failedChecks = allChecksKeys.filter(key => !this.checklist[key]); 278 | 279 | const report: AgentValidationResult = {"
+      - generic [ref=f1e207]:
+        - generic [ref=f1e208]: ERROR in src/screens/AddEmployeeScreen.tsx:81:17
+        - generic [ref=f1e209]: "TS4111: Property 'email' comes from an index signature, so it must be accessed with ['email']. 79 | // Required fields 80 | if (!formData.email.trim()) { > 81 | newErrors.email = 'E-Mail ist erforderlich'; | ^^^^^ 82 | } else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(formData.email)) { 83 | newErrors.email = 'Ungültige E-Mail-Adresse'; 84 | }"
+      - generic [ref=f1e210]:
+        - generic [ref=f1e211]: ERROR in src/screens/AddEmployeeScreen.tsx:83:17
+        - generic [ref=f1e212]: "TS4111: Property 'email' comes from an index signature, so it must be accessed with ['email']. 81 | newErrors.email = 'E-Mail ist erforderlich'; 82 | } else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(formData.email)) { > 83 | newErrors.email = 'Ungültige E-Mail-Adresse'; | ^^^^^ 84 | } 85 | 86 | if (!formData.firstName.trim()) {"
+      - generic [ref=f1e213]:
+        - generic [ref=f1e214]: ERROR in src/screens/AddEmployeeScreen.tsx:87:17
+        - generic [ref=f1e215]: "TS4111: Property 'firstName' comes from an index signature, so it must be accessed with ['firstName']. 85 | 86 | if (!formData.firstName.trim()) { > 87 | newErrors.firstName = 'Vorname ist erforderlich'; | ^^^^^^^^^ 88 | } 89 | 90 | if (!formData.lastName.trim()) {"
+      - generic [ref=f1e216]:
+        - generic [ref=f1e217]: ERROR in src/screens/AddEmployeeScreen.tsx:91:17
+        - generic [ref=f1e218]: "TS4111: Property 'lastName' comes from an index signature, so it must be accessed with ['lastName']. 89 | 90 | if (!formData.lastName.trim()) { > 91 | newErrors.lastName = 'Nachname ist erforderlich'; | ^^^^^^^^ 92 | } 93 | 94 | if (!formData.position.trim()) {"
+      - generic [ref=f1e219]:
+        - generic [ref=f1e220]: ERROR in src/screens/AddEmployeeScreen.tsx:95:17
+        - generic [ref=f1e221]: "TS4111: Property 'position' comes from an index signature, so it must be accessed with ['position']. 93 | 94 | if (!formData.position.trim()) { > 95 | newErrors.position = 'Position ist erforderlich'; | ^^^^^^^^ 96 | } 97 | 98 | if (!formData.department.trim()) {"
+      - generic [ref=f1e222]:
+        - generic [ref=f1e223]: ERROR in src/screens/AddEmployeeScreen.tsx:99:17
+        - generic [ref=f1e224]: "TS4111: Property 'department' comes from an index signature, so it must be accessed with ['department']. 97 | 98 | if (!formData.department.trim()) { > 99 | newErrors.department = 'Abteilung ist erforderlich'; | ^^^^^^^^^^ 100 | } 101 | 102 | // Numeric validations"
+      - generic [ref=f1e225]:
+        - generic [ref=f1e226]: ERROR in src/screens/AddEmployeeScreen.tsx:105:17
+        - generic [ref=f1e227]: "TS4111: Property 'weeklyHours' comes from an index signature, so it must be accessed with ['weeklyHours']. 103 | const weeklyHours = parseInt(formData.weeklyHours); 104 | if (isNaN(weeklyHours) || weeklyHours < 1 || weeklyHours > 60) { > 105 | newErrors.weeklyHours = 'Wochenstunden müssen zwischen 1 und 60 liegen'; | ^^^^^^^^^^^ 106 | } 107 | 108 | const vacationDays = parseInt(formData.vacationDays);"
+      - generic [ref=f1e228]:
+        - generic [ref=f1e229]: ERROR in src/screens/AddEmployeeScreen.tsx:110:17
+        - generic [ref=f1e230]: "TS4111: Property 'vacationDays' comes from an index signature, so it must be accessed with ['vacationDays']. 108 | const vacationDays = parseInt(formData.vacationDays); 109 | if (isNaN(vacationDays) || vacationDays < 0 || vacationDays > 50) { > 110 | newErrors.vacationDays = 'Urlaubstage müssen zwischen 0 und 50 liegen'; | ^^^^^^^^^^^^ 111 | } 112 | 113 | // Employment type custom validation"
+      - generic [ref=f1e231]:
+        - generic [ref=f1e232]: ERROR in src/screens/AddEmployeeScreen.tsx:115:17
+        - generic [ref=f1e233]: "TS4111: Property 'employmentTypeCustom' comes from an index signature, so it must be accessed with ['employmentTypeCustom']. 113 | // Employment type custom validation 114 | if (formData.employmentType === 'OTHER' && !formData.employmentTypeCustom.trim()) { > 115 | newErrors.employmentTypeCustom = 'Beschreibung ist erforderlich bei \"Sonstige\"'; | ^^^^^^^^^^^^^^^^^^^^ 116 | } 117 | 118 | // IBAN validation (if provided)"
+      - generic [ref=f1e234]:
+        - generic [ref=f1e235]: ERROR in src/screens/AddEmployeeScreen.tsx:120:17
+        - generic [ref=f1e236]: "TS4111: Property 'iban' comes from an index signature, so it must be accessed with ['iban']. 118 | // IBAN validation (if provided) 119 | if (formData.iban && !/^[A-Z]{2}[0-9]{2}[A-Z0-9]{4}[0-9]{7}([A-Z0-9]?){0,16}$/.test(formData.iban.replace(/\\s/g, ''))) { > 120 | newErrors.iban = 'Ungültige IBAN'; | ^^^^ 121 | } 122 | 123 | setErrors(newErrors);"
+      - generic [ref=f1e237]:
+        - generic [ref=f1e238]: ERROR in src/screens/AddEmployeeScreen.tsx:237:28
+        - generic [ref=f1e239]: "TS4111: Property 'email' comes from an index signature, so it must be accessed with ['email']. 235 | className={cn( 236 | \"w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500\", > 237 | errors.email ? \"border-red-500\" : \"border-gray-300\" | ^^^^^ 238 | )} 239 | placeholder=\"max.mustermann@firma.de\" 240 | />"
+      - generic [ref=f1e240]:
+        - generic [ref=f1e241]: ERROR in src/screens/AddEmployeeScreen.tsx:241:25
+        - generic [ref=f1e242]: "TS4111: Property 'email' comes from an index signature, so it must be accessed with ['email']. 239 | placeholder=\"max.mustermann@firma.de\" 240 | /> > 241 | {errors.email && ( | ^^^^^ 242 | <p className=\"mt-1 text-sm text-red-600\">{errors.email}</p> 243 | )} 244 | </div>"
+      - generic [ref=f1e243]:
+        - generic [ref=f1e244]: ERROR in src/screens/AddEmployeeScreen.tsx:242:68
+        - generic [ref=f1e245]: "TS4111: Property 'email' comes from an index signature, so it must be accessed with ['email']. 240 | /> 241 | {errors.email && ( > 242 | <p className=\"mt-1 text-sm text-red-600\">{errors.email}</p> | ^^^^^ 243 | )} 244 | </div> 245 |"
+      - generic [ref=f1e246]:
+        - generic [ref=f1e247]: ERROR in src/screens/AddEmployeeScreen.tsx:273:28
+        - generic [ref=f1e248]: "TS4111: Property 'firstName' comes from an index signature, so it must be accessed with ['firstName']. 271 | className={cn( 272 | \"w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500\", > 273 | errors.firstName ? \"border-red-500\" : \"border-gray-300\" | ^^^^^^^^^ 274 | )} 275 | placeholder=\"Max\" 276 | />"
+      - generic [ref=f1e249]:
+        - generic [ref=f1e250]: ERROR in src/screens/AddEmployeeScreen.tsx:277:25
+        - generic [ref=f1e251]: "TS4111: Property 'firstName' comes from an index signature, so it must be accessed with ['firstName']. 275 | placeholder=\"Max\" 276 | /> > 277 | {errors.firstName && ( | ^^^^^^^^^ 278 | <p className=\"mt-1 text-sm text-red-600\">{errors.firstName}</p> 279 | )} 280 | </div>"
+      - generic [ref=f1e252]:
+        - generic [ref=f1e253]: ERROR in src/screens/AddEmployeeScreen.tsx:278:68
+        - generic [ref=f1e254]: "TS4111: Property 'firstName' comes from an index signature, so it must be accessed with ['firstName']. 276 | /> 277 | {errors.firstName && ( > 278 | <p className=\"mt-1 text-sm text-red-600\">{errors.firstName}</p> | ^^^^^^^^^ 279 | )} 280 | </div> 281 |"
+      - generic [ref=f1e255]:
+        - generic [ref=f1e256]: ERROR in src/screens/AddEmployeeScreen.tsx:293:28
+        - generic [ref=f1e257]: "TS4111: Property 'lastName' comes from an index signature, so it must be accessed with ['lastName']. 291 | className={cn( 292 | \"w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500\", > 293 | errors.lastName ? \"border-red-500\" : \"border-gray-300\" | ^^^^^^^^ 294 | )} 295 | placeholder=\"Mustermann\" 296 | />"
+      - generic [ref=f1e258]:
+        - generic [ref=f1e259]: ERROR in src/screens/AddEmployeeScreen.tsx:297:25
+        - generic [ref=f1e260]: "TS4111: Property 'lastName' comes from an index signature, so it must be accessed with ['lastName']. 295 | placeholder=\"Mustermann\" 296 | /> > 297 | {errors.lastName && ( | ^^^^^^^^ 298 | <p className=\"mt-1 text-sm text-red-600\">{errors.lastName}</p> 299 | )} 300 | </div>"
+      - generic [ref=f1e261]:
+        - generic [ref=f1e262]: ERROR in src/screens/AddEmployeeScreen.tsx:298:68
+        - generic [ref=f1e263]: "TS4111: Property 'lastName' comes from an index signature, so it must be accessed with ['lastName']. 296 | /> 297 | {errors.lastName && ( > 298 | <p className=\"mt-1 text-sm text-red-600\">{errors.lastName}</p> | ^^^^^^^^ 299 | )} 300 | </div> 301 | </div>"
+      - generic [ref=f1e264]:
+        - generic [ref=f1e265]: ERROR in src/screens/AddEmployeeScreen.tsx:411:28
+        - generic [ref=f1e266]: "TS4111: Property 'position' comes from an index signature, so it must be accessed with ['position']. 409 | className={cn( 410 | \"w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500\", > 411 | errors.position ? \"border-red-500\" : \"border-gray-300\" | ^^^^^^^^ 412 | )} 413 | placeholder=\"Senior Developer\" 414 | />"
+      - generic [ref=f1e267]:
+        - generic [ref=f1e268]: ERROR in src/screens/AddEmployeeScreen.tsx:415:25
+        - generic [ref=f1e269]: "TS4111: Property 'position' comes from an index signature, so it must be accessed with ['position']. 413 | placeholder=\"Senior Developer\" 414 | /> > 415 | {errors.position && ( | ^^^^^^^^ 416 | <p className=\"mt-1 text-sm text-red-600\">{errors.position}</p> 417 | )} 418 | </div>"
+      - generic [ref=f1e270]:
+        - generic [ref=f1e271]: ERROR in src/screens/AddEmployeeScreen.tsx:416:68
+        - generic [ref=f1e272]: "TS4111: Property 'position' comes from an index signature, so it must be accessed with ['position']. 414 | /> 415 | {errors.position && ( > 416 | <p className=\"mt-1 text-sm text-red-600\">{errors.position}</p> | ^^^^^^^^ 417 | )} 418 | </div> 419 |"
+      - generic [ref=f1e273]:
+        - generic [ref=f1e274]: ERROR in src/screens/AddEmployeeScreen.tsx:431:28
+        - generic [ref=f1e275]: "TS4111: Property 'department' comes from an index signature, so it must be accessed with ['department']. 429 | className={cn( 430 | \"w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500\", > 431 | errors.department ? \"border-red-500\" : \"border-gray-300\" | ^^^^^^^^^^ 432 | )} 433 | placeholder=\"IT\" 434 | />"
+      - generic [ref=f1e276]:
+        - generic [ref=f1e277]: ERROR in src/screens/AddEmployeeScreen.tsx:435:25
+        - generic [ref=f1e278]: "TS4111: Property 'department' comes from an index signature, so it must be accessed with ['department']. 433 | placeholder=\"IT\" 434 | /> > 435 | {errors.department && ( | ^^^^^^^^^^ 436 | <p className=\"mt-1 text-sm text-red-600\">{errors.department}</p> 437 | )} 438 | </div>"
+      - generic [ref=f1e279]:
+        - generic [ref=f1e280]: ERROR in src/screens/AddEmployeeScreen.tsx:436:68
+        - generic [ref=f1e281]: "TS4111: Property 'department' comes from an index signature, so it must be accessed with ['department']. 434 | /> 435 | {errors.department && ( > 436 | <p className=\"mt-1 text-sm text-red-600\">{errors.department}</p> | ^^^^^^^^^^ 437 | )} 438 | </div> 439 |"
+      - generic [ref=f1e282]:
+        - generic [ref=f1e283]: ERROR in src/screens/AddEmployeeScreen.tsx:453:28
+        - generic [ref=f1e284]: "TS4111: Property 'weeklyHours' comes from an index signature, so it must be accessed with ['weeklyHours']. 451 | className={cn( 452 | \"w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500\", > 453 | errors.weeklyHours ? \"border-red-500\" : \"border-gray-300\" | ^^^^^^^^^^^ 454 | )} 455 | /> 456 | {errors.weeklyHours && ("
+      - generic [ref=f1e285]:
+        - generic [ref=f1e286]: ERROR in src/screens/AddEmployeeScreen.tsx:456:25
+        - generic [ref=f1e287]: "TS4111: Property 'weeklyHours' comes from an index signature, so it must be accessed with ['weeklyHours']. 454 | )} 455 | /> > 456 | {errors.weeklyHours && ( | ^^^^^^^^^^^ 457 | <p className=\"mt-1 text-sm text-red-600\">{errors.weeklyHours}</p> 458 | )} 459 | </div>"
+      - generic [ref=f1e288]:
+        - generic [ref=f1e289]: ERROR in src/screens/AddEmployeeScreen.tsx:457:68
+        - generic [ref=f1e290]: "TS4111: Property 'weeklyHours' comes from an index signature, so it must be accessed with ['weeklyHours']. 455 | /> 456 | {errors.weeklyHours && ( > 457 | <p className=\"mt-1 text-sm text-red-600\">{errors.weeklyHours}</p> | ^^^^^^^^^^^ 458 | )} 459 | </div> 460 |"
+      - generic [ref=f1e291]:
+        - generic [ref=f1e292]: ERROR in src/screens/AddEmployeeScreen.tsx:489:32
+        - generic [ref=f1e293]: "TS4111: Property 'employmentTypeCustom' comes from an index signature, so it must be accessed with ['employmentTypeCustom']. 487 | className={cn( 488 | \"w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500\", > 489 | errors.employmentTypeCustom ? \"border-red-500\" : \"border-gray-300\" | ^^^^^^^^^^^^^^^^^^^^ 490 | )} 491 | /> 492 | {errors.employmentTypeCustom && ("
+      - generic [ref=f1e294]:
+        - generic [ref=f1e295]: ERROR in src/screens/AddEmployeeScreen.tsx:492:29
+        - generic [ref=f1e296]: "TS4111: Property 'employmentTypeCustom' comes from an index signature, so it must be accessed with ['employmentTypeCustom']. 490 | )} 491 | /> > 492 | {errors.employmentTypeCustom && ( | ^^^^^^^^^^^^^^^^^^^^ 493 | <p className=\"mt-1 text-sm text-red-600\">{errors.employmentTypeCustom}</p> 494 | )} 495 | </div>"
+      - generic [ref=f1e297]:
+        - generic [ref=f1e298]: ERROR in src/screens/AddEmployeeScreen.tsx:493:72
+        - generic [ref=f1e299]: "TS4111: Property 'employmentTypeCustom' comes from an index signature, so it must be accessed with ['employmentTypeCustom']. 491 | /> 492 | {errors.employmentTypeCustom && ( > 493 | <p className=\"mt-1 text-sm text-red-600\">{errors.employmentTypeCustom}</p> | ^^^^^^^^^^^^^^^^^^^^ 494 | )} 495 | </div> 496 | )}"
+      - generic [ref=f1e300]:
+        - generic [ref=f1e301]: ERROR in src/screens/AddEmployeeScreen.tsx:525:28
+        - generic [ref=f1e302]: "TS4111: Property 'vacationDays' comes from an index signature, so it must be accessed with ['vacationDays']. 523 | className={cn( 524 | \"w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500\", > 525 | errors.vacationDays ? \"border-red-500\" : \"border-gray-300\" | ^^^^^^^^^^^^ 526 | )} 527 | /> 528 | {errors.vacationDays && ("
+      - generic [ref=f1e303]:
+        - generic [ref=f1e304]: ERROR in src/screens/AddEmployeeScreen.tsx:528:25
+        - generic [ref=f1e305]: "TS4111: Property 'vacationDays' comes from an index signature, so it must be accessed with ['vacationDays']. 526 | )} 527 | /> > 528 | {errors.vacationDays && ( | ^^^^^^^^^^^^ 529 | <p className=\"mt-1 text-sm text-red-600\">{errors.vacationDays}</p> 530 | )} 531 | </div>"
+      - generic [ref=f1e306]:
+        - generic [ref=f1e307]: ERROR in src/screens/AddEmployeeScreen.tsx:529:68
+        - generic [ref=f1e308]: "TS4111: Property 'vacationDays' comes from an index signature, so it must be accessed with ['vacationDays']. 527 | /> 528 | {errors.vacationDays && ( > 529 | <p className=\"mt-1 text-sm text-red-600\">{errors.vacationDays}</p> | ^^^^^^^^^^^^ 530 | )} 531 | </div> 532 | </div>"
+      - generic [ref=f1e309]:
+        - generic [ref=f1e310]: ERROR in src/screens/AddEmployeeScreen.tsx:551:28
+        - generic [ref=f1e311]: "TS4111: Property 'iban' comes from an index signature, so it must be accessed with ['iban']. 549 | className={cn( 550 | \"w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500\", > 551 | errors.iban ? \"border-red-500\" : \"border-gray-300\" | ^^^^ 552 | )} 553 | placeholder=\"DE89 3704 0044 0532 0130 00\" 554 | />"
+      - generic [ref=f1e312]:
+        - generic [ref=f1e313]: ERROR in src/screens/AddEmployeeScreen.tsx:555:25
+        - generic [ref=f1e314]: "TS4111: Property 'iban' comes from an index signature, so it must be accessed with ['iban']. 553 | placeholder=\"DE89 3704 0044 0532 0130 00\" 554 | /> > 555 | {errors.iban && ( | ^^^^ 556 | <p className=\"mt-1 text-sm text-red-600\">{errors.iban}</p> 557 | )} 558 | </div>"
+      - generic [ref=f1e315]:
+        - generic [ref=f1e316]: ERROR in src/screens/AddEmployeeScreen.tsx:556:68
+        - generic [ref=f1e317]: "TS4111: Property 'iban' comes from an index signature, so it must be accessed with ['iban']. 554 | /> 555 | {errors.iban && ( > 556 | <p className=\"mt-1 text-sm text-red-600\">{errors.iban}</p> | ^^^^ 557 | )} 558 | </div> 559 |"
+      - generic [ref=f1e318]:
+        - generic [ref=f1e319]: ERROR in src/screens/AddEmployeeScreen.tsx:633:19
+        - generic [ref=f1e320]: "TS4111: Property 'submit' comes from an index signature, so it must be accessed with ['submit']. 631 | 632 | {/* Error Message */} > 633 | {errors.submit && ( | ^^^^^^ 634 | <div className=\"bg-red-50 border border-red-200 rounded-lg p-4\"> 635 | <p className=\"text-red-600\">{errors.submit}</p> 636 | </div>"
+      - generic [ref=f1e321]:
+        - generic [ref=f1e322]: ERROR in src/screens/AddEmployeeScreen.tsx:635:51
+        - generic [ref=f1e323]: "TS4111: Property 'submit' comes from an index signature, so it must be accessed with ['submit']. 633 | {errors.submit && ( 634 | <div className=\"bg-red-50 border border-red-200 rounded-lg p-4\"> > 635 | <p className=\"text-red-600\">{errors.submit}</p> | ^^^^^^ 636 | </div> 637 | )} 638 |"
+      - generic [ref=f1e324]:
+        - generic [ref=f1e325]: ERROR in src/screens/AdminCoinsScreen.tsx
+        - generic [ref=f1e326]: "TS6133: 'React' is declared but its value is never read."
+      - generic [ref=f1e327]:
+        - generic [ref=f1e328]: ERROR in src/screens/BenefitsScreen.tsx:1:8
+        - generic [ref=f1e329]: "TS6133: 'React' is declared but its value is never read. > 1 | import React, { useState, useEffect } from 'react'; | ^^^^^ 2 | 3 | // Direct imports with explicit paths - v3 4 | import { EarnTab } from '../components/benefits/EarnTab';"
+      - generic [ref=f1e330]:
+        - generic [ref=f1e331]: ERROR in src/screens/CalendarScreen.tsx:1:8
+        - generic [ref=f1e332]: "TS6133: 'React' is declared but its value is never read. > 1 | import React, { useState, useEffect, useMemo } from 'react'; | ^^^^^ 2 | import { useNavigate } from 'react-router-dom'; 3 | 4 | import { YearView } from '../components/YearView';"
+      - generic [ref=f1e333]:
+        - generic [ref=f1e334]: ERROR in src/screens/CalendarScreen.tsx:102:13
+        - generic [ref=f1e335]: "TS2322: Type 'string | undefined' is not assignable to type 'string'. Type 'undefined' is not assignable to type 'string'. 100 | `${getUserName(leave.userId)} - ${leave.type === 'VACATION' ? 'Urlaub' : 'Krank'}` : 101 | leave.type === 'VACATION' ? 'Urlaub' : 'Krank', > 102 | date: date.toISOString().split('T')[0], | ^^^^ 103 | type: leave.type === 'VACATION' ? 'vacation' : 'sick', 104 | userId: leave.userId, 105 | color: leave.type === 'VACATION' ? 'bg-blue-500' : 'bg-red-500'"
+      - generic [ref=f1e336]:
+        - generic [ref=f1e337]: ERROR in src/screens/CalendarScreen.tsx:112:60
+        - generic [ref=f1e338]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 110 | // Add time records for personal view 111 | if (viewMode === 'personal' && user) { > 112 | const timeRecords = getTimeRecordsForPeriod(user.id, startDateStr, endDateStr); | ^^^^^^^^^^^^ 113 | timeRecords.forEach(record => { 114 | if (record.timeOut) { // Only completed records 115 | events.push({"
+      - generic [ref=f1e339]:
+        - generic [ref=f1e340]: ERROR in src/screens/CalendarScreen.tsx:171:42
+        - generic [ref=f1e341]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 169 | // Get user's time records if in personal mode 170 | const userTimeRecords = user && viewMode === 'personal' ? > 171 | getTimeRecordsForPeriod(user.id, startDateStr, endDateStr) : []; | ^^^^^^^^^^^^ 172 | 173 | // Generate team time records for team view 174 | const teamTimeRecords = viewMode === 'team' ?"
+      - generic [ref=f1e342]:
+        - generic [ref=f1e343]: ERROR in src/screens/CalendarScreen.tsx:175:61
+        - generic [ref=f1e344]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 173 | // Generate team time records for team view 174 | const teamTimeRecords = viewMode === 'team' ? > 175 | allUsers.flatMap(u => getTimeRecordsForPeriod(u.id, startDateStr, endDateStr)) : []; | ^^^^^^^^^^^^ 176 | 177 | // Generate 42 days (6 weeks) 178 | const days: CalendarDay[] = [];"
+      - generic [ref=f1e345]:
+        - generic [ref=f1e346]: ERROR in src/screens/CalendarScreen.tsx:194:40
+        - generic [ref=f1e347]: "TS2769: No overload matches this call. Overload 1 of 4, '(value: string | number | Date): Date', gave the following error. Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'. Overload 2 of 4, '(value: string | number): Date', gave the following error. Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'. 192 | const startDate = new Date(leave.startDate); 193 | const endDate = new Date(leave.endDate); > 194 | const currentDate = new Date(dateString); | ^^^^^^^^^^ 195 | 196 | return currentDate >= startDate && currentDate <= endDate && 197 | leave.status === 'APPROVED' &&"
+      - generic [ref=f1e348]:
+        - generic [ref=f1e349]: ERROR in src/screens/CalendarScreen.tsx:205:40
+        - generic [ref=f1e350]: "TS2769: No overload matches this call. Overload 1 of 4, '(value: string | number | Date): Date', gave the following error. Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'. Overload 2 of 4, '(value: string | number): Date', gave the following error. Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'. 203 | const startDate = new Date(leave.startDate); 204 | const endDate = new Date(leave.endDate); > 205 | const currentDate = new Date(dateString); | ^^^^^^^^^^ 206 | 207 | return currentDate >= startDate && currentDate <= endDate && 208 | leave.userId === user?.id && leave.status === 'APPROVED';"
+      - generic [ref=f1e351]:
+        - generic [ref=f1e352]: ERROR in src/screens/CalendarScreen.tsx:212:15
+        - generic [ref=f1e353]: "TS6133: '_dayTimeRecords' is declared but its value is never read. 210 | 211 | // Find time records for this date > 212 | const _dayTimeRecords = teamTimeRecords.filter(record => record.date === dateString); | ^^^^^^^^^^^^^^^ 213 | const userTimeRecord = userTimeRecords.find(record => record.date === dateString) || undefined; 214 | 215 | // Find reminders for this date"
+      - generic [ref=f1e354]:
+        - generic [ref=f1e355]: ERROR in src/screens/CalendarScreen.tsx:308:9
+        - generic [ref=f1e356]: "TS2532: Object is possibly 'undefined'. 306 | 307 | usersToShow.forEach(u => { > 308 | yearData[u.id][week] = yearLeaves.filter(leave => { | ^^^^^^^^^^^^^^ 309 | if (leave.userId !== u.id) return false; 310 | 311 | const leaveStart = new Date(leave.startDate);"
+      - generic [ref=f1e357]:
+        - generic [ref=f1e358]: ERROR in src/screens/CalendarScreen.tsx:342:9
+        - generic [ref=f1e359]: "TS6133: '_getWeekNumber' is declared but its value is never read. 340 | * Get week number for a date 341 | */ > 342 | const _getWeekNumber = (date: Date) => { | ^^^^^^^^^^^^^^ 343 | const start = new Date(date.getFullYear(), 0, 1); 344 | const days = Math.floor((date.getTime() - start.getTime()) / (24 * 60 * 60 * 1000)); 345 | return Math.ceil((days + start.getDay() + 1) / 7);"
+      - generic [ref=f1e360]:
+        - generic [ref=f1e361]: ERROR in src/screens/CoinHistoryScreen.tsx
+        - generic [ref=f1e362]: "TS6133: 'React' is declared but its value is never read."
+      - generic [ref=f1e363]:
+        - generic [ref=f1e364]: ERROR in src/screens/CreateTrainingScreen.tsx
+        - generic [ref=f1e365]: "TS6133: 'React' is declared but its value is never read."
+      - generic [ref=f1e366]:
+        - generic [ref=f1e367]: ERROR in src/screens/DashboardScreen.tsx:1:8
+        - generic [ref=f1e368]: "TS6133: 'React' is declared but its value is never read. > 1 | import React, { useState, useEffect } from 'react'; | ^^^^^ 2 | import { useNavigate } from 'react-router-dom'; 3 | 4 | import { usePermission, useLocalStorage, useToast } from '../hooks';"
+      - generic [ref=f1e369]:
+        - generic [ref=f1e370]: ERROR in src/screens/DocumentsScreen.tsx
+        - generic [ref=f1e371]: "TS6133: 'React' is declared but its value is never read."
+      - generic [ref=f1e372]:
+        - generic [ref=f1e373]: ERROR in src/screens/LearningDashboard.tsx:1:8
+        - generic [ref=f1e374]: "TS6133: 'React' is declared but its value is never read. > 1 | import React, { useEffect, useState } from 'react'; | ^^^^^ 2 | 3 | import { useAuthStore } from '../state/auth'; 4 | import { useLearningStore } from '../state/learning';"
+      - generic [ref=f1e375]:
+        - generic [ref=f1e376]: ERROR in src/screens/LoginScreen.tsx:1:8
+        - generic [ref=f1e377]: "TS6133: 'React' is declared but its value is never read. > 1 | import React, { useEffect } from 'react'; | ^^^^^ 2 | import { useNavigate } from 'react-router-dom'; 3 | import { z } from 'zod'; 4 |"
+      - generic [ref=f1e378]:
+        - generic [ref=f1e379]: ERROR in src/screens/LoginScreen.tsx:139:65
+        - generic [ref=f1e380]: "TS4111: Property 'REACT_APP_DEMO_MODE' comes from an index signature, so it must be accessed with ['REACT_APP_DEMO_MODE']. 137 | </form> 138 | > 139 | {(process.env.NODE_ENV === 'development' || process.env.REACT_APP_DEMO_MODE === 'true') && ( | ^^^^^^^^^^^^^^^^^^^ 140 | <div className=\"mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg\"> 141 | <p className=\"text-sm text-blue-800 mb-2 font-medium\">🚀 Demo-Modus aktiv</p> 142 | <div className=\"space-y-2\">"
+      - generic [ref=f1e381]:
+        - generic [ref=f1e382]: ERROR in src/screens/MyRequestsScreen.tsx:1:8
+        - generic [ref=f1e383]: "TS6133: 'React' is declared but its value is never read. > 1 | import React, { useEffect, useState } from 'react'; | ^^^^^ 2 | import { useNavigate } from 'react-router-dom'; 3 | 4 | import { useAuthStore } from '../state/auth';"
+      - generic [ref=f1e384]:
+        - generic [ref=f1e385]: ERROR in src/screens/MyRequestsScreen.tsx:243:48
+        - generic [ref=f1e386]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 241 | <div className=\"text-right\"> 242 | <p className=\"text-xs text-gray-500\"> > 243 | Eingereicht am {formatDate(request.createdAt.split('T')[0])} | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 244 | </p> 245 | {request.approvedBy && request.approvedAt && ( 246 | <p className=\"text-xs text-gray-500\">"
+      - generic [ref=f1e387]:
+        - generic [ref=f1e388]: ERROR in src/screens/MyRequestsScreen.tsx:247:108
+        - generic [ref=f1e389]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 245 | {request.approvedBy && request.approvedAt && ( 246 | <p className=\"text-xs text-gray-500\"> > 247 | {getStatusText(request.status)} von {getUserName(request.approvedBy)} am {formatDate(request.approvedAt.split('T')[0])} | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 248 | </p> 249 | )} 250 | </div>"
+      - generic [ref=f1e390]:
+        - generic [ref=f1e391]: ERROR in src/screens/NotFoundScreen.tsx
+        - generic [ref=f1e392]: "TS6133: 'React' is declared but its value is never read."
+      - generic [ref=f1e393]:
+        - generic [ref=f1e394]: ERROR in src/screens/RequestLeaveScreen.tsx:43:28
+        - generic [ref=f1e395]: "TS2769: No overload matches this call. Overload 1 of 4, '(value: string | number | Date): Date', gave the following error. Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'. Type 'undefined' is not assignable to type 'string | number | Date'. Overload 2 of 4, '(value: string | number): Date', gave the following error. Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'. Type 'undefined' is not assignable to type 'string | number'. 41 | 42 | // Validation > 43 | const start = new Date(startDate); | ^^^^^^^^^ 44 | const end = new Date(endDate); 45 | 46 | if (isNaN(start.getTime()) || isNaN(end.getTime())) {"
+      - generic [ref=f1e396]:
+        - generic [ref=f1e397]: ERROR in src/screens/RequestLeaveScreen.tsx:44:26
+        - generic [ref=f1e398]: "TS2769: No overload matches this call. Overload 1 of 4, '(value: string | number | Date): Date', gave the following error. Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'. Overload 2 of 4, '(value: string | number): Date', gave the following error. Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'. 42 | // Validation 43 | const start = new Date(startDate); > 44 | const end = new Date(endDate); | ^^^^^^^ 45 | 46 | if (isNaN(start.getTime()) || isNaN(end.getTime())) { 47 | setError('Ungültiges Datum ausgewählt');"
+      - generic [ref=f1e399]:
+        - generic [ref=f1e400]: ERROR in src/screens/RequestLeaveScreen.tsx:62:9
+        - generic [ref=f1e401]: "TS2322: Type 'string | undefined' is not assignable to type 'string'. Type 'undefined' is not assignable to type 'string'. 60 | await submitLeaveRequest({ 61 | userId: targetUserId, > 62 | startDate, | ^^^^^^^^^ 63 | endDate, 64 | comment, 65 | status: 'PENDING',"
+      - generic [ref=f1e402]:
+        - generic [ref=f1e403]: ERROR in src/screens/RequestLeaveScreen.tsx:63:9
+        - generic [ref=f1e404]: "TS2322: Type 'string | undefined' is not assignable to type 'string'. Type 'undefined' is not assignable to type 'string'. 61 | userId: targetUserId, 62 | startDate, > 63 | endDate, | ^^^^^^^ 64 | comment, 65 | status: 'PENDING', 66 | type: leaveType"
+      - generic [ref=f1e405]:
+        - generic [ref=f1e406]: ERROR in src/screens/RequestLeaveScreen.tsx:80:28
+        - generic [ref=f1e407]: "TS2769: No overload matches this call. Overload 1 of 4, '(value: string | number | Date): Date', gave the following error. Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'. Overload 2 of 4, '(value: string | number): Date', gave the following error. Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'. 78 | 79 | const calculateDays = () => { > 80 | const start = new Date(startDate); | ^^^^^^^^^ 81 | const end = new Date(endDate); 82 | const diffTime = Math.abs(end.getTime() - start.getTime()); 83 | return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;"
+      - generic [ref=f1e408]:
+        - generic [ref=f1e409]: ERROR in src/screens/RequestLeaveScreen.tsx:81:26
+        - generic [ref=f1e410]: "TS2769: No overload matches this call. Overload 1 of 4, '(value: string | number | Date): Date', gave the following error. Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'. Overload 2 of 4, '(value: string | number): Date', gave the following error. Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'. 79 | const calculateDays = () => { 80 | const start = new Date(startDate); > 81 | const end = new Date(endDate); | ^^^^^^^ 82 | const diffTime = Math.abs(end.getTime() - start.getTime()); 83 | return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; 84 | };"
+      - generic [ref=f1e411]:
+        - generic [ref=f1e412]: ERROR in src/screens/RequestLeaveScreen.tsx:206:31
+        - generic [ref=f1e413]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 204 | <p className=\"text-sm text-gray-600\">Zeitraum</p> 205 | <p className=\"font-semibold text-gray-900\"> > 206 | {formatDate(startDate)} - {formatDate(endDate)} | ^^^^^^^^^ 207 | </p> 208 | </div> 209 | <div className=\"text-right\">"
+      - generic [ref=f1e414]:
+        - generic [ref=f1e415]: ERROR in src/screens/RequestLeaveScreen.tsx:206:57
+        - generic [ref=f1e416]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 204 | <p className=\"text-sm text-gray-600\">Zeitraum</p> 205 | <p className=\"font-semibold text-gray-900\"> > 206 | {formatDate(startDate)} - {formatDate(endDate)} | ^^^^^^^ 207 | </p> 208 | </div> 209 | <div className=\"text-right\">"
+      - generic [ref=f1e417]:
+        - generic [ref=f1e418]: ERROR in src/screens/TakeLessonScreen.tsx
+        - generic [ref=f1e419]: "TS6133: 'React' is declared but its value is never read."
+      - generic [ref=f1e420]:
+        - generic [ref=f1e421]: ERROR in src/screens/TeamManagementScreen.tsx:1:8
+        - generic [ref=f1e422]: "TS6133: 'React' is declared but its value is never read. > 1 | import React, { useState, useMemo } from 'react'; | ^^^^^ 2 | import { Link } from 'react-router-dom'; 3 | 4 | import { useAuthStore } from '../state/auth';"
+      - generic [ref=f1e423]:
+        - generic [ref=f1e424]: ERROR in src/screens/TeamMemberDetailsScreen.tsx:1:8
+        - generic [ref=f1e425]: "TS6133: 'React' is declared but its value is never read. > 1 | import React, { useState, useEffect } from 'react'; | ^^^^^ 2 | import { useParams, useNavigate, Link } from 'react-router-dom'; 3 | 4 | import { useAuthStore } from '../state/auth';"
+      - generic [ref=f1e426]:
+        - generic [ref=f1e427]: ERROR in src/screens/TeamMemberDetailsScreen.tsx:20:30
+        - generic [ref=f1e428]: "TS6133: 'getAllUsers' is declared but its value is never read. 18 | const { userId } = useParams<{ userId: string }>(); 19 | const navigate = useNavigate(); > 20 | const { user: currentUser, getAllUsers, updateUser, loadEmployees } = useAuthStore(); | ^^^^^^^^^^^ 21 | const { 22 | getAllTeams, 23 | getTeamsByUserId,"
+      - generic [ref=f1e429]:
+        - generic [ref=f1e430]: ERROR in src/screens/TeamsOverviewScreen.tsx:1:8
+        - generic [ref=f1e431]: "TS6133: 'React' is declared but its value is never read. > 1 | import React, { useState } from 'react'; | ^^^^^ 2 | import { useNavigate, Link } from 'react-router-dom'; 3 | 4 | import { useAuthStore } from '../state/auth';"
+      - generic [ref=f1e432]:
+        - generic [ref=f1e433]: ERROR in src/screens/TimeAndVacationScreen.backup.tsx:3:8
+        - generic [ref=f1e434]: "TS6133: 'React' is declared but its value is never read. 1 | import { format } from 'date-fns'; 2 | import { de } from 'date-fns/locale'; > 3 | import React, { useState, useMemo, useEffect } from 'react'; | ^^^^^ 4 | import { useNavigate } from 'react-router-dom'; 5 | 6 | import { TeamCalendarView } from '../components/TeamCalendarView';"
+      - generic [ref=f1e435]:
+        - generic [ref=f1e436]: ERROR in src/screens/TimeAndVacationScreen.backup.tsx:145:73
+        - generic [ref=f1e437]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 143 | 144 | if (shouldShowWorkTime) { > 145 | const timeRecords = getTimeRecordsForPeriod(displayUser.userId, startDateStr, endDateStr); | ^^^^^^^^^^^^ 146 | timeRecords.forEach((record: TimeRecord) => { 147 | if (record.totalHours) { 148 | entries.push({"
+      - generic [ref=f1e438]:
+        - generic [ref=f1e439]: ERROR in src/screens/TimeAndVacationScreen.tsx:3:8
+        - generic [ref=f1e440]: "TS6133: 'React' is declared but its value is never read. 1 | import { format } from 'date-fns'; 2 | import { de } from 'date-fns/locale'; > 3 | import React, { useState, useMemo, useEffect } from 'react'; | ^^^^^ 4 | import { useNavigate } from 'react-router-dom'; 5 | 6 | import { TeamCalendarView } from '../components/TeamCalendarView';"
+      - generic [ref=f1e441]:
+        - generic [ref=f1e442]: ERROR in src/screens/TimeAndVacationScreen.tsx:145:73
+        - generic [ref=f1e443]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 143 | 144 | if (shouldShowWorkTime) { > 145 | const timeRecords = getTimeRecordsForPeriod(displayUser.userId, startDateStr, endDateStr); | ^^^^^^^^^^^^ 146 | timeRecords.forEach((record: TimeRecord) => { 147 | if (record.totalHours) { 148 | entries.push({"
+      - generic [ref=f1e444]:
+        - generic [ref=f1e445]: ERROR in src/screens/TimeRecordsScreen.tsx:1:8
+        - generic [ref=f1e446]: "TS6133: 'React' is declared but its value is never read. > 1 | import React, { useState, useEffect } from 'react'; | ^^^^^ 2 | 3 | import { useAuthStore } from '../state/auth'; 4 | import { useTimeRecordsStore } from '../state/timeRecords';"
+      - generic [ref=f1e447]:
+        - generic [ref=f1e448]: ERROR in src/screens/TimeRecordsScreen.tsx:57:9
+        - generic [ref=f1e449]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 55 | records = getTimeRecordsForPeriod( 56 | user.id, > 57 | startOfWeek.toISOString().split('T')[0], | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 58 | endOfWeek.toISOString().split('T')[0] 59 | ); 60 | } else {"
+      - generic [ref=f1e450]:
+        - generic [ref=f1e451]: ERROR in src/screens/TimeRecordsScreen.tsx:66:9
+        - generic [ref=f1e452]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 64 | records = getTimeRecordsForPeriod( 65 | user.id, > 66 | startOfMonth.toISOString().split('T')[0], | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 67 | endOfMonth.toISOString().split('T')[0] 68 | ); 69 | }"
+      - generic [ref=f1e453]:
+        - generic [ref=f1e454]: ERROR in src/screens/TimeRecordsScreen.tsx:113:36
+        - generic [ref=f1e455]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 111 | 112 | const timeInParts = todayRecord.timeIn.split(':'); > 113 | const timeInMinutes = parseInt(timeInParts[0]) * 60 + parseInt(timeInParts[1]); | ^^^^^^^^^^^^^^ 114 | const currentMinutes = currentTime.getHours() * 60 + currentTime.getMinutes(); 115 | const workedMinutes = Math.max(0, currentMinutes - timeInMinutes); 116 |"
+      - generic [ref=f1e456]:
+        - generic [ref=f1e457]: ERROR in src/screens/TimeRecordsScreen.tsx:113:68
+        - generic [ref=f1e458]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 111 | 112 | const timeInParts = todayRecord.timeIn.split(':'); > 113 | const timeInMinutes = parseInt(timeInParts[0]) * 60 + parseInt(timeInParts[1]); | ^^^^^^^^^^^^^^ 114 | const currentMinutes = currentTime.getHours() * 60 + currentTime.getMinutes(); 115 | const workedMinutes = Math.max(0, currentMinutes - timeInMinutes); 116 |"
+      - generic [ref=f1e459]:
+        - generic [ref=f1e460]: ERROR in src/screens/TimeRecordsScreen.tsx:367:93
+        - generic [ref=f1e461]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 365 | )} 366 | style={{ > 367 | width: `${Math.min(100, ((record.timeOut ? record.totalHours : parseFloat(getCurrentWorkingTime().split(':')[0])) / 8) * 100)}%` | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 368 | }} 369 | /> 370 | </div>"
+      - generic [ref=f1e462]:
+        - generic [ref=f1e463]: ERROR in src/screens/TrainingDetailsScreen.tsx
+        - generic [ref=f1e464]: "TS6133: 'React' is declared but its value is never read."
+      - generic [ref=f1e465]:
+        - generic [ref=f1e466]: ERROR in src/screens/TrainingManagementScreen.tsx
+        - generic [ref=f1e467]: "TS6133: 'React' is declared but its value is never read."
+      - generic [ref=f1e468]:
+        - generic [ref=f1e469]: ERROR in src/screens/TrainingOverviewScreen.tsx
+        - generic [ref=f1e470]: "TS6133: 'React' is declared but its value is never read."
+      - generic [ref=f1e471]:
+        - generic [ref=f1e472]: ERROR in src/screens/VideoLearningScreen.tsx:1:8
+        - generic [ref=f1e473]: "TS6133: 'React' is declared but its value is never read. > 1 | import React, { useState, useEffect } from 'react'; | ^^^^^ 2 | import { useParams, useNavigate } from 'react-router-dom'; 3 | 4 | import { LootboxAnimation, CelebrationOverlay } from '../components/LootboxAnimation';"
+      - generic [ref=f1e474]:
+        - generic [ref=f1e475]: ERROR in src/screens/VideoLearningScreen.tsx:347:11
+        - generic [ref=f1e476]: "TS2322: Type 'Reward | undefined' is not assignable to type 'Reward'. Type 'undefined' is not assignable to type 'Reward'. 345 | {showRewards && earnedRewards.length > 0 && ( 346 | <LootboxAnimation > 347 | reward={earnedRewards[0]} | ^^^^^^ 348 | onComplete={handleRewardsComplete} 349 | autoStart 350 | />"
+      - generic [ref=f1e477]:
+        - generic [ref=f1e478]: ERROR in src/state/auth.ts:336:13
+        - generic [ref=f1e479]: "TS2322: Type '{ id?: string | undefined; email?: string | undefined; name?: string | undefined; role?: UserRole | undefined; organizationId?: string | undefined; employeeNumber?: string | undefined; ... 23 more ...; level?: number | undefined; }' is not assignable to type 'User'. Types of property 'id' are incompatible. Type 'string | undefined' is not assignable to type 'string'. Type 'undefined' is not assignable to type 'string'. 334 | const userIndex = mockUsers.findIndex(u => u.id === userId); 335 | if (userIndex !== -1) { > 336 | mockUsers[userIndex] = { ...mockUsers[userIndex], ...updates }; | ^^^^^^^^^^^^^^^^^^^^ 337 | } 338 | 339 | // Update current user if it's the same"
+      - generic [ref=f1e480]:
+        - generic [ref=f1e481]: ERROR in src/state/avatar-helpers.ts:7:20
+        - generic [ref=f1e482]: "TS2532: Object is possibly 'undefined'. 5 | export const calculateLevel = (totalXP: number, levels: Level[]): number => { 6 | for (let i = levels.length - 1; i >= 0; i--) { > 7 | if (totalXP >= levels[i].requiredXP) { | ^^^^^^^^^ 8 | return levels[i].levelNumber; 9 | } 10 | }"
+      - generic [ref=f1e483]:
+        - generic [ref=f1e484]: ERROR in src/state/avatar-helpers.ts:8:14
+        - generic [ref=f1e485]: "TS2532: Object is possibly 'undefined'. 6 | for (let i = levels.length - 1; i >= 0; i--) { 7 | if (totalXP >= levels[i].requiredXP) { > 8 | return levels[i].levelNumber; | ^^^^^^^^^ 9 | } 10 | } 11 | return 1;"
+      - generic [ref=f1e486]:
+        - generic [ref=f1e487]: ERROR in src/state/avatar-helpers.ts:25:26
+        - generic [ref=f1e488]: "TS4111: Property 'type' comes from an index signature, so it must be accessed with ['type']. 23 | id: `${params.userId}-${Date.now()}`, 24 | userId: params.userId, > 25 | type: (params.metadata.type as XPEventType) || 'manual', | ^^^^ 26 | skillId: params.skillId || undefined, 27 | xpAmount: params.xpAmount, 28 | description: params.description,"
+      - generic [ref=f1e489]:
+        - generic [ref=f1e490]: ERROR in src/state/avatar.ts:18:30
+        - generic [ref=f1e491]: "TS6133: 'get' is declared but its value is never read. 16 | 17 | // Helper functions for avatar store actions > 18 | const createAvatarActions = (get: any, set: any) => ({ | ^^^ 19 | updateSkill: (userId: string, skillId: string, updates: Partial<Skill>) => { 20 | set((state: any) => { 21 | const userAvatar = state.userAvatars[userId];"
+      - generic [ref=f1e492]:
+        - generic [ref=f1e493]: ERROR in src/state/avatar.ts:78:29
+        - generic [ref=f1e494]: "TS6133: 'get' is declared but its value is never read. 76 | }); 77 | > 78 | const createLevelActions = (get: any, set: any) => ({ | ^^^ 79 | addLevel: (levelData: Omit<Level, 'id'>) => { 80 | const newLevel: Level = { 81 | ...levelData,"
+      - generic [ref=f1e495]:
+        - generic [ref=f1e496]: ERROR in src/state/dashboardInfo.ts:219:29
+        - generic [ref=f1e497]: "TS18048: 'existingItem' is possibly 'undefined'. 217 | try { 218 | const existingItem = items[itemIndex]; > 219 | let updatedFile = existingItem.file; | ^^^^^^^^^^^^ 220 | 221 | // Handle file replacement 222 | if (data.file) {"
+      - generic [ref=f1e498]:
+        - generic [ref=f1e499]: ERROR in src/state/dashboardInfo.ts:240:17
+        - generic [ref=f1e500]: "TS2322: Type '{ title: string; description: string | undefined; file: DashboardInfoFile; isActive: boolean; updatedAt: string; expiresAt: string | undefined; id?: string | undefined; createdAt?: string | undefined; createdBy?: string | undefined; }' is not assignable to type 'DashboardInfo'. Types of property 'id' are incompatible. Type 'string | undefined' is not assignable to type 'string'. Type 'undefined' is not assignable to type 'string'. 238 | } 239 | > 240 | const updatedItem: DashboardInfo = { | ^^^^^^^^^^^ 241 | ...existingItem, 242 | title: data.title ?? existingItem.title, 243 | description: data.description !== undefined ? data.description : existingItem.description,"
+      - generic [ref=f1e501]:
+        - generic [ref=f1e502]: ERROR in src/state/dashboardInfo.ts:242:34
+        - generic [ref=f1e503]: "TS18048: 'existingItem' is possibly 'undefined'. 240 | const updatedItem: DashboardInfo = { 241 | ...existingItem, > 242 | title: data.title ?? existingItem.title, | ^^^^^^^^^^^^ 243 | description: data.description !== undefined ? data.description : existingItem.description, 244 | file: updatedFile, 245 | isActive: data.isActive ?? existingItem.isActive,"
+      - generic [ref=f1e504]:
+        - generic [ref=f1e505]: ERROR in src/state/dashboardInfo.ts:243:78
+        - generic [ref=f1e506]: "TS18048: 'existingItem' is possibly 'undefined'. 241 | ...existingItem, 242 | title: data.title ?? existingItem.title, > 243 | description: data.description !== undefined ? data.description : existingItem.description, | ^^^^^^^^^^^^ 244 | file: updatedFile, 245 | isActive: data.isActive ?? existingItem.isActive, 246 | updatedAt: new Date().toISOString(),"
+      - generic [ref=f1e507]:
+        - generic [ref=f1e508]: ERROR in src/state/dashboardInfo.ts:245:40
+        - generic [ref=f1e509]: "TS18048: 'existingItem' is possibly 'undefined'. 243 | description: data.description !== undefined ? data.description : existingItem.description, 244 | file: updatedFile, > 245 | isActive: data.isActive ?? existingItem.isActive, | ^^^^^^^^^^^^ 246 | updatedAt: new Date().toISOString(), 247 | expiresAt: data.expiresAt !== undefined ? data.expiresAt : existingItem.expiresAt 248 | };"
+      - generic [ref=f1e510]:
+        - generic [ref=f1e511]: ERROR in src/state/dashboardInfo.ts:247:72
+        - generic [ref=f1e512]: "TS18048: 'existingItem' is possibly 'undefined'. 245 | isActive: data.isActive ?? existingItem.isActive, 246 | updatedAt: new Date().toISOString(), > 247 | expiresAt: data.expiresAt !== undefined ? data.expiresAt : existingItem.expiresAt | ^^^^^^^^^^^^ 248 | }; 249 | 250 | const updatedItems = [...items];"
+      - generic [ref=f1e513]:
+        - generic [ref=f1e514]: ERROR in src/state/dashboardInfo.ts:298:11
+        - generic [ref=f1e515]: "TS2322: Type '{ isActive: boolean; updatedAt: string; id?: string | undefined; title?: string | undefined; description?: string | undefined; file?: DashboardInfoFile | undefined; createdAt?: string | undefined; createdBy?: string | undefined; expiresAt?: string | undefined; }' is not assignable to type 'DashboardInfo'. Types of property 'id' are incompatible. Type 'string | undefined' is not assignable to type 'string'. Type 'undefined' is not assignable to type 'string'. 296 | 297 | const updatedItems = [...items]; > 298 | updatedItems[itemIndex] = { | ^^^^^^^^^^^^^^^^^^^^^^^ 299 | ...updatedItems[itemIndex], 300 | isActive: !updatedItems[itemIndex].isActive, 301 | updatedAt: new Date().toISOString()"
+      - generic [ref=f1e516]:
+        - generic [ref=f1e517]: ERROR in src/state/dashboardInfo.ts:300:24
+        - generic [ref=f1e518]: "TS2532: Object is possibly 'undefined'. 298 | updatedItems[itemIndex] = { 299 | ...updatedItems[itemIndex], > 300 | isActive: !updatedItems[itemIndex].isActive, | ^^^^^^^^^^^^^^^^^^^^^^^ 301 | updatedAt: new Date().toISOString() 302 | }; 303 |"
+      - generic [ref=f1e519]:
+        - generic [ref=f1e520]: ERROR in src/state/employees.ts:165:18
+        - generic [ref=f1e521]: "TS2367: This comparison appears to be unintentional because the types '\"PARENTAL_LEAVE\" | \"TERMINATED\" | undefined' and '\"INACTIVE\"' have no overlap. 163 | if (emp.employmentStatus === 'ACTIVE') { 164 | stats.active++; > 165 | } else if (emp.employmentStatus === 'INACTIVE') { | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 166 | stats.inactive++; 167 | } 168 |"
+      - generic [ref=f1e522]:
+        - generic [ref=f1e523]: ERROR in src/state/gamification.ts:79:35
+        - generic [ref=f1e524]: "TS4111: Property 'coinAmount' comes from an index signature, so it must be accessed with ['coinAmount']. 77 | return config.xpRates.punctualCheckin; 78 | case 'coins_earned': > 79 | return Math.floor((metadata.coinAmount || 0) * config.xpRates.coinsEarned); | ^^^^^^^^^^ 80 | case 'feedback_given': 81 | return config.xpRates.feedbackGiven; 82 | case 'daily_login':"
+      - generic [ref=f1e525]:
+        - generic [ref=f1e526]: ERROR in src/state/gamification.ts:158:29
+        - generic [ref=f1e527]: "TS4111: Property 'streakDay' comes from an index signature, so it must be accessed with ['streakDay']. 156 | return `Schulung abgeschlossen`; 157 | case 'punctual_checkin': > 158 | return metadata.streakDay > 1 | ^^^^^^^^^ 159 | ? `Pünktlich (${metadata.streakDay} Tage Serie)` 160 | : 'Pünktlich gestempelt'; 161 | case 'coins_earned':"
+      - generic [ref=f1e528]:
+        - generic [ref=f1e529]: ERROR in src/state/gamification.ts:159:40
+        - generic [ref=f1e530]: "TS4111: Property 'streakDay' comes from an index signature, so it must be accessed with ['streakDay']. 157 | case 'punctual_checkin': 158 | return metadata.streakDay > 1 > 159 | ? `Pünktlich (${metadata.streakDay} Tage Serie)` | ^^^^^^^^^ 160 | : 'Pünktlich gestempelt'; 161 | case 'coins_earned': 162 | return `${metadata.coinAmount} Coins verdient: ${metadata.reason}`;"
+      - generic [ref=f1e531]:
+        - generic [ref=f1e532]: ERROR in src/state/gamification.ts:162:32
+        - generic [ref=f1e533]: "TS4111: Property 'coinAmount' comes from an index signature, so it must be accessed with ['coinAmount']. 160 | : 'Pünktlich gestempelt'; 161 | case 'coins_earned': > 162 | return `${metadata.coinAmount} Coins verdient: ${metadata.reason}`; | ^^^^^^^^^^ 163 | case 'feedback_given': 164 | return 'Feedback gegeben'; 165 | case 'daily_login':"
+      - generic [ref=f1e534]:
+        - generic [ref=f1e535]: ERROR in src/state/gamification.ts:162:71
+        - generic [ref=f1e536]: "TS4111: Property 'reason' comes from an index signature, so it must be accessed with ['reason']. 160 | : 'Pünktlich gestempelt'; 161 | case 'coins_earned': > 162 | return `${metadata.coinAmount} Coins verdient: ${metadata.reason}`; | ^^^^^^ 163 | case 'feedback_given': 164 | return 'Feedback gegeben'; 165 | case 'daily_login':"
+      - generic [ref=f1e537]:
+        - generic [ref=f1e538]: ERROR in src/state/gamification.ts:168:29
+        - generic [ref=f1e539]: "TS4111: Property 'reason' comes from an index signature, so it must be accessed with ['reason']. 166 | return 'Täglicher Login'; 167 | case 'manual': > 168 | return metadata.reason || 'Manuell vergeben'; | ^^^^^^ 169 | default: 170 | return 'XP erhalten'; 171 | }"
+      - generic [ref=f1e540]:
+        - generic [ref=f1e541]: ERROR in src/state/gamification.ts:243:55
+        - generic [ref=f1e542]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 241 | 242 | if (lastLogin !== today) { > 243 | localStorage.setItem(`lastLogin-${userId}`, today); | ^^^^^ 244 | get().awardXP({ 245 | type: 'daily_login', 246 | userId,"
+      - generic [ref=f1e543]:
+        - generic [ref=f1e544]: ERROR in src/state/learning.ts:318:21
+        - generic [ref=f1e545]: "TS2532: Object is possibly 'undefined'. 316 | 317 | for (let i = 0; i < LEVEL_CONFIGS.length; i++) { > 318 | if (xp >= LEVEL_CONFIGS[i].xp) { | ^^^^^^^^^^^^^^^^ 319 | currentLevel = LEVEL_CONFIGS[i]; 320 | nextLevel = LEVEL_CONFIGS[i + 1] || currentLevel; 321 | }"
+      - generic [ref=f1e546]:
+        - generic [ref=f1e547]: ERROR in src/state/learning.ts:325:18
+        - generic [ref=f1e548]: "TS18048: 'currentLevel' is possibly 'undefined'. 323 | 324 | return { > 325 | level: currentLevel.level, | ^^^^^^^^^^^^ 326 | title: currentLevel.title, 327 | xp: xp, 328 | nextLevelXp: nextLevel.xp"
+      - generic [ref=f1e549]:
+        - generic [ref=f1e550]: ERROR in src/state/learning.ts:326:18
+        - generic [ref=f1e551]: "TS18048: 'currentLevel' is possibly 'undefined'. 324 | return { 325 | level: currentLevel.level, > 326 | title: currentLevel.title, | ^^^^^^^^^^^^ 327 | xp: xp, 328 | nextLevelXp: nextLevel.xp 329 | };"
+      - generic [ref=f1e552]:
+        - generic [ref=f1e553]: ERROR in src/state/learning.ts:328:24
+        - generic [ref=f1e554]: "TS18048: 'nextLevel' is possibly 'undefined'. 326 | title: currentLevel.title, 327 | xp: xp, > 328 | nextLevelXp: nextLevel.xp | ^^^^^^^^^ 329 | }; 330 | }, 331 |"
+      - generic [ref=f1e555]:
+        - generic [ref=f1e556]: ERROR in src/state/reminders.ts:122:17
+        - generic [ref=f1e557]: "TS2322: Type 'string | undefined' is not assignable to type 'string'. Type 'undefined' is not assignable to type 'string'. 120 | userId: leaveRequest.userId, 121 | reminderType: 'AUTOMATIC', > 122 | reminderDate: reminderDate.toISOString().split('T')[0], | ^^^^^^^^^^^^ 123 | daysBeforeVacation: days, 124 | isActive: true, 125 | isSent: false,"
+      - generic [ref=f1e558]:
+        - generic [ref=f1e559]: ERROR in src/state/reminders.ts:211:15
+        - generic [ref=f1e560]: "TS2322: Type '{ id?: string | undefined; managerId?: string | undefined; isEnabled?: boolean | undefined; defaultReminders?: number[] | undefined; customMessage?: string | undefined; notificationMethod?: \"APP\" | ... 2 more ... | undefined; autoCreateForNewVacations?: boolean | undefined; createdAt?: string | undefined; }' is not assignable to type 'ReminderSettings'. Types of property 'id' are incompatible. Type 'string | undefined' is not assignable to type 'string'. Type 'undefined' is not assignable to type 'string'. 209 | // Update existing settings 210 | const updatedSettings = [...state.reminderSettings]; > 211 | updatedSettings[existingIndex] = { ...updatedSettings[existingIndex], ...settingsUpdate }; | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 212 | return { reminderSettings: updatedSettings, isLoading: false }; 213 | } else { 214 | // Create new settings"
+      - generic [ref=f1e561]:
+        - generic [ref=f1e562]: ERROR in src/state/reminders.ts:244:29
+        - generic [ref=f1e563]: "TS18048: 'today' is possibly 'undefined'. 242 | 243 | return get().notifications.filter(n => > 244 | n.scheduledFor >= today && | ^^^^^ 245 | n.scheduledFor <= upcomingDays.toISOString().split('T')[0] && 246 | !n.isRead 247 | );"
+      - generic [ref=f1e564]:
+        - generic [ref=f1e565]: ERROR in src/state/reminders.ts:245:29
+        - generic [ref=f1e566]: "TS2532: Object is possibly 'undefined'. 243 | return get().notifications.filter(n => 244 | n.scheduledFor >= today && > 245 | n.scheduledFor <= upcomingDays.toISOString().split('T')[0] && | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 246 | !n.isRead 247 | ); 248 | },"
+      - generic [ref=f1e567]:
+        - generic [ref=f1e568]: ERROR in src/state/reminders.ts:264:15
+        - generic [ref=f1e569]: "TS2322: Type '{ id: string; reminderId: string; title: string; message: string; isRead: false; createdAt: string; scheduledFor: string | undefined; leaveRequestId: string; employeeName: string; vacationDates: { ...; }; }[]' is not assignable to type 'ReminderNotification[]'. Type '{ id: string; reminderId: string; title: string; message: string; isRead: false; createdAt: string; scheduledFor: string | undefined; leaveRequestId: string; employeeName: string; vacationDates: { ...; }; }' is not assignable to type 'ReminderNotification'. Types of property 'scheduledFor' are incompatible. Type 'string | undefined' is not assignable to type 'string'. Type 'undefined' is not assignable to type 'string'. 262 | ); 263 | > 264 | const newNotifications: ReminderNotification[] = todayReminders.map(reminder => ({ | ^^^^^^^^^^^^^^^^ 265 | id: Date.now().toString() + Math.random(), 266 | reminderId: reminder.id, 267 | title: `Urlaubserinnerung - ${reminder.daysBeforeVacation} Tag${reminder.daysBeforeVacation !== 1 ? 'e' : ''} vorher`,"
+      - generic [ref=f1e570]:
+        - generic [ref=f1e571]: ERROR in src/state/reminders.ts:297:35
+        - generic [ref=f1e572]: "TS6133: 'managerId' is declared but its value is never read. 295 | }, 296 | > 297 | getUpcomingVacationAlerts: (managerId: string, days = 14) => { | ^^^^^^^^^ 298 | const endDate = new Date(); 299 | endDate.setDate(endDate.getDate() + days); 300 | const endDateString = endDate.toISOString().split('T')[0];"
+      - generic [ref=f1e573]:
+        - generic [ref=f1e574]: ERROR in src/state/reminders.ts:304:29
+        - generic [ref=f1e575]: "TS18048: 'today' is possibly 'undefined'. 302 | 303 | return get().notifications.filter(n => > 304 | n.scheduledFor >= today && | ^^^^^ 305 | n.scheduledFor <= endDateString 306 | ).sort((a, b) => new Date(a.scheduledFor).getTime() - new Date(b.scheduledFor).getTime()); 307 | }"
+      - generic [ref=f1e576]:
+        - generic [ref=f1e577]: ERROR in src/state/reminders.ts:305:29
+        - generic [ref=f1e578]: "TS18048: 'endDateString' is possibly 'undefined'. 303 | return get().notifications.filter(n => 304 | n.scheduledFor >= today && > 305 | n.scheduledFor <= endDateString | ^^^^^^^^^^^^^ 306 | ).sort((a, b) => new Date(a.scheduledFor).getTime() - new Date(b.scheduledFor).getTime()); 307 | } 308 | }),"
+      - generic [ref=f1e579]:
+        - generic [ref=f1e580]: ERROR in src/state/timeRecords.ts:50:7
+        - generic [ref=f1e581]: "TS2322: Type 'string | undefined' is not assignable to type 'string'. Type 'undefined' is not assignable to type 'string'. 48 | id: `${userId}-${date.toISOString().split('T')[0]}`, 49 | userId, > 50 | date: date.toISOString().split('T')[0], | ^^^^ 51 | timeIn: timeIn.toTimeString().split(' ')[0].substring(0, 5), 52 | timeOut: timeOut.toTimeString().split(' ')[0].substring(0, 5), 53 | breakMinutes,"
+      - generic [ref=f1e582]:
+        - generic [ref=f1e583]: ERROR in src/state/timeRecords.ts:51:15
+        - generic [ref=f1e584]: "TS2532: Object is possibly 'undefined'. 49 | userId, 50 | date: date.toISOString().split('T')[0], > 51 | timeIn: timeIn.toTimeString().split(' ')[0].substring(0, 5), | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 52 | timeOut: timeOut.toTimeString().split(' ')[0].substring(0, 5), 53 | breakMinutes, 54 | totalHours: Math.round(totalHours * 100) / 100"
+      - generic [ref=f1e585]:
+        - generic [ref=f1e586]: ERROR in src/state/timeRecords.ts:52:16
+        - generic [ref=f1e587]: "TS2532: Object is possibly 'undefined'. 50 | date: date.toISOString().split('T')[0], 51 | timeIn: timeIn.toTimeString().split(' ')[0].substring(0, 5), > 52 | timeOut: timeOut.toTimeString().split(' ')[0].substring(0, 5), | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 53 | breakMinutes, 54 | totalHours: Math.round(totalHours * 100) / 100 55 | });"
+      - generic [ref=f1e588]:
+        - generic [ref=f1e589]: ERROR in src/state/timeRecords.ts:146:26
+        - generic [ref=f1e590]: "TS2532: Object is possibly 'undefined'. 144 | try { 145 | const now = new Date(); > 146 | const timeIn = now.toTimeString().split(' ')[0].substring(0, 5); // HH:MM | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 147 | const today = now.toISOString().split('T')[0]; 148 | 149 | // Check if already clocked in today"
+      - generic [ref=f1e591]:
+        - generic [ref=f1e592]: ERROR in src/state/timeRecords.ts:164:13
+        - generic [ref=f1e593]: "TS2322: Type 'string | undefined' is not assignable to type 'string'. Type 'undefined' is not assignable to type 'string'. 162 | id: `${userId}-${today}-${Date.now()}`, 163 | userId, > 164 | date: today, | ^^^^ 165 | timeIn, 166 | breakMinutes: 0, 167 | totalHours: 0"
+      - generic [ref=f1e594]:
+        - generic [ref=f1e595]: ERROR in src/state/timeRecords.ts:190:27
+        - generic [ref=f1e596]: "TS2532: Object is possibly 'undefined'. 188 | try { 189 | const now = new Date(); > 190 | const timeOut = now.toTimeString().split(' ')[0].substring(0, 5); // HH:MM | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 191 | 192 | // Find today's record 193 | const todayRecord = get().getTodayRecord(userId);"
+      - generic [ref=f1e597]:
+        - generic [ref=f1e598]: ERROR in src/state/timeRecords.ts:201:42
+        - generic [ref=f1e599]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 199 | const timeInParts = todayRecord.timeIn.split(':'); 200 | const timeOutParts = timeOut.split(':'); > 201 | const timeInMinutes = parseInt(timeInParts[0]) * 60 + parseInt(timeInParts[1]); | ^^^^^^^^^^^^^^ 202 | const timeOutMinutes = parseInt(timeOutParts[0]) * 60 + parseInt(timeOutParts[1]); 203 | const totalMinutes = timeOutMinutes - timeInMinutes - breakMinutes; 204 | const totalHours = Math.round((totalMinutes / 60) * 100) / 100;"
+      - generic [ref=f1e600]:
+        - generic [ref=f1e601]: ERROR in src/state/timeRecords.ts:201:74
+        - generic [ref=f1e602]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 199 | const timeInParts = todayRecord.timeIn.split(':'); 200 | const timeOutParts = timeOut.split(':'); > 201 | const timeInMinutes = parseInt(timeInParts[0]) * 60 + parseInt(timeInParts[1]); | ^^^^^^^^^^^^^^ 202 | const timeOutMinutes = parseInt(timeOutParts[0]) * 60 + parseInt(timeOutParts[1]); 203 | const totalMinutes = timeOutMinutes - timeInMinutes - breakMinutes; 204 | const totalHours = Math.round((totalMinutes / 60) * 100) / 100;"
+      - generic [ref=f1e603]:
+        - generic [ref=f1e604]: ERROR in src/state/timeRecords.ts:202:43
+        - generic [ref=f1e605]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 200 | const timeOutParts = timeOut.split(':'); 201 | const timeInMinutes = parseInt(timeInParts[0]) * 60 + parseInt(timeInParts[1]); > 202 | const timeOutMinutes = parseInt(timeOutParts[0]) * 60 + parseInt(timeOutParts[1]); | ^^^^^^^^^^^^^^^ 203 | const totalMinutes = timeOutMinutes - timeInMinutes - breakMinutes; 204 | const totalHours = Math.round((totalMinutes / 60) * 100) / 100; 205 |"
+      - generic [ref=f1e606]:
+        - generic [ref=f1e607]: ERROR in src/state/timeRecords.ts:202:76
+        - generic [ref=f1e608]: "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'. 200 | const timeOutParts = timeOut.split(':'); 201 | const timeInMinutes = parseInt(timeInParts[0]) * 60 + parseInt(timeInParts[1]); > 202 | const timeOutMinutes = parseInt(timeOutParts[0]) * 60 + parseInt(timeOutParts[1]); | ^^^^^^^^^^^^^^^ 203 | const totalMinutes = timeOutMinutes - timeInMinutes - breakMinutes; 204 | const totalHours = Math.round((totalMinutes / 60) * 100) / 100; 205 |"
+      - generic [ref=f1e609]:
+        - generic [ref=f1e610]: ERROR in src/utils/error-tracking.ts:93:11
+        - generic [ref=f1e611]: "TS6133: 'user' is declared but its value is never read. 91 | * Set user context 92 | */ > 93 | setUser(user: { id: string; email: string; username?: string } | null): void { | ^^^^ 94 | if (!this.initialized) return; 95 | 96 | // Sentry.setUser(user);"
+      - generic [ref=f1e612]:
+        - generic [ref=f1e613]: ERROR in src/utils/error-tracking.ts:102:17
+        - generic [ref=f1e614]: "TS6133: 'breadcrumb' is declared but its value is never read. 100 | * Add breadcrumb for better error context 101 | */ > 102 | addBreadcrumb(breadcrumb: { | ^^^^^^^^^^ 103 | message: string; 104 | category?: string; 105 | level?: 'debug' | 'info' | 'warning' | 'error';"
+      - generic [ref=f1e615]:
+        - generic [ref=f1e616]: ERROR in src/utils/error-tracking.ts:208:33
+        - generic [ref=f1e617]: "TS4111: Property 'REACT_APP_SENTRY_DSN' comes from an index signature, so it must be accessed with ['REACT_APP_SENTRY_DSN']. 206 | // Initialize on import (can be configured later) 207 | if (typeof window !== 'undefined') { > 208 | errorTracker.init(process.env.REACT_APP_SENTRY_DSN); | ^^^^^^^^^^^^^^^^^^^^ 209 | }"
+      - generic [ref=f1e618]:
+        - generic [ref=f1e619]: ERROR in src/utils/exportCalendar.test.ts:1:10
+        - generic [ref=f1e620]: "TS2724: '\"./exportCalendar\"' has no exported member named 'exportToICS'. Did you mean 'exportToCSV'? > 1 | import { exportToICS, formatEventDescription, createICSEvent } from './exportCalendar'; | ^^^^^^^^^^^ 2 | 3 | describe('Calendar Export Utils', () => { 4 | describe('formatEventDescription', () => {"
+      - generic [ref=f1e621]:
+        - generic [ref=f1e622]: ERROR in src/utils/exportCalendar.test.ts:1:23
+        - generic [ref=f1e623]: "TS2305: Module '\"./exportCalendar\"' has no exported member 'formatEventDescription'. > 1 | import { exportToICS, formatEventDescription, createICSEvent } from './exportCalendar'; | ^^^^^^^^^^^^^^^^^^^^^^ 2 | 3 | describe('Calendar Export Utils', () => { 4 | describe('formatEventDescription', () => {"
+      - generic [ref=f1e624]:
+        - generic [ref=f1e625]: ERROR in src/utils/exportCalendar.test.ts:1:47
+        - generic [ref=f1e626]: "TS2305: Module '\"./exportCalendar\"' has no exported member 'createICSEvent'. > 1 | import { exportToICS, formatEventDescription, createICSEvent } from './exportCalendar'; | ^^^^^^^^^^^^^^ 2 | 3 | describe('Calendar Export Utils', () => { 4 | describe('formatEventDescription', () => {"
+      - generic [ref=f1e627]:
+        - generic [ref=f1e628]: ERROR in src/utils/exportCalendar.ts:48:3
+        - generic [ref=f1e629]: "TS6133: 'dateRange' is declared but its value is never read. 46 | export const exportToCSV = ( 47 | entries: CalendarEntry[], > 48 | dateRange: Date[], | ^^^^^^^^^ 49 | users: { userId: string; userName: string }[], 50 | view: 'monat' | 'jahr', 51 | selectedMonth: Date"
+      - generic [ref=f1e630]:
+        - generic [ref=f1e631]: ERROR in src/utils/exportCalendar.ts:49:3
+        - generic [ref=f1e632]: "TS6133: 'users' is declared but its value is never read. 47 | entries: CalendarEntry[], 48 | dateRange: Date[], > 49 | users: { userId: string; userName: string }[], | ^^^^^ 50 | view: 'monat' | 'jahr', 51 | selectedMonth: Date 52 | ): void => {"
+      - generic [ref=f1e633]:
+        - generic [ref=f1e634]: ERROR in src/utils/exportCalendar.ts:78:7
+        - generic [ref=f1e635]: "TS2322: Type 'string | undefined' is not assignable to type 'string'. Type 'undefined' is not assignable to type 'string'. 76 | type, 77 | hours, > 78 | status | ^^^^^^ 79 | ]); 80 | }); 81 |"
+      - generic [ref=f1e636]:
+        - generic [ref=f1e637]: ERROR in src/utils/exportCalendar.ts:223:34
+        - generic [ref=f1e638]: "TS2345: Argument of type 'Date | undefined' is not assignable to parameter of type 'string | number | Date'. Type 'undefined' is not assignable to type 'string | number | Date'. 221 | const user = users[userIndex]; 222 | const date = dateRange[dateIndex]; > 223 | const dateStr = format(date, 'yyyy-MM-dd'); | ^^^^ 224 | const entry = entriesMap.get(`${user.userId}-${dateStr}`); 225 | 226 | if (entry) {"
+      - generic [ref=f1e639]:
+        - generic [ref=f1e640]: ERROR in src/utils/exportCalendar.ts:224:43
+        - generic [ref=f1e641]: "TS18048: 'user' is possibly 'undefined'. 222 | const date = dateRange[dateIndex]; 223 | const dateStr = format(date, 'yyyy-MM-dd'); > 224 | const entry = entriesMap.get(`${user.userId}-${dateStr}`); | ^^^^ 225 | 226 | if (entry) { 227 | let fillColor;"
+      - generic [ref=f1e642]:
+        - generic [ref=f1e643]: ERROR in src/utils/exportCalendar.ts:257:32
+        - generic [ref=f1e644]: "TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'. Type 'undefined' is not assignable to type 'number'. 255 | 256 | if (fillColor) { > 257 | doc.setFillColor(fillColor[0], fillColor[1], fillColor[2]); | ^^^^^^^^^^^^ 258 | doc.rect(data.cell.x, data.cell.y, data.cell.width, data.cell.height, 'F'); 259 | doc.setTextColor(0, 0, 0); // Reset text color 260 | }"
+      - generic [ref=f1e645]:
+        - generic [ref=f1e646]: ERROR in src/utils/exportCalendar.ts:282:24
+        - generic [ref=f1e647]: "TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'. Type 'undefined' is not assignable to type 'number'. 280 | let legendY = finalY + 5; 281 | legendItems.forEach(item => { > 282 | doc.setFillColor(item.color[0], item.color[1], item.color[2]); | ^^^^^^^^^^^^^ 283 | doc.rect(14, legendY - 3, 5, 3, 'F'); 284 | doc.setFontSize(8); 285 | doc.text(item.label, 22, legendY);"
+      - generic [ref=f1e648]:
+        - generic [ref=f1e649]: ERROR in src/utils/exportCalendar.ts:309:9
+        - generic [ref=f1e650]: "TS2532: Object is possibly 'undefined'. 307 | 308 | if (entry.type === 'zeit' && entry.stunden) { > 309 | summaryData[entry.userName].arbeitsstunden += entry.stunden; | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ 310 | } else { 311 | summaryData[entry.userName][entry.type] = (summaryData[entry.userName][entry.type] || 0) + 1; 312 | }"
+      - generic [ref=f1e651]:
+        - generic [ref=f1e652]: ERROR in src/utils/exportCalendar.ts:309:37
+        - generic [ref=f1e653]: "TS4111: Property 'arbeitsstunden' comes from an index signature, so it must be accessed with ['arbeitsstunden']. 307 | 308 | if (entry.type === 'zeit' && entry.stunden) { > 309 | summaryData[entry.userName].arbeitsstunden += entry.stunden; | ^^^^^^^^^^^^^^ 310 | } else { 311 | summaryData[entry.userName][entry.type] = (summaryData[entry.userName][entry.type] || 0) + 1; 312 | }"
+      - generic [ref=f1e654]:
+        - generic [ref=f1e655]: ERROR in src/utils/exportCalendar.ts:311:9
+        - generic [ref=f1e656]: "TS2532: Object is possibly 'undefined'. 309 | summaryData[entry.userName].arbeitsstunden += entry.stunden; 310 | } else { > 311 | summaryData[entry.userName][entry.type] = (summaryData[entry.userName][entry.type] || 0) + 1; | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ 312 | } 313 | }); 314 |"
+      - generic [ref=f1e657]:
+        - generic [ref=f1e658]: ERROR in src/utils/exportCalendar.ts:311:52
+        - generic [ref=f1e659]: "TS2532: Object is possibly 'undefined'. 309 | summaryData[entry.userName].arbeitsstunden += entry.stunden; 310 | } else { > 311 | summaryData[entry.userName][entry.type] = (summaryData[entry.userName][entry.type] || 0) + 1; | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ 312 | } 313 | }); 314 |"
+      - generic [ref=f1e660]:
+        - generic [ref=f1e661]: ERROR in src/utils/exportCalendar.ts:322:17
+        - generic [ref=f1e662]: "TS4111: Property 'urlaub' comes from an index signature, so it must be accessed with ['urlaub']. 320 | tableRows.push([ 321 | userName, > 322 | `${data.urlaub} Tage`, | ^^^^^^ 323 | `${data.krank} Tage`, 324 | `${data.meeting} Tage`, 325 | `${data.fortbildung} Tage`,"
+      - generic [ref=f1e663]:
+        - generic [ref=f1e664]: ERROR in src/utils/exportCalendar.ts:323:17
+        - generic [ref=f1e665]: "TS4111: Property 'krank' comes from an index signature, so it must be accessed with ['krank']. 321 | userName, 322 | `${data.urlaub} Tage`, > 323 | `${data.krank} Tage`, | ^^^^^ 324 | `${data.meeting} Tage`, 325 | `${data.fortbildung} Tage`, 326 | `${data.ux} Tage`,"
+      - generic [ref=f1e666]:
+        - generic [ref=f1e667]: ERROR in src/utils/exportCalendar.ts:324:17
+        - generic [ref=f1e668]: "TS4111: Property 'meeting' comes from an index signature, so it must be accessed with ['meeting']. 322 | `${data.urlaub} Tage`, 323 | `${data.krank} Tage`, > 324 | `${data.meeting} Tage`, | ^^^^^^^ 325 | `${data.fortbildung} Tage`, 326 | `${data.ux} Tage`, 327 | `${data.arbeitsstunden.toFixed(1)} h`"
+      - generic [ref=f1e669]:
+        - generic [ref=f1e670]: ERROR in src/utils/exportCalendar.ts:325:17
+        - generic [ref=f1e671]: "TS4111: Property 'fortbildung' comes from an index signature, so it must be accessed with ['fortbildung']. 323 | `${data.krank} Tage`, 324 | `${data.meeting} Tage`, > 325 | `${data.fortbildung} Tage`, | ^^^^^^^^^^^ 326 | `${data.ux} Tage`, 327 | `${data.arbeitsstunden.toFixed(1)} h` 328 | ]);"
+      - generic [ref=f1e672]:
+        - generic [ref=f1e673]: ERROR in src/utils/exportCalendar.ts:326:17
+        - generic [ref=f1e674]: "TS4111: Property 'ux' comes from an index signature, so it must be accessed with ['ux']. 324 | `${data.meeting} Tage`, 325 | `${data.fortbildung} Tage`, > 326 | `${data.ux} Tage`, | ^^ 327 | `${data.arbeitsstunden.toFixed(1)} h` 328 | ]); 329 | });"
+      - generic [ref=f1e675]:
+        - generic [ref=f1e676]: ERROR in src/utils/exportCalendar.ts:327:12
+        - generic [ref=f1e677]: "TS18048: 'data.arbeitsstunden' is possibly 'undefined'. 325 | `${data.fortbildung} Tage`, 326 | `${data.ux} Tage`, > 327 | `${data.arbeitsstunden.toFixed(1)} h` | ^^^^^^^^^^^^^^^^^^^ 328 | ]); 329 | }); 330 |"
+      - generic [ref=f1e678]:
+        - generic [ref=f1e679]: ERROR in src/utils/exportCalendar.ts:327:17
+        - generic [ref=f1e680]: "TS4111: Property 'arbeitsstunden' comes from an index signature, so it must be accessed with ['arbeitsstunden']. 325 | `${data.fortbildung} Tage`, 326 | `${data.ux} Tage`, > 327 | `${data.arbeitsstunden.toFixed(1)} h` | ^^^^^^^^^^^^^^ 328 | ]); 329 | }); 330 |"
+      - generic [ref=f1e681]:
+        - generic [ref=f1e682]: ERROR in src/utils/performance-monitoring.ts:158:31
+        - generic [ref=f1e683]: "TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead? 156 | private monitorCustomMetrics() { 157 | // Monitor React render performance > 158 | if (window.performance && window.performance.measure) { | ^^^^^^^^^^^^^^^^^^^^^^^^^^ 159 | // Measure initial app load 160 | window.addEventListener('load', () => { 161 | const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;"
+      - generic [ref=f1e684]:
+        - generic [ref=f1e685]: ERROR in src/utils/performance-monitoring.ts:379:62
+        - generic [ref=f1e686]: "TS4111: Property 'REACT_APP_ANALYTICS_URL' comes from an index signature, so it must be accessed with ['REACT_APP_ANALYTICS_URL']. 377 | 378 | // Send to analytics service in production > 379 | if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_ANALYTICS_URL) { | ^^^^^^^^^^^^^^^^^^^^^^^ 380 | fetch(process.env.REACT_APP_ANALYTICS_URL, { 381 | method: 'POST', 382 | headers: { 'Content-Type': 'application/json' },"
+      - generic [ref=f1e687]:
+        - generic [ref=f1e688]: ERROR in src/utils/performance-monitoring.ts:380:25
+        - generic [ref=f1e689]: "TS4111: Property 'REACT_APP_ANALYTICS_URL' comes from an index signature, so it must be accessed with ['REACT_APP_ANALYTICS_URL']. 378 | // Send to analytics service in production 379 | if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_ANALYTICS_URL) { > 380 | fetch(process.env.REACT_APP_ANALYTICS_URL, { | ^^^^^^^^^^^^^^^^^^^^^^^ 381 | method: 'POST', 382 | headers: { 'Content-Type': 'application/json' }, 383 | body: JSON.stringify({ metrics: batch, summary }),"
+      - generic [ref=f1e690]:
+        - generic [ref=f1e691]: ERROR in src/utils/performance-monitoring.ts:400:7
+        - generic [ref=f1e692]: "TS2532: Object is possibly 'undefined'. 398 | acc[metric.metric] = []; 399 | } > 400 | acc[metric.metric].push(metric.value); | ^^^^^^^^^^^^^^^^^^ 401 | return acc; 402 | }, {} as Record<string, number[]>); 403 |"
+```
