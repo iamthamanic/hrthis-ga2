@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/src/styles/nprogress.css"],"sourcesContent":["/* Progress Bar Stilleri */\n#nprogress {\n  pointer-events: none;\n}\n\n#nprogress .bar {\n  background: #0ea5e9; /* Mavi renk - değiştirebilirsiniz */\n  position: fixed;\n  z-index: 1031;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 3px;\n}\n\n/* Pulsating effect */\n#nprogress .peg {\n  display: block;\n  position: absolute;\n  right: 0px;\n  width: 100px;\n  height: 100%;\n  box-shadow: 0 0 10px #0ea5e9, 0 0 5px #0ea5e9;\n  opacity: 1.0;\n  transform: rotate(3deg) translate(0px, -4px);\n}\n"],"names":[],"mappings":"AACA;;;;AAIA;;;;;;;;;;AAWA"}}]
+}
