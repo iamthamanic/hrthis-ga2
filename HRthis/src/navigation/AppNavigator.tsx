@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, Link, useLocation, useNavigate } from 'react-router-dom';
 
 
 // Removed unused imports for requests functionality
@@ -38,7 +38,8 @@ import { ROUTES } from '../utils/navigation';
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
-  const { user } = useAuthStore();
+  const navigate = useNavigate();
+  const { user, logout } = useAuthStore();
   // Removed unused notification logic for requests tab
   
   const getNotificationCount = (_tabPath: string): number => {
@@ -95,6 +96,31 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
               </Link>
             );
             })}
+          </div>
+          
+          {/* Power Button with Dropdown */}
+          <div className="relative group">
+            <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+              <span className="text-xl">⚙️</span>
+            </button>
+            <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 hidden group-hover:block">
+              <button 
+                onClick={() => navigate('/user/personal-file')}
+                className="w-full text-left px-4 py-2 hover:bg-gray-50 text-sm"
+              >
+                Einstellungen
+              </button>
+              <hr className="border-gray-200" />
+              <button 
+                onClick={() => {
+                  logout();
+                  navigate('/login');
+                }}
+                className="w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-red-600"
+              >
+                Abmelden
+              </button>
+            </div>
           </div>
         </div>
       </nav>

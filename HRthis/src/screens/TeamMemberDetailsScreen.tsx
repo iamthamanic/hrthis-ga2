@@ -189,6 +189,10 @@ export const TeamMemberDetailsScreen = () => {
             >
               ← Zurück
             </button>
+            {/* Profile Avatar */}
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-2xl mr-4">
+              {targetUser.name.charAt(0)}
+            </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900">{targetUser.name}</h1>
               <p className="text-gray-600">{targetUser.email}</p>

@@ -136,24 +136,48 @@ export const DashboardScreen = () => {
   return (
     <div className="flex-1 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-6">
-        {/* Header */}
+        {/* Header with Profile */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-          <div className="flex justify-between items-start">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                {displayUser.id === user.id 
-                  ? `Hallo, ${displayUser.firstName || displayUser.name.split(' ')[0]}!`
-                  : `Mitarbeiter: ${displayUser.name}`
-                }
-              </h1>
-              {displayUser.employeeNumber && (
-                <p className="text-sm text-gray-500">Personalnummer: {displayUser.employeeNumber}</p>
-              )}
-              {isAdmin && displayUser.id !== user.id && (
+          <div className="flex items-center space-x-4">
+            {/* Profile Avatar */}
+            <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+              <span className="text-2xl">👤</span>
+            </div>
+            
+            {/* User Info */}
+            <div className="flex-1">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h1 className="text-2xl font-bold text-gray-900">
+                    {displayUser.id === user.id 
+                      ? `Willkommen, ${displayUser.firstName || displayUser.name.split(' ')[0]}!`
+                      : `Mitarbeiter: ${displayUser.name}`
+                    }
+                  </h1>
+                  <div className="flex items-center space-x-4 text-sm text-gray-600 mt-1">
+                    {displayUser.position && <span>{displayUser.position}</span>}
+                    {displayUser.department && <span>•</span>}
+                    {displayUser.department && <span>{displayUser.department}</span>}
+                    {displayUser.employeeNumber && <span>•</span>}
+                    {displayUser.employeeNumber && <span>ID: {displayUser.employeeNumber}</span>}
+                  </div>
+                </div>
+                
+                {/* Personalakte Link */}
+                <button 
+                  onClick={() => navigate('/user/personal-file')}
+                  className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                >
+                  Personalakte →
+                </button>
+              </div>
+              
+              {/* Admin User Selector */}
+              {isAdmin && allUsers.length > 1 && (
                 <select
                   value={dashboardPrefs.selectedUserId}
                   onChange={(e) => handleUserChange(e.target.value)}
-                  className="mt-2 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="mt-3 text-sm border border-gray-300 rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value={user.id}>Meine Ansicht</option>
                   {allUsers.filter(u => u.id !== user.id).map(u => (
@@ -162,79 +186,8 @@ export const DashboardScreen = () => {
                 </select>
               )}
             </div>
-            <div className="flex items-center gap-3">
-              <button 
-                onClick={() => navigate('/user/personal-file')}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                title="Personalakte"
-              >
-                ⚙️
-              </button>
-              <button 
-                onClick={() => {
-                  logout();
-                  toast.info('Abgemeldet', 'Sie wurden erfolgreich abgemeldet.');
-                }}
-                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
-              >
-                <span className="text-gray-700">Abmelden</span>
-              </button>
-            </div>
           </div>
 
-          {/* Position and Organization */}
-          <div className="mt-4 grid md:grid-cols-3 gap-4">
-            <div>
-              <p className="text-sm text-gray-500">Position</p>
-              {isEditingUser && canEdit(displayUser) ? (
-                <input
-                  type="text"
-                  value={editForm.position}
-                  onChange={(e) => setEditForm({...editForm, position: e.target.value})}
-                  className="mt-1 w-full border border-gray-300 rounded px-2 py-1 text-sm"
-                />
-              ) : (
-                <p className="font-medium">{displayUser.position || '-'}</p>
-              )}
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Abteilung</p>
-              <p className="font-medium">{displayUser.department || '-'}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Organisation</p>
-              <p className="font-medium">{organization?.name}</p>
-            </div>
-          </div>
-
-          {/* Admin Edit Controls - Now with permission check */}
-          {hasPermission('edit:employees') && displayUser.id !== user.id && (
-            <div className="mt-4 flex justify-end">
-              {isEditingUser ? (
-                <>
-                  <button
-                    onClick={() => setIsEditingUser(false)}
-                    className="px-3 py-1 text-sm text-gray-600 hover:text-gray-800"
-                  >
-                    Abbrechen
-                  </button>
-                  <button
-                    onClick={handleSaveUserEdit}
-                    className="ml-2 px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
-                  >
-                    Speichern
-                  </button>
-                </>
-              ) : (
-                <button
-                  onClick={() => setIsEditingUser(true)}
-                  className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
-                >
-                  Bearbeiten
-                </button>
-              )}
-            </div>
-          )}
         </div>
 
         {/* Main Stats Grid */}
@@ -365,132 +318,8 @@ export const DashboardScreen = () => {
           </div>
         </div>
 
-        {/* Employment Details (Admin editable) - Now with permission check */}
-        {hasPermission('view:employees') && (
-          <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Beschäftigungsdetails</h2>
-            <div className="grid md:grid-cols-4 gap-4">
-              <div>
-                <p className="text-sm text-gray-500">Wochenarbeitszeit</p>
-                {isEditingUser && canEdit(displayUser) ? (
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      value={editForm.weeklyHours}
-                      onChange={(e) => setEditForm({...editForm, weeklyHours: e.target.value})}
-                      className="w-20 border border-gray-300 rounded px-2 py-1 text-sm"
-                    />
-                    <span className="text-sm">Stunden</span>
-                  </div>
-                ) : (
-                  <p className="font-medium">{displayUser.weeklyHours || '-'}h / Woche</p>
-                )}
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Beschäftigungsart</p>
-                <p className="font-medium">
-                  {displayUser.employmentType === 'FULL_TIME' && 'Vollzeit'}
-                  {displayUser.employmentType === 'PART_TIME' && 'Teilzeit'}
-                  {displayUser.employmentType === 'MINI_JOB' && 'Minijob'}
-                  {displayUser.employmentType === 'INTERN' && 'Praktikant'}
-                  {displayUser.employmentType === 'OTHER' && (displayUser.employmentTypeCustom || 'Sonstige')}
-                  {!displayUser.employmentType && '-'}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Eintrittsdatum</p>
-                <p className="font-medium">
-                  {displayUser.joinDate ? new Date(displayUser.joinDate).toLocaleDateString('de-DE') : '-'}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Status</p>
-                <p className="font-medium">
-                  {displayUser.employmentStatus === 'ACTIVE' && '✅ Aktiv'}
-                  {displayUser.employmentStatus === 'PARENTAL_LEAVE' && '👶 Elternzeit'}
-                  {displayUser.employmentStatus === 'TERMINATED' && '❌ Ausgeschieden'}
-                  {!displayUser.employmentStatus && '-'}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
 
-        {/* Quick Actions */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <button
-            onClick={() => navigate('/time-vacation')}
-            className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow text-left"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-3xl">⏰</span>
-              <span className="text-gray-400">→</span>
-            </div>
-            <h3 className="font-semibold text-gray-900">Zeit & Urlaub</h3>
-            <p className="text-sm text-gray-500 mt-1">Arbeitszeit, Stempeln & Kalender</p>
-          </button>
 
-          <button
-            onClick={() => navigate('/benefits')}
-            className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow text-left"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-3xl">🎁</span>
-              <span className="text-gray-400">→</span>
-            </div>
-            <h3 className="font-semibold text-gray-900">Benefits</h3>
-            <p className="text-sm text-gray-500 mt-1">Shop & Coins</p>
-          </button>
-
-          <button
-            onClick={() => navigate('/documents')}
-            className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow text-left"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-3xl">📄</span>
-              <span className="text-gray-400">→</span>
-            </div>
-            <h3 className="font-semibold text-gray-900">Dokumente</h3>
-            <p className="text-sm text-gray-500 mt-1">Lohn & Verträge</p>
-          </button>
-
-          <button
-            onClick={() => navigate('/user/personal-file')}
-            className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow text-left"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-3xl">📋</span>
-              <span className="text-gray-400">→</span>
-            </div>
-            <h3 className="font-semibold text-gray-900">Personalakte</h3>
-            <p className="text-sm text-gray-500 mt-1">Meine Daten</p>
-          </button>
-
-          {/* Show Admin panel only if user has permission */}
-          {hasPermission('manage:system') && (
-            <button
-              onClick={() => navigate('/admin')}
-              className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow text-left"
-            >
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-3xl">👨‍💼</span>
-                <span className="text-white opacity-75">→</span>
-              </div>
-              <h3 className="font-semibold">Admin Panel</h3>
-              <p className="text-sm opacity-90 mt-1">System-Verwaltung</p>
-            </button>
-          )}
-        </div>
-
-        {/* Preferences Toggle */}
-        <div className="mt-6 flex justify-end">
-          <button
-            onClick={() => setDashboardPrefs(prev => ({ ...prev, compactMode: !prev.compactMode }))}
-            className="text-sm text-gray-500 hover:text-gray-700"
-          >
-            {dashboardPrefs.compactMode ? '📐 Standard-Ansicht' : '📦 Kompakt-Ansicht'}
-          </button>
-        </div>
       </div>
     </div>
   );
