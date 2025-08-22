@@ -129,6 +129,11 @@ interface UseToastReturn {
   // State
   toasts: Toast[];
   isActive: (id: string) => boolean;
+
+  // Back-compat API expected by older tests
+  showToast: (message: string, type: ToastType, duration?: number) => string;
+  removeToast: (id: string) => void;
+  clearToasts: () => void;
 }
 
 /**
@@ -285,7 +290,12 @@ export function useToast(defaultOptions?: UseToastOptions): UseToastReturn {
     dismissAll,
     update,
     toasts,
-    isActive
+    isActive,
+    // Back-compat wrappers for tests using older API
+    showToast: (message: string, type: ToastType, duration?: number) =>
+      show({ type, title: message, message, duration }),
+    removeToast: (id: string) => dismiss(id),
+    clearToasts: () => dismissAll(),
   };
 }
 

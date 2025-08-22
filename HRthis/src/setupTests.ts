@@ -49,3 +49,28 @@ global.IntersectionObserver = jest.fn().mockImplementation(() => ({
   unobserve: jest.fn(),
   disconnect: jest.fn(),
 }));
+
+// Mock jspdf and autotable to avoid ESM/binary issues in Jest
+jest.mock('jspdf', () => {
+  return {
+    __esModule: true,
+    default: class jsPDF {
+      lastAutoTable: { finalY: number } = { finalY: 35 };
+      constructor(_opts?: any) {}
+      setFontSize(): void {}
+      text(): void {}
+      setFillColor(): void {}
+      rect(): void {}
+      setTextColor(): void {}
+      save(): void {}
+    },
+  };
+});
+
+jest.mock('jspdf-autotable', () => {
+  return {
+    __esModule: true,
+    default: (_doc: any, _opts: any) => {},
+  };
+});
+

@@ -6,8 +6,8 @@
 import { User } from '../types';
 
 // API configuration
-const API_BASE_URL = process.env.REACT_APP_API_URL;
-const USE_REAL_API = Boolean(API_BASE_URL && API_BASE_URL.trim() !== '');
+const getApiBaseUrl = () => process.env.REACT_APP_API_URL;
+const isRealApiEnabled = () => Boolean(getApiBaseUrl() && getApiBaseUrl()!.trim() !== '');
 
 // API endpoints (base path is already included in API_BASE_URL)
 const ENDPOINTS = {
@@ -20,9 +20,11 @@ const ENDPOINTS = {
  * Generic API request handler
  */
 async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-  if (!USE_REAL_API) {
+  if (!isRealApiEnabled()) {
     throw new Error('API_URL not configured - falling back to mock data');
   }
+  
+  const API_BASE_URL = getApiBaseUrl();
 
   const url = `${API_BASE_URL}${endpoint}`;
   
@@ -35,6 +37,14 @@ async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promi
   });
 
   if (!response.ok) {
+    try {
+      const err = await response.json();
+      if (err?.message) {
+        throw new Error(err.message);
+      }
+    } catch {
+      // ignore parse errors
+    }
     throw new Error(`API request failed: ${response.status} ${response.statusText}`);
   }
 
@@ -54,6 +64,14 @@ export const authAPI = {
 
   getCurrentUser: async (token: string) => {
     return apiRequest('/api/auth/me', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+  },
+  refreshToken: async (token: string) => {
+    return apiRequest('/api/auth/refresh', {
+      method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -130,8 +148,8 @@ export const employeesAPI = {
  * Utility functions
  */
 export const apiUtils = {
-  isRealAPIEnabled: () => USE_REAL_API,
-  getBaseURL: () => API_BASE_URL,
+  isRealAPIEnabled: () => isRealApiEnabled(),
+  getBaseURL: () => getApiBaseUrl(),
   
   // Transform backend user data to frontend User type
   transformBackendUser: (backendUser: any): User => {

@@ -67,18 +67,26 @@ export const DashboardScreen = () => {
         {/* Header with Profile */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-6">
-            {/* Profile Avatar with crosshatch pattern */}
+            {/* Profile Avatar */}
             <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 relative">
-              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100">
-                <defs>
-                  <pattern id="crosshatch" patternUnits="userSpaceOnUse" width="4" height="4">
-                    <path d="M0,4 l4,-4 M0,0 l4,4" stroke="#d1d5db" strokeWidth="0.5"/>
-                  </pattern>
-                </defs>
-                <circle cx="50" cy="50" r="50" fill="url(#crosshatch)" />
-                <circle cx="50" cy="35" r="18" fill="#9ca3af" />
-                <ellipse cx="50" cy="70" rx="28" ry="20" fill="#9ca3af" />
-              </svg>
+              {displayUser.avatarUrl ? (
+                <img 
+                  src={displayUser.avatarUrl} 
+                  alt={displayUser.name} 
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100">
+                  <defs>
+                    <pattern id="crosshatch" patternUnits="userSpaceOnUse" width="4" height="4">
+                      <path d="M0,4 l4,-4 M0,0 l4,4" stroke="#d1d5db" strokeWidth="0.5"/>
+                    </pattern>
+                  </defs>
+                  <circle cx="50" cy="50" r="50" fill="url(#crosshatch)" />
+                  <circle cx="50" cy="35" r="18" fill="#9ca3af" />
+                  <ellipse cx="50" cy="70" rx="28" ry="20" fill="#9ca3af" />
+                </svg>
+              )}
             </div>
             
             {/* User Info */}

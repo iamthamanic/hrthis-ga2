@@ -6,7 +6,8 @@ global.fetch = jest.fn();
 describe('API Client', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    delete process.env.REACT_APP_API_URL;
+    // Set a default API URL for all tests
+    process.env.REACT_APP_API_URL = 'http://localhost:8002/hrthis';
   });
 
   describe('utils', () => {

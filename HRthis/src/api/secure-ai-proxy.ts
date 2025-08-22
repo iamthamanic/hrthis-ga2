@@ -15,6 +15,7 @@
  */
 
 import { AIMessage, AIRequestOptions, AIResponse } from "../types/ai";
+import { getAuthToken } from "../state/auth";
 
 // API configuration
 const API_BASE_URL = process.env.REACT_APP_API_URL;
@@ -45,58 +46,74 @@ interface SecureAIRequest {
  * Generic secure API request handler for AI services
  * @internal For testing purposes, this is exported
  */
+// Overloads for legacy and new signatures
 export async function secureAIRequest<T>(
-  endpoint: string, 
+  service: AIServiceType,
+  messages: AIMessage[],
+  options?: AIRequestOptions,
+  token?: string
+): Promise<T>;
+export async function secureAIRequest<T>(
+  endpoint: string,
   data: SecureAIRequest,
   token?: string
+): Promise<T>;
+export async function secureAIRequest<T>(
+  arg1: any,
+  arg2: any,
+  arg3?: any,
+  arg4?: any
 ): Promise<T> {
-  // Fallback to mock/demo mode if no backend configured
+  // Determine token (param has priority, else from store)
+  let token: string | undefined = typeof arg4 === 'string' ? arg4 : typeof arg3 === 'string' ? arg3 : undefined;
+  if (!token) {
+    try { token = getAuthToken?.() || undefined; } catch { /* ignore */ }
+  }
+
+  // Legacy signature: (service, messages, options?, token?)
+  if (typeof arg1 === 'string' && Array.isArray(arg2)) {
+    const inputService = arg1 as string;
+    const service: AIServiceType = (Object.keys(AI_ENDPOINTS) as AIServiceType[]).includes(inputService as AIServiceType)
+      ? (inputService as AIServiceType)
+      : 'openai';
+    const messages = arg2 as AIMessage[];
+    const options = (typeof arg3 === 'object' && !Array.isArray(arg3)) ? (arg3 as AIRequestOptions) : undefined;
+
+    // Fallback to demo mode
+    if (!USE_REAL_API) {
+      return generateMockAIResponse({ messages, options, service }) as unknown as T;
+    }
+
+    const url = `${API_BASE_URL}${AI_ENDPOINTS[service]}`;
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const body = JSON.stringify({ messages, ...(options || {}) });
+
+    const response = await fetch(url, { method: 'POST', headers, body });
+    if (!response.ok) {
+      throw new Error(`AI request failed: ${response.status} ${response.statusText}`);
+    }
+    return response.json();
+  }
+
+  // New signature: (endpoint, data, token?)
+  const endpoint = arg1 as string;
+  const data = arg2 as SecureAIRequest;
+
   if (!USE_REAL_API) {
-    console.warn('🔒 Secure AI Proxy: Backend not configured, falling back to demo mode');
-    return generateMockAIResponse(data) as T;
+    return generateMockAIResponse(data) as unknown as T;
   }
 
   const url = `${API_BASE_URL}${endpoint}`;
-  
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  };
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (token) headers['Authorization'] = `Bearer ${token}`;
 
-  // Add authentication if token provided
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+  const response = await fetch(url, { method: 'POST', headers, body: JSON.stringify(data) });
+  if (!response.ok) {
+    throw new Error(`AI request failed: ${response.status} ${response.statusText}`);
   }
-
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      // Handle specific error cases
-      if (response.status === 401) {
-        throw new Error('Authentication failed: Invalid or expired token');
-      }
-      if (response.status === 429) {
-        throw new Error('Rate limit exceeded: Please try again later');
-      }
-      if (response.status === 503) {
-        throw new Error('AI service temporarily unavailable');
-      }
-      
-      const errorText = await response.text();
-      throw new Error(`AI Proxy API request failed: ${response.status} ${response.statusText} - ${errorText}`);
-    }
-
-    return response.json();
-  } catch (error) {
-    if (error instanceof Error) {
-      throw error;
-    }
-    throw new Error(`AI Proxy request failed: ${String(error)}`);
-  }
+  return response.json();
 }
 
 /**
