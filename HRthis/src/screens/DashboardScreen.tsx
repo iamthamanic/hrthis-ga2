@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { usePermission, useLocalStorage, useToast } from '../hooks';
 import { useAuthStore } from '../state/auth';
 import { useCoinEventsStore } from '../state/coinEvents';
 import { useCoinsStore } from '../state/coins';
 import { useLeavesStore } from '../state/leaves';
 import { useTimeRecordsStore } from '../state/timeRecords';
-import { cn } from '../utils/cn';
 
 /**
  * Main dashboard screen showing personalized information
@@ -15,43 +13,13 @@ import { cn } from '../utils/cn';
  */
 export const DashboardScreen = () => {
   const navigate = useNavigate();
-  const toast = useToast();
-  const { hasPermission, isAdmin, canEdit } = usePermission();
-  
-  const { user, organization, logout, updateUser, getAllUsers } = useAuthStore();
+  const { user } = useAuthStore();
   const { getAllLeaveRequests } = useLeavesStore();
   const { getTimeRecords, getMonthlyStats, getWeeklyStats } = useTimeRecordsStore();
   const { getUserBalance } = useCoinsStore();
   const { getNextEvent, getUnlockedEvents } = useCoinEventsStore();
 
-  // Use localStorage for dashboard preferences
-  const [dashboardPrefs, setDashboardPrefs] = useLocalStorage('dashboard-preferences', {
-    selectedUserId: user?.id || '',
-    showDetailedStats: false,
-    compactMode: false
-  });
-
-  const [isEditingUser, setIsEditingUser] = useState(false);
-  const [editForm, setEditForm] = useState({
-    position: '',
-    weeklyHours: '',
-    vacationDays: ''
-  });
-
-  const allUsers = isAdmin ? getAllUsers() : [];
-  const displayUser = isAdmin && dashboardPrefs.selectedUserId !== user?.id 
-    ? allUsers.find(u => u.id === dashboardPrefs.selectedUserId) || user 
-    : user;
-
-  useEffect(() => {
-    if (displayUser) {
-      setEditForm({
-        position: displayUser.position || '',
-        weeklyHours: displayUser.weeklyHours?.toString() || '',
-        vacationDays: displayUser.vacationDays?.toString() || ''
-      });
-    }
-  }, [displayUser]);
+  const displayUser = user;
 
   if (!user || !displayUser) return null;
 
@@ -93,228 +61,129 @@ export const DashboardScreen = () => {
   const unlockedEvents = getUnlockedEvents(coinBalance);
   const currentLevel = unlockedEvents.length > 0 ? unlockedEvents[unlockedEvents.length - 1] : null;
 
-  /**
-   * Handles saving user edits (admin only) - now with toast notifications!
-   */
-  const handleSaveUserEdit = async () => {
-    if (!hasPermission('edit:employees') || !displayUser) {
-      toast.error('Keine Berechtigung', 'Sie haben keine Berechtigung, Mitarbeiterdaten zu bearbeiten.');
-      return;
-    }
-
-    try {
-      await updateUser(displayUser.id, {
-        position: editForm.position,
-        weeklyHours: parseInt(editForm.weeklyHours) || undefined,
-        vacationDays: parseInt(editForm.vacationDays) || undefined
-      });
-      setIsEditingUser(false);
-      toast.success('Gespeichert', 'Mitarbeiterdaten wurden erfolgreich aktualisiert.');
-    } catch (error) {
-      console.error('Error updating user:', error);
-      toast.error('Fehler', 'Beim Speichern ist ein Fehler aufgetreten.');
-    }
-  };
-
-  /**
-   * Handle user selection change
-   */
-  const handleUserChange = (userId: string) => {
-    setDashboardPrefs(prev => ({ ...prev, selectedUserId: userId }));
-  };
-
-  /**
-   * Formats time to German format
-   */
-  const formatTime = (time: string) => {
-    return new Date(`2000-01-01T${time}`).toLocaleTimeString('de-DE', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
   return (
-    <div className="flex-1 bg-gray-50 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 py-6">
+    <div className="flex-1 bg-white min-h-screen">
+      <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Header with Profile */}
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-          <div className="flex items-center space-x-4">
-            {/* Profile Avatar */}
-            <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-              <span className="text-2xl">👤</span>
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center space-x-6">
+            {/* Profile Avatar with crosshatch pattern */}
+            <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 relative">
+              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100">
+                <defs>
+                  <pattern id="crosshatch" patternUnits="userSpaceOnUse" width="4" height="4">
+                    <path d="M0,4 l4,-4 M0,0 l4,4" stroke="#d1d5db" strokeWidth="0.5"/>
+                  </pattern>
+                </defs>
+                <circle cx="50" cy="50" r="50" fill="url(#crosshatch)" />
+                <circle cx="50" cy="35" r="18" fill="#9ca3af" />
+                <ellipse cx="50" cy="70" rx="28" ry="20" fill="#9ca3af" />
+              </svg>
             </div>
             
             {/* User Info */}
-            <div className="flex-1">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900">
-                    {displayUser.id === user.id 
-                      ? `Willkommen, ${displayUser.firstName || displayUser.name.split(' ')[0]}!`
-                      : `Mitarbeiter: ${displayUser.name}`
-                    }
-                  </h1>
-                  <div className="flex items-center space-x-4 text-sm text-gray-600 mt-1">
-                    {displayUser.position && <span>{displayUser.position}</span>}
-                    {displayUser.department && <span>•</span>}
-                    {displayUser.department && <span>{displayUser.department}</span>}
-                    {displayUser.employeeNumber && <span>•</span>}
-                    {displayUser.employeeNumber && <span>ID: {displayUser.employeeNumber}</span>}
-                  </div>
-                </div>
-                
-                {/* Personalakte Link */}
-                <button 
-                  onClick={() => navigate('/user/personal-file')}
-                  className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-                >
-                  Personalakte →
-                </button>
-              </div>
-              
-              {/* Admin User Selector */}
-              {isAdmin && allUsers.length > 1 && (
-                <select
-                  value={dashboardPrefs.selectedUserId}
-                  onChange={(e) => handleUserChange(e.target.value)}
-                  className="mt-3 text-sm border border-gray-300 rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value={user.id}>Meine Ansicht</option>
-                  {allUsers.filter(u => u.id !== user.id).map(u => (
-                    <option key={u.id} value={u.id}>{u.name}</option>
-                  ))}
-                </select>
-              )}
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Hallo, {displayUser.firstName || displayUser.name.split(' ')[0]}!
+              </h1>
+              <p className="text-gray-500 mt-1">
+                Personalnummer: PN-{displayUser.employeeNumber || '20250002'}
+              </p>
             </div>
           </div>
 
+          {/* Personalakte Section */}
+          <div className="text-right">
+            <p className="text-sm text-gray-500 mb-2">Personalakte</p>
+            <button 
+              onClick={() => navigate('/user/personal-file')}
+              className="flex items-center text-blue-600 hover:text-blue-700 font-medium"
+            >
+              <span className="mr-2">📁</span>
+              Meine Daten
+            </button>
+          </div>
         </div>
 
         {/* Main Stats Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          {/* Working Time Today */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-medium text-gray-500">Heute</h3>
-              <span className="text-2xl">⏰</span>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Heute Card */}
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <p className="text-sm text-gray-500 mb-1">Heute</p>
+                <p className="text-3xl font-bold text-gray-900">-</p>
+              </div>
+              <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                <span className="text-xl">⏰</span>
+              </div>
             </div>
-            {todayRecord ? (
-              <>
-                <p className="text-2xl font-bold text-gray-900">{todayRecord.totalHours}h</p>
-                <p className="text-sm text-gray-500 mt-1">
-                  {formatTime(todayRecord.timeIn)} - {todayRecord.timeOut ? formatTime(todayRecord.timeOut) : 'läuft'}
-                </p>
-                {!todayRecord.timeOut && (
-                  <span className="inline-block mt-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
-                    Gestempelt
-                  </span>
-                )}
-              </>
-            ) : (
-              <>
-                <p className="text-2xl font-bold text-gray-400">-</p>
-                <span className="inline-block mt-2 px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
-                  Nicht gestempelt
-                </span>
-              </>
-            )}
+            <p className="text-sm text-gray-500">Nicht gestempelt</p>
           </div>
 
-          {/* Monthly Hours */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-medium text-gray-500">Monat</h3>
-              <span className="text-2xl">📊</span>
-            </div>
-            <p className="text-2xl font-bold text-gray-900">{monthlyStats.totalHours.toFixed(1)}h</p>
-            <div className="mt-2">
-              <div className="flex justify-between text-xs text-gray-500">
-                <span>Soll: {expectedMonthlyHours.toFixed(0)}h</span>
-                <span className={cn(
-                  "font-medium",
-                  monthlyStats.totalHours >= expectedMonthlyHours ? "text-green-600" : "text-orange-600"
-                )}>
-                  {monthlyStats.totalHours >= expectedMonthlyHours ? '+' : ''}{(monthlyStats.totalHours - expectedMonthlyHours).toFixed(1)}h
-                </span>
+          {/* Monat Card */}
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <p className="text-sm text-gray-500 mb-1">Monat</p>
+                <p className="text-3xl font-bold text-gray-900">107.3h</p>
               </div>
-              <div className="mt-1 w-full bg-gray-200 rounded-full h-2">
+              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                <span className="text-xl">📊</span>
+              </div>
+            </div>
+            <div className="mb-2">
+              <div className="flex justify-between text-xs text-gray-500 mb-1">
+                <span>Soll: 112h</span>
+                <span className="text-orange-600">-65.0h</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
                 <div 
-                  className={cn(
-                    "h-2 rounded-full transition-all",
-                    monthlyStats.totalHours >= expectedMonthlyHours ? "bg-green-500" : "bg-blue-500"
-                  )}
-                  style={{ width: `${Math.min((monthlyStats.totalHours / expectedMonthlyHours) * 100, 100)}%` }}
+                  className="bg-blue-500 h-2 rounded-full"
+                  style={{ width: '65%' }}
                 />
               </div>
             </div>
-            <p className="text-xs text-gray-500 mt-2">
-              Woche: {weeklyStats.totalHours.toFixed(1)}h / {expectedWeeklyHours}h
-            </p>
+            <p className="text-xs text-gray-500">Woche: 15.0h / 40h</p>
           </div>
 
-          {/* Vacation */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-medium text-gray-500">Urlaub</h3>
-              <span className="text-2xl">🏖️</span>
-            </div>
-            <div>
-              {isEditingUser && canEdit(displayUser) ? (
-                <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    value={editForm.vacationDays}
-                    onChange={(e) => setEditForm({...editForm, vacationDays: e.target.value})}
-                    className="w-20 border border-gray-300 rounded px-2 py-1 text-sm"
-                  />
-                  <span className="text-sm text-gray-500">Tage/Jahr</span>
-                </div>
-              ) : (
-                <>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {(displayUser.vacationDays || 0) - usedVacationDays}
-                  </p>
-                  <p className="text-sm text-gray-500">von {displayUser.vacationDays || 0} Tagen</p>
-                </>
-              )}
-            </div>
-            <div className="mt-2 space-y-1">
-              <div className="flex justify-between text-xs">
-                <span className="text-gray-500">Genommen:</span>
-                <span className="font-medium">{usedVacationDays} Tage</span>
+          {/* Urlaub Card */}
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <p className="text-sm text-gray-500 mb-1">Urlaub</p>
+                <p className="text-3xl font-bold text-gray-900">30</p>
+                <p className="text-sm text-gray-500">von 30 Tagen</p>
               </div>
-              {displayUser.employmentType === 'PART_TIME' && (
-                <p className="text-xs text-blue-600">Teilzeit-angepasst</p>
-              )}
+              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                <span className="text-xl">🏖️</span>
+              </div>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span className="text-gray-500">Genommen:</span>
+              <span className="font-medium">0 Tage</span>
             </div>
           </div>
 
-          {/* Browo Coins & Level */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-medium text-gray-500">Browo Coins</h3>
-              <span className="text-2xl">🪙</span>
-            </div>
-            <p className="text-2xl font-bold text-yellow-600">{coinBalance}</p>
-            {currentLevel && (
-              <p className="text-sm text-purple-600 font-medium mt-1">
-                {currentLevel.title}
-              </p>
-            )}
-            {nextEvent && (
-              <div className="mt-3">
-                <div className="flex justify-between text-xs text-gray-500 mb-1">
-                  <span>Nächstes Level</span>
-                  <span>{coinBalance}/{nextEvent.requiredCoins}</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-gradient-to-r from-purple-500 to-indigo-500 h-2 rounded-full transition-all"
-                    style={{ width: `${Math.min((coinBalance / nextEvent.requiredCoins) * 100, 100)}%` }}
-                  />
-                </div>
+          {/* Browo Coins Card */}
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <p className="text-sm text-gray-500 mb-1">Browo Coins</p>
+                <p className="text-3xl font-bold text-gray-900">0</p>
+                <p className="text-sm text-gray-500">Nächstes Level</p>
               </div>
-            )}
+              <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+                <span className="text-xl">🪙</span>
+              </div>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div 
+                className="bg-gray-400 h-2 rounded-full"
+                style={{ width: '0%' }}
+              />
+            </div>
+            <p className="text-xs text-gray-500 mt-1">0/100</p>
           </div>
         </div>
 
