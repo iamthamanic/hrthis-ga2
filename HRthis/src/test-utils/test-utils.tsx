@@ -84,10 +84,10 @@ export const waitForLoadingToFinish = async () => {
 
 // Mock navigation
 export const mockNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
-}));
+// Override useNavigate on the already mocked module from setupTests to avoid recursive mocks
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const ReactRouterDom = require('react-router-dom');
+(ReactRouterDom as any).useNavigate = () => mockNavigate;
 
 // Reset all mocks between tests
 beforeEach(() => {
