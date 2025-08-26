@@ -7,8 +7,8 @@ import { AppNavigator } from './navigation/AppNavigator';
 import { startPerformanceMonitoring } from './utils/performance-monitoring';
 import { errorTracker } from './utils/error-tracking';
 
-// Get base path from environment variable or default to empty string
-const basename = process.env.REACT_APP_BASE_PATH || '';
+// Get base path from environment variable or default to "/hrthis"
+const basename = process.env.REACT_APP_BASE_PATH || '/hrthis';
 
 function App(): React.JSX.Element {
   useEffect(() => {

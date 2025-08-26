@@ -4,7 +4,7 @@ Implements comprehensive security headers and protections
 """
 
 from fastapi import Request, Response
-from fastapi.middleware.base import BaseHTTPMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 from typing import Dict, Optional, Set
 import hashlib
 import secrets
@@ -148,8 +148,10 @@ class SecurityMiddleware(BaseHTTPMiddleware):
         )
         
         # Remove server header information
-        response.headers.pop("Server", None)
-        response.headers.pop("X-Powered-By", None)
+        if "server" in response.headers:
+            del response.headers["server"]
+        if "x-powered-by" in response.headers:
+            del response.headers["x-powered-by"]
     
     def add_request_id(self, request: Request, response: Response):
         """Add unique request ID for tracking"""
