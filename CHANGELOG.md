@@ -7,7 +7,50 @@ und dieses Projekt hält sich an [Semantic Versioning](https://semver.org/spec/v
 
 ## [Unreleased]
 
-### 🚀 Added - 2025-01-21
+### 🚀 Added - 2025-08-26
+- **Profile Avatar System**
+  - Profile avatars integrated across all screens
+  - Comprehensive avatar customization system
+  - User profile management with avatar display
+  - Avatar integration in navigation, dashboard, and user interface
+
+- **Documents Management Feature** 
+  - Complete document management system
+  - File upload and organization capabilities
+  - Document categorization and search
+  - Secure document storage and access control
+
+- **Enhanced Dashboard Design**
+  - Updated dashboard to match exact design specification
+  - Improved UI/UX consistency across components
+  - Enhanced visual design and user experience
+  - Better responsive design implementation
+
+### 🧪 Improved - 2025-08-26
+- **Test Suite Enhancement**
+  - Comprehensive test improvements across the application
+  - Enhanced error boundary testing with retry functionality
+  - Improved API client test coverage
+  - Better mock implementations for testing
+  - Enhanced component testing for screens and hooks
+  - Improved toast notification testing
+  - Pipeline testing improvements
+  - Calendar export functionality testing
+
+### 🔧 Technical Improvements - 2025-08-26
+- **API Client Enhancements**
+  - Secure AI proxy implementations
+  - Enhanced error handling and boundaries
+  - Improved authentication flow testing
+  - Better state management testing
+
+- **Component Architecture**
+  - Enhanced error boundaries with retry capabilities
+  - Improved toast notification system
+  - Better screen component organization
+  - Enhanced utility functions and exports
+
+### 🚀 Previous Updates - 2025-01-21
 - **Komplettes E2E Test-System mit Docker**
   - `docker-compose.test.yml` für isolierten Test-Stack
   - PostgreSQL Test-Datenbank mit Seed-Daten

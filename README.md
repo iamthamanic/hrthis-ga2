@@ -6,10 +6,11 @@ Ein umfassendes HR-Management-System mit React Frontend und FastAPI Backend für
 
 - **Dashboard** mit KPI-Übersicht und Echtzeit-Metriken
 - **Mitarbeiterverwaltung** mit automatischen Mitarbeiternummern
+- **Profile Avatar System** mit umfangreicher Anpassung und Integration
 - **Zeit & Urlaub** Management mit Kalenderansicht
 - **Lern-Management-System** mit Video-Lektionen und Fortschrittsverfolgung
 - **Benefits-Verwaltung** mit Coins-System
-- **Dokumenten-Management** für Mitarbeiterunterlagen
+- **Dokumenten-Management** für Mitarbeiterunterlagen mit Kategorisierung
 - **Admin-Bereich** für Systemverwaltung
 - **JWT-basierte Authentifizierung** für sichere Anmeldung
 - **Responsive Design** für Desktop und Mobile
@@ -440,5 +441,33 @@ Bei Fragen oder Problemen:
 
 ---
 
-**Version:** 2.3.0  
-**Letztes Update:** 2025-01-19
+**Version:** 2.4.0  
+**Letztes Update:** 2025-08-26
+
+---
+
+## 🆕 Was ist neu in Version 2.4.0
+
+### ✨ Profile Avatar System
+- **Vollständige Avatar-Integration** auf allen Bildschirmen
+- **Umfassende Anpassungsoptionen** für Benutzerprofile
+- **Avatar-Management** mit personalisierten Darstellungen
+- **Nahtlose Navigation** mit Avatar-Anzeige
+
+### 📁 Erweiterte Dokumentenverwaltung
+- **Kategorisierte Dokumentenorganisation** (Vertrag, Zertifikat, Lohnabrechnung, Sonstige)
+- **Intelligente Dokumentensuche** und -filterung
+- **Sichere Dateispeicherung** mit Zugriffskontrolle
+- **Benutzerfreundliche Upload-Funktionen**
+
+### 🎨 Verbessertes Dashboard-Design
+- **Pixel-perfekte Designumsetzung** nach Spezifikation
+- **Konsistente UI/UX** über alle Komponenten
+- **Verbesserte Responsivität** für alle Gerätetypen
+- **Optimierte Benutzerführung**
+
+### 🧪 Robuste Test-Infrastructure
+- **Umfassende Testabdeckung** für alle neuen Features
+- **Verbesserte Error-Boundary** Tests mit Retry-Funktionalität
+- **Erweiterte API-Client** Testsuiten
+- **Stabilere Mock-Implementierungen**
