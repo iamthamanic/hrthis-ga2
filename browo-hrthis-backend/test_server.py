@@ -10,13 +10,18 @@ os.chdir('/Users/halteverbotsocialmacpro/Desktop/arsvivai/HRthis/browo-hrthis-ba
 sys.path.insert(0, '.')
 
 from app.main import app
-from app.core.database import SessionLocal
+from app.core.database import SessionLocal, create_tables
 from app.models.employee import Employee
 from app.schemas.employee import EmployeeResponse, EmployeeList
 
 # Test the conversion directly
 def test_conversion():
     print("Testing conversion...")
+    # Ensure tables exist before querying
+    try:
+        create_tables()
+    except Exception as e:
+        print(f"Warning: could not create tables: {e}")
     db = SessionLocal()
     try:
         employees = db.query(Employee).all()

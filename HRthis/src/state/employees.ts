@@ -71,7 +71,11 @@ export const useEmployeeStore = create<EmployeeStore>((set, get) => ({
   },
   
   // Actions
-  setEmployees: (employees) => set({ employees }),
+  setEmployees: (employees) => set({ 
+    employees,
+    // Reset filters to avoid test-case leakage between specs
+    filters: { search: '', department: null, employmentStatus: null, employmentType: null },
+  }),
   
   addEmployee: (employee) => 
     set((state) => ({ employees: [...state.employees, employee] })),

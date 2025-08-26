@@ -4,13 +4,12 @@ SQLAlchemy model for employee data including all new HR features
 """
 
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, Text, Enum, JSON
-from sqlalchemy.ext.declarative import declarative_base
+from app.core.database import Base
 from sqlalchemy.sql import func
 from datetime import datetime
 from enum import Enum as PyEnum
 from typing import Optional
 
-Base = declarative_base()
 
 class EmploymentType(PyEnum):
     FULLTIME = "FULLTIME"

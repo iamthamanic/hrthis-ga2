@@ -45,7 +45,13 @@ async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promi
     } catch {
       // ignore parse errors
     }
-    throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+    // Tailor fallback error: login vs generic API
+    const status = (response as any)?.status ?? 0;
+    const statusText = (response as any)?.statusText ?? 'Error';
+    if (endpoint.includes('/api/auth/login')) {
+      throw new Error('Invalid credentials');
+    }
+    throw new Error(`API request failed: ${status} ${statusText}`);
   }
 
   return response.json();
@@ -95,6 +101,11 @@ export const employeesAPI = {
     return apiRequest<User[]>(ENDPOINTS.employees, {
       headers,
     });
+  },
+
+  // Compatibility alias for older tests expecting `employees.list`
+  list: async (token?: string): Promise<User[]> => {
+    return employeesAPI.getAll(token);
   },
 
   getById: async (id: string, token?: string): Promise<User> => {

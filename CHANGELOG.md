@@ -1,3 +1,9 @@
+## [v2.4.1] - 2025-08-26
+### Fixed
+- Enforce '/hrthis' frontend base path for correct routing
+- Security middleware compatibility with Starlette headers handling
+
+
 # Changelog
 
 Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert.

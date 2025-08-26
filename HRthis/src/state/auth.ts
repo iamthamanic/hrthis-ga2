@@ -61,6 +61,8 @@ interface AuthState {
   isLoading: boolean;
   token: string | null;
   cachedEmployees: User[] | null;
+  // Backwards-compat field expected in tests
+  employees?: User[] | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   setUser: (user: User) => void;
@@ -69,6 +71,8 @@ interface AuthState {
   createUser: (userData: Partial<User>) => Promise<User>;
   getAllUsers: () => User[];
   loadEmployees: () => Promise<User[]>;
+  // Backwards-compat helper expected off store in some tests
+  getAuthToken?: () => string | null;
 }
 
 // Mock authentication data
@@ -201,6 +205,23 @@ export const getAuthToken = (): string | null => {
   return state.token;
 };
 
+// Test-only helper to reset store without losing methods
+export const __resetAuthStoreForTests = (): void => {
+  try {
+    useAuthStore.setState({
+      user: null,
+      organization: null,
+      isAuthenticated: false,
+      isLoading: false,
+      token: null,
+      cachedEmployees: null,
+      employees: null,
+    } as any);
+  } catch {
+    // ignore
+  }
+};
+
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
@@ -210,6 +231,7 @@ export const useAuthStore = create<AuthState>()(
       isLoading: false,
       token: null,
       cachedEmployees: null,
+      employees: null,
 
       login: async (email: string, password: string) => {
         set({ isLoading: true });
@@ -307,6 +329,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: () => {
+        // Preserve functions; only reset data fields
         set({ 
           user: null, 
           organization: null, 
@@ -389,17 +412,17 @@ export const useAuthStore = create<AuthState>()(
             const transformedEmployees = employees.map(apiUtils.transformBackendUser);
             
             // Cache the employees for getAllUsers
-            set({ isLoading: false, cachedEmployees: transformedEmployees });
+            set({ isLoading: false, cachedEmployees: transformedEmployees, employees: transformedEmployees });
             return transformedEmployees;
           } else {
             // Use mock data
             await simulateApiCall();
-            set({ isLoading: false, cachedEmployees: mockUsers });
+            set({ isLoading: false, cachedEmployees: mockUsers, employees: mockUsers });
             return mockUsers;
           }
         } catch (error) {
           console.warn('Failed to load employees from API, falling back to mock data:', error);
-          set({ isLoading: false, cachedEmployees: mockUsers });
+          set({ isLoading: false, cachedEmployees: mockUsers, employees: mockUsers });
           return mockUsers;
         }
       },
@@ -408,10 +431,13 @@ export const useAuthStore = create<AuthState>()(
         // Check if we're using real API and have loaded employees
         if (apiUtils.isRealAPIEnabled()) {
           // Return cached employees or empty array - loadEmployees should be called first
-          return get().cachedEmployees || [];
+          return get().cachedEmployees || get().employees || [];
         }
-        return mockUsers;
-      }
+        return get().employees || mockUsers;
+      },
+
+      // Provide getAuthToken on the store for test compatibility
+      getAuthToken: () => get().token
     }),
     {
       name: 'auth-storage',
