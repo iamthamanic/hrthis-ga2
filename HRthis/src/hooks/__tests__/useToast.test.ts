@@ -2,13 +2,20 @@ import { renderHook, act } from '@testing-library/react';
 
 import { useToast } from '../ui/useToast';
 
+// Import the store to reset it between tests
+import { useToastStore } from '../ui/useToast';
+
 describe('useToast', () => {
   beforeEach(() => {
     jest.useFakeTimers();
+    // Reset the toast store before each test
+    useToastStore.setState({ toasts: [] });
   });
 
   afterEach(() => {
     jest.useRealTimers();
+    // Clear all toasts after each test
+    useToastStore.setState({ toasts: [] });
   });
 
   it('should initialize with no toasts', () => {
@@ -25,7 +32,7 @@ describe('useToast', () => {
 
     expect(result.current.toasts).toHaveLength(1);
     expect(result.current.toasts[0]).toMatchObject({
-      message: 'Test message',
+      title: 'Test message',
       type: 'success'
     });
   });
@@ -40,9 +47,9 @@ describe('useToast', () => {
     });
 
     expect(result.current.toasts).toHaveLength(3);
-    expect(result.current.toasts[0].message).toBe('First message');
-    expect(result.current.toasts[1].message).toBe('Second message');
-    expect(result.current.toasts[2].message).toBe('Third message');
+    expect(result.current.toasts[0].title).toBe('First message');
+    expect(result.current.toasts[1].title).toBe('Second message');
+    expect(result.current.toasts[2].title).toBe('Third message');
   });
 
   it('should generate unique IDs for toasts', () => {
@@ -185,9 +192,9 @@ describe('useToast', () => {
       result.current.showToast('Third', 'info');
     });
 
-    expect(result.current.toasts[0].message).toBe('First');
-    expect(result.current.toasts[1].message).toBe('Second');
-    expect(result.current.toasts[2].message).toBe('Third');
+    expect(result.current.toasts[0].title).toBe('First');
+    expect(result.current.toasts[1].title).toBe('Second');
+    expect(result.current.toasts[2].title).toBe('Third');
   });
 
   it('should handle removing non-existent toast gracefully', () => {

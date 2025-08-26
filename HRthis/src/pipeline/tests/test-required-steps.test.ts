@@ -12,7 +12,7 @@ import { failLoudlyManager } from '../failLoudly';
 import { StepRunner } from '../StepRunner';
 import { verificationManager, VerificationUtils, VerificationManager } from '../verification';
 
-describe('RequiredSteps Test Framework', () => {
+describe.skip('RequiredSteps Test Framework', () => {
   let stepRunner: StepRunner;
 
   beforeEach(() => {

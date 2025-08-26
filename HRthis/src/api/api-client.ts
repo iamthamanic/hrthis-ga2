@@ -58,6 +58,9 @@ export const authAPI = {
   login: async (email: string, password: string) => {
     return apiRequest('/api/auth/login', {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ username: email, password }),
     });
   },
@@ -106,7 +109,9 @@ export const employeesAPI = {
   },
 
   create: async (userData: Partial<User>, token?: string): Promise<User> => {
-    const headers: Record<string, string> = {};
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     }
@@ -119,7 +124,9 @@ export const employeesAPI = {
   },
 
   update: async (id: string, userData: Partial<User>, token?: string): Promise<User> => {
-    const headers: Record<string, string> = {};
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     }

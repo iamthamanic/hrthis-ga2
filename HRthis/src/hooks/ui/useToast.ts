@@ -32,8 +32,8 @@ interface ToastState {
   updateToast: (id: string, updates: Partial<Toast>) => void;
 }
 
-// Global toast store
-const useToastStore = create<ToastState>((set) => ({
+// Global toast store (exported for testing)
+export const useToastStore = create<ToastState>((set) => ({
   toasts: [],
   
   addToast: (toast) => {

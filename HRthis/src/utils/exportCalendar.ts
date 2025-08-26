@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import de from 'date-fns/locale/de';
+import { de } from 'date-fns/locale';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -58,9 +58,12 @@ export const exportToCSV = (
   
   // Sort entries by date and user
   const sortedEntries = [...entries].sort((a, b) => {
-    const dateCompare = a.date.localeCompare(b.date);
+    // Ensure dates are strings for comparison
+    const dateA = typeof a.date === 'string' ? a.date : a.date.toISOString();
+    const dateB = typeof b.date === 'string' ? b.date : b.date.toISOString();
+    const dateCompare = dateA.localeCompare(dateB);
     if (dateCompare !== 0) return dateCompare;
-    return a.userName.localeCompare(b.userName);
+    return (a.userName || '').localeCompare(b.userName || '');
   });
   
   // Add each entry as a row

@@ -1,107 +1,172 @@
-import { exportToICS, formatEventDescription, createICSEvent } from './exportCalendar';
+// Mock date-fns to avoid ESM issues
+jest.mock('date-fns', () => ({
+  format: jest.fn((date, formatStr) => {
+    if (formatStr === 'dd.MM.yyyy') {
+      return '01.01.2024';
+    }
+    if (formatStr === 'HH:mm') {
+      return '09:00';
+    }
+    if (formatStr === "yyyyMMdd'T'HHmmss") {
+      return '20240101T090000';
+    }
+    return '2024-01-01';
+  })
+}));
+
+jest.mock('date-fns/locale', () => ({
+  de: {}
+}));
+
+jest.mock('jspdf');
+jest.mock('jspdf-autotable');
+
+import { exportToCSV, exportToPDF } from './exportCalendar';
 
 describe('Calendar Export Utils', () => {
-  describe('formatEventDescription', () => {
-    it('should format event description correctly', () => {
-      const description = formatEventDescription(
-        'Team Meeting',
-        'Conference Room A',
-        'Discuss Q4 goals'
-      );
-      
-      expect(description).toContain('Team Meeting');
-      expect(description).toContain('Conference Room A');
-      expect(description).toContain('Discuss Q4 goals');
-    });
+  const mockEntries = [
+    {
+      id: '1',
+      date: new Date('2024-01-01'),
+      type: 'holiday' as const,
+      title: 'Neujahr',
+      description: 'Feiertag',
+      status: 'approved' as const,
+      isAllDay: true
+    },
+    {
+      id: '2',
+      date: new Date('2024-01-02'),
+      type: 'vacation' as const,
+      title: 'Urlaub',
+      description: 'Jahresurlaub',
+      status: 'pending' as const,
+      isAllDay: true
+    }
+  ];
 
-    it('should handle missing fields gracefully', () => {
-      const description = formatEventDescription('Meeting');
-      expect(description).toContain('Meeting');
-    });
-  });
+  const mockDateRange = {
+    start: new Date('2024-01-01'),
+    end: new Date('2024-01-31')
+  };
 
-  describe('createICSEvent', () => {
-    it('should create valid ICS event string', () => {
-      const event = {
-        title: 'Test Event',
-        start: new Date('2024-01-15T10:00:00'),
-        end: new Date('2024-01-15T11:00:00'),
-        description: 'Test Description',
-        location: 'Test Location'
-      };
-      
-      const icsEvent = createICSEvent(event);
-      
-      expect(icsEvent).toContain('BEGIN:VEVENT');
-      expect(icsEvent).toContain('END:VEVENT');
-      expect(icsEvent).toContain('SUMMARY:Test Event');
-      expect(icsEvent).toContain('DESCRIPTION:Test Description');
-      expect(icsEvent).toContain('LOCATION:Test Location');
-    });
-  });
-
-  describe('exportToICS', () => {
-    // Mock URL.createObjectURL and document.createElement
-    const mockCreateObjectURL = jest.fn(() => 'blob:mock-url');
-    const mockRevokeObjectURL = jest.fn();
-    const mockClick = jest.fn();
-    
+  describe('exportToCSV', () => {
     beforeEach(() => {
-      global.URL.createObjectURL = mockCreateObjectURL;
-      global.URL.revokeObjectURL = mockRevokeObjectURL;
+      // Mock DOM methods
+      global.URL.createObjectURL = jest.fn(() => 'blob:mock-url');
+      global.URL.revokeObjectURL = jest.fn();
       
-      jest.spyOn(document, 'createElement').mockImplementation((tagName) => {
+      // Mock document.createElement with proper element
+      const mockLink = document.createElement('a');
+      mockLink.click = jest.fn();
+      mockLink.remove = jest.fn();
+      mockLink.setAttribute = jest.fn();
+      
+      const originalCreateElement = document.createElement;
+      document.createElement = jest.fn((tagName: string) => {
         if (tagName === 'a') {
-          return {
-            click: mockClick,
-            href: '',
-            download: '',
-            style: {},
-          } as any;
+          return mockLink;
         }
-        return document.createElement(tagName);
+        return originalCreateElement.call(document, tagName);
       });
+      document.body.appendChild = jest.fn();
     });
 
     afterEach(() => {
-      jest.restoreAllMocks();
+      jest.clearAllMocks();
     });
 
-    it('should export single event to ICS file', () => {
-      const event = {
-        id: '1',
-        title: 'Meeting',
-        start: new Date('2024-01-15T10:00:00'),
-        end: new Date('2024-01-15T11:00:00'),
+    it('should export entries to CSV file', () => {
+      exportToCSV(mockEntries, mockDateRange);
+
+      expect(document.createElement).toHaveBeenCalledWith('a');
+      expect(global.URL.createObjectURL).toHaveBeenCalled();
+    });
+
+    it('should handle empty entries array', () => {
+      exportToCSV([], mockDateRange);
+
+      expect(document.createElement).toHaveBeenCalledWith('a');
+      expect(global.URL.createObjectURL).toHaveBeenCalled();
+    });
+
+    it('should create CSV with proper filename', () => {
+      exportToCSV(mockEntries, mockDateRange);
+
+      const mockLink = document.createElement('a');
+      expect(mockLink.download).toContain('.csv');
+    });
+  });
+
+  describe('exportToPDF', () => {
+    beforeEach(() => {
+      // Mock jsPDF methods
+      const mockJsPDF = {
+        setFontSize: jest.fn(),
+        text: jest.fn(),
+        setFont: jest.fn(),
+        setTextColor: jest.fn(),
+        setDrawColor: jest.fn(),
+        setLineWidth: jest.fn(),
+        line: jest.fn(),
+        save: jest.fn(),
+        internal: {
+          pageSize: {
+            width: 210,
+            height: 297
+          }
+        },
+        autoTable: jest.fn()
       };
-      
-      exportToICS([event], 'test-calendar.ics');
-      
-      expect(mockCreateObjectURL).toHaveBeenCalled();
-      expect(mockClick).toHaveBeenCalled();
-      expect(mockRevokeObjectURL).toHaveBeenCalled();
+
+      const jsPDF = require('jspdf');
+      jsPDF.default = jest.fn(() => mockJsPDF);
+      jsPDF.jsPDF = jest.fn(() => mockJsPDF);
     });
 
-    it('should export multiple events to ICS file', () => {
-      const events = [
-        {
-          id: '1',
-          title: 'Meeting 1',
-          start: new Date('2024-01-15T10:00:00'),
-          end: new Date('2024-01-15T11:00:00'),
-        },
-        {
-          id: '2',
-          title: 'Meeting 2',
-          start: new Date('2024-01-16T14:00:00'),
-          end: new Date('2024-01-16T15:00:00'),
-        },
-      ];
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should export entries to PDF file', () => {
+      const jsPDF = require('jspdf');
+      const mockInstance = new jsPDF.jsPDF();
       
-      exportToICS(events, 'meetings.ics');
+      exportToPDF(mockEntries, mockDateRange, 'John Doe');
+
+      expect(jsPDF.jsPDF).toHaveBeenCalled();
+      expect(mockInstance.save).toHaveBeenCalled();
+    });
+
+    it('should handle empty entries array', () => {
+      const jsPDF = require('jspdf');
+      const mockInstance = new jsPDF.jsPDF();
       
-      expect(mockCreateObjectURL).toHaveBeenCalled();
-      expect(mockClick).toHaveBeenCalled();
+      exportToPDF([], mockDateRange, 'John Doe');
+
+      expect(jsPDF.jsPDF).toHaveBeenCalled();
+      expect(mockInstance.save).toHaveBeenCalled();
+    });
+
+    it('should include employee name in PDF', () => {
+      const jsPDF = require('jspdf');
+      const mockInstance = new jsPDF.jsPDF();
+      
+      exportToPDF(mockEntries, mockDateRange, 'Jane Smith');
+
+      expect(jsPDF.jsPDF).toHaveBeenCalled();
+      expect(mockInstance.text).toHaveBeenCalled();
+    });
+
+    it('should create PDF with proper filename', () => {
+      const jsPDF = require('jspdf');
+      const mockInstance = new jsPDF.jsPDF();
+      
+      exportToPDF(mockEntries, mockDateRange, 'John Doe');
+
+      expect(mockInstance.save).toHaveBeenCalledWith(
+        expect.stringContaining('.pdf')
+      );
     });
   });
 });

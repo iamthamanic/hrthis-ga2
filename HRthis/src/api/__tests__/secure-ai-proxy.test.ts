@@ -1,5 +1,4 @@
 import { getAuthToken } from '../../state/auth';
-import { secureAIService, secureAIRequest } from '../secure-ai-proxy';
 
 // Mock auth token
 jest.mock('../../state/auth', () => ({
@@ -14,6 +13,9 @@ describe('Secure AI Proxy', () => {
     jest.clearAllMocks();
     (getAuthToken as jest.Mock).mockReturnValue('test-token');
     (global.fetch as jest.Mock).mockClear();
+    
+    // Reset modules to ensure clean state
+    jest.resetModules();
   });
 
   afterEach(() => {
@@ -21,107 +23,39 @@ describe('Secure AI Proxy', () => {
   });
 
   describe('secureAIRequest', () => {
-    it('should make request with proper headers', async () => {
-      const mockResponse = {
-        success: true,
-        data: { content: 'AI response' }
-      };
-
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockResponse
-      });
-
+    it('should return mock response in demo mode', async () => {
+      // Import after mocks are set up
+      const { secureAIRequest } = await import('../secure-ai-proxy');
+      
       const messages = [{ role: 'user' as const, content: 'Hello' }];
       const result = await secureAIRequest('openai', messages);
 
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('/api/ai/'),
-        expect.objectContaining({
-          method: 'POST',
-          headers: expect.objectContaining({
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer test-token'
-          })
-        })
-      );
-      expect(result).toEqual(mockResponse);
+      // In demo mode, should return mock response
+      expect(result).toHaveProperty('content');
+      expect(result.content).toContain('[OPENAI DEMO MODE]');
+      expect(result.content).toContain('Hello');
+      expect(result).toHaveProperty('usage');
     });
 
-    it('should handle request without auth token', async () => {
-      (getAuthToken as jest.Mock).mockReturnValue(null);
-
-      const mockResponse = { success: true };
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockResponse
-      });
-
-      const messages = [{ role: 'user' as const, content: 'Hello' }];
-      await secureAIRequest('openai', messages);
-
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.objectContaining({
-          headers: expect.not.objectContaining({
-            'Authorization': expect.any(String)
-          })
-        })
-      );
-    });
-
-    it('should handle API errors gracefully', async () => {
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
-        ok: false,
-        status: 500,
-        statusText: 'Internal Server Error',
-        json: async () => ({ error: 'Server error' })
-      });
-
-      const messages = [{ role: 'user' as const, content: 'Hello' }];
+    it('should handle different services in demo mode', async () => {
+      const { secureAIRequest } = await import('../secure-ai-proxy');
       
-      await expect(secureAIRequest('openai', messages)).rejects.toThrow(
-        'AI request failed: 500 Internal Server Error'
-      );
+      const services = ['openai', 'anthropic', 'grok'] as const;
+      const messages = [{ role: 'user' as const, content: 'Test message' }];
+
+      for (const service of services) {
+        const result = await secureAIRequest(service, messages);
+        
+        expect(result).toHaveProperty('content');
+        expect(result.content).toContain(`[${service.toUpperCase()} DEMO MODE]`);
+        expect(result.content).toContain('Test message');
+        expect(result).toHaveProperty('usage');
+      }
     });
 
-    it('should handle network errors', async () => {
-      (global.fetch as jest.Mock).mockRejectedValueOnce(
-        new Error('Network error')
-      );
-
-      const messages = [{ role: 'user' as const, content: 'Hello' }];
+    it('should handle options in demo mode', async () => {
+      const { secureAIRequest } = await import('../secure-ai-proxy');
       
-      await expect(secureAIRequest('openai', messages)).rejects.toThrow(
-        'Network error'
-      );
-    });
-
-    it('should validate service parameter', async () => {
-      const messages = [{ role: 'user' as const, content: 'Hello' }];
-      
-      // Invalid service should still work but use a default endpoint
-      const mockResponse = { success: true };
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockResponse
-      });
-
-      await secureAIRequest('invalid-service' as any, messages);
-      
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('/api/ai/'),
-        expect.any(Object)
-      );
-    });
-
-    it('should include optional parameters in request', async () => {
-      const mockResponse = { success: true };
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockResponse
-      });
-
       const messages = [{ role: 'user' as const, content: 'Hello' }];
       const options = {
         model: 'gpt-4',
@@ -129,89 +63,135 @@ describe('Secure AI Proxy', () => {
         maxTokens: 1000
       };
 
-      await secureAIRequest('openai', messages, options);
-
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.objectContaining({
-          body: JSON.stringify({
-            messages,
-            ...options
-          })
-        })
-      );
+      const result = await secureAIRequest('openai', messages, options);
+      
+      expect(result).toHaveProperty('content');
+      expect(result.content).toContain('[OPENAI DEMO MODE]');
     });
 
-    it('should handle streaming responses', async () => {
-      const mockResponse = { success: true, streaming: true };
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockResponse
-      });
-
+    it('should handle invalid service gracefully', async () => {
+      const { secureAIRequest } = await import('../secure-ai-proxy');
+      
       const messages = [{ role: 'user' as const, content: 'Hello' }];
-      const result = await secureAIRequest('openai', messages, { stream: true });
-
-      expect(result).toEqual(mockResponse);
+      
+      // Invalid service should default to openai
+      const result = await secureAIRequest('invalid-service' as any, messages);
+      
+      expect(result).toHaveProperty('content');
+      expect(result.content).toContain('[OPENAI DEMO MODE]');
     });
 
-    it('should respect timeout settings', async () => {
-      // Mock a delayed response
-      (global.fetch as jest.Mock).mockImplementationOnce(
-        () => new Promise(resolve => {
-          setTimeout(() => {
-            resolve({
-              ok: true,
-              json: async () => ({ success: true })
-            });
-          }, 100);
-        })
-      );
-
-      const messages = [{ role: 'user' as const, content: 'Hello' }];
+    it('should handle multiple messages', async () => {
+      const { secureAIRequest } = await import('../secure-ai-proxy');
+      
+      const messages = [
+        { role: 'system' as const, content: 'You are a helpful assistant' },
+        { role: 'user' as const, content: 'Hello' },
+        { role: 'assistant' as const, content: 'Hi there!' },
+        { role: 'user' as const, content: 'How are you?' }
+      ];
+      
       const result = await secureAIRequest('openai', messages);
+      
+      expect(result).toHaveProperty('content');
+      // Should use the last user message
+      expect(result.content).toContain('How are you?');
+    });
+  });
 
-      expect(result).toEqual({ success: true });
+  describe('service wrappers in demo mode', () => {
+    it('should handle secureOpenAIService', async () => {
+      const { secureOpenAIService } = await import('../secure-ai-proxy');
+      
+      const messages = [{ role: 'user' as const, content: 'Test' }];
+      const result = await secureOpenAIService.getTextResponse(messages);
+      
+      expect(result).toHaveProperty('content');
+      expect(result.content).toContain('[OPENAI DEMO MODE]');
     });
 
-    it('should handle different AI services', async () => {
+    it('should handle secureOpenAIService chat', async () => {
+      const { secureOpenAIService } = await import('../secure-ai-proxy');
+      
+      const result = await secureOpenAIService.getChatResponse('Test prompt');
+      
+      expect(result).toHaveProperty('content');
+      expect(result.content).toContain('[OPENAI DEMO MODE]');
+      expect(result.content).toContain('Test prompt');
+    });
+
+    it('should handle secureAnthropicService', async () => {
+      const { secureAnthropicService } = await import('../secure-ai-proxy');
+      
+      const messages = [{ role: 'user' as const, content: 'Test' }];
+      const result = await secureAnthropicService.getTextResponse(messages);
+      
+      expect(result).toHaveProperty('content');
+      expect(result.content).toContain('[ANTHROPIC DEMO MODE]');
+    });
+
+    it('should handle secureGrokService', async () => {
+      const { secureGrokService } = await import('../secure-ai-proxy');
+      
+      const messages = [{ role: 'user' as const, content: 'Test' }];
+      const result = await secureGrokService.getTextResponse(messages);
+      
+      expect(result).toHaveProperty('content');
+      expect(result.content).toContain('[GROK DEMO MODE]');
+    });
+  });
+
+  describe('unified service', () => {
+    it('should handle getResponse for all services', async () => {
+      const { secureAIService } = await import('../secure-ai-proxy');
+      
       const services = ['openai', 'anthropic', 'grok'] as const;
-      const mockResponse = { success: true };
-
+      const messages = [{ role: 'user' as const, content: 'Test' }];
+      
       for (const service of services) {
-        (global.fetch as jest.Mock).mockResolvedValueOnce({
-          ok: true,
-          json: async () => mockResponse
-        });
-
-        const messages = [{ role: 'user' as const, content: 'Hello' }];
-        const result = await secureAIRequest(service, messages);
-
-        expect(result).toEqual(mockResponse);
-        expect(global.fetch).toHaveBeenCalledWith(
-          expect.stringContaining(`/api/ai/${service}`),
-          expect.any(Object)
-        );
+        const result = await secureAIService.getResponse(service, messages);
+        
+        expect(result).toHaveProperty('content');
+        expect(result.content).toContain(`[${service.toUpperCase()} DEMO MODE]`);
       }
     });
 
-    it('should sanitize user input', async () => {
-      const mockResponse = { success: true };
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockResponse
-      });
+    it('should check backend availability', async () => {
+      const { secureAIService } = await import('../secure-ai-proxy');
+      
+      // In test environment without API URL, should return false
+      expect(secureAIService.isSecureBackendAvailable()).toBe(false);
+    });
 
-      // Potentially malicious input
-      const messages = [{
-        role: 'user' as const,
-        content: '<script>alert("XSS")</script>'
-      }];
+    it('should get backend info', async () => {
+      const { secureAIService } = await import('../secure-ai-proxy');
+      
+      const info = secureAIService.getBackendInfo();
+      
+      expect(info).toHaveProperty('baseURL');
+      expect(info).toHaveProperty('isRealAPIEnabled');
+      expect(info.isRealAPIEnabled).toBe(false);
+      expect(info.availableServices).toEqual(['openai', 'anthropic', 'grok']);
+    });
+  });
 
-      await secureAIRequest('openai', messages);
+  describe('migration helpers', () => {
+    it('should detect insecure API usage', async () => {
+      const { migrationHelpers } = await import('../secure-ai-proxy');
+      
+      // In test environment, should not detect insecure keys
+      expect(migrationHelpers.detectInsecureAPIUsage()).toBe(false);
+    });
 
-      // The request should still be made (sanitization happens on backend)
-      expect(global.fetch).toHaveBeenCalled();
+    it('should validate secure setup', async () => {
+      const { migrationHelpers } = await import('../secure-ai-proxy');
+      
+      const result = migrationHelpers.validateSecureSetup();
+      
+      expect(result).toHaveProperty('isSecure');
+      expect(result).toHaveProperty('warnings');
+      expect(result.isSecure).toBe(false); // No backend configured in test
+      expect(result.warnings).toContain('Backend API URL not configured');
     });
   });
 });

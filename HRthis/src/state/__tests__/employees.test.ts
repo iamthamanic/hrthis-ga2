@@ -194,8 +194,9 @@ describe('Employee Store', () => {
     });
 
     it('should filter by employment status', () => {
-      const employeesWithInactive = [
-        ...mockEmployees,
+      const employeesWithStatus = [
+        { ...mockEmployees[0], employmentStatus: 'ACTIVE' },
+        { ...mockEmployees[1], employmentStatus: 'ACTIVE' },
         {
           id: '3',
           email: 'inactive@example.com',
@@ -213,7 +214,7 @@ describe('Employee Store', () => {
       const { result } = renderHook(() => useEmployeeStore());
 
       act(() => {
-        result.current.setEmployees(employeesWithInactive);
+        result.current.setEmployees(employeesWithStatus);
         result.current.setFilters({ employmentStatus: 'ACTIVE' });
       });
 
@@ -243,7 +244,13 @@ describe('Employee Store', () => {
     it('should apply multiple filters', () => {
       const { result } = renderHook(() => useEmployeeStore());
 
+      const employeesWithStatus = mockEmployees.map(emp => ({
+        ...emp,
+        employmentStatus: 'ACTIVE' as const,
+      }));
+
       act(() => {
+        result.current.setEmployees(employeesWithStatus);
         result.current.setFilters({
           search: 'John',
           department: 'IT',
@@ -520,8 +527,8 @@ describe('Employee Store', () => {
       (apiClient.employees.create as jest.Mock).mockResolvedValue(createdEmployee);
 
       await act(async () => {
-        const result = await result.current.createEmployee(newEmployee, 'test-token');
-        expect(result).toEqual(createdEmployee);
+        const created = await result.current.createEmployee(newEmployee, 'test-token');
+        expect(created).toEqual(createdEmployee);
       });
 
       expect(apiClient.employees.create).toHaveBeenCalledWith(newEmployee, 'test-token');
