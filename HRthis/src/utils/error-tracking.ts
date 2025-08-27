@@ -90,10 +90,10 @@ class ErrorTracker {
   /**
    * Set user context
    */
-  setUser(user: { id: string; email: string; username?: string } | null): void {
+  setUser(_user: { id: string; email: string; username?: string } | null): void {
     if (!this.initialized) return;
 
-    // Sentry.setUser(user);
+    // Sentry.setUser(_user);
   }
 
   /**

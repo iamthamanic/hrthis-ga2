@@ -17,7 +17,7 @@ import { getEmploymentTypeLabel, EMPLOYMENT_TYPE_OPTIONS } from '../utils/employ
 export const TeamMemberDetailsScreen = () => {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
-  const { user: currentUser, getAllUsers, updateUser, loadEmployees } = useAuthStore();
+  const { user: currentUser, updateUser, loadEmployees } = useAuthStore();
   const { 
     getAllTeams, 
     getTeamsByUserId, 
