@@ -33,7 +33,7 @@ interface PerformanceData {
 class PerformanceMonitor {
   private metrics: PerformanceData[] = [];
   private reportCallback?: (data: PerformanceData) => void;
-  private batchTimer?: NodeJS.Timeout;
+  private batchTimer?: ReturnType<typeof setInterval>;
   private batchSize = 10;
   private batchInterval = 30000; // 30 seconds
 

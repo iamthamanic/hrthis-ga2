@@ -18,7 +18,7 @@ interface ErrorBoundaryProps {
  * Enhanced Error Boundary with retry mechanism and better error reporting
  */
 export class ErrorBoundaryWithRetry extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  private resetTimeoutId: NodeJS.Timeout | null = null;
+  private resetTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
   constructor(props: ErrorBoundaryProps) {
     super(props);
