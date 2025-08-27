@@ -2,9 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuthStore } from '../state/auth';
-import { useCoinEventsStore } from '../state/coinEvents';
 import { useCoinsStore } from '../state/coins';
-import { useLeavesStore } from '../state/leaves';
 import { useTimeRecordsStore } from '../state/timeRecords';
 
 /**
@@ -14,10 +12,8 @@ import { useTimeRecordsStore } from '../state/timeRecords';
 export const DashboardScreen = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { getAllLeaveRequests } = useLeavesStore();
-  const { getTimeRecords, getMonthlyStats, getWeeklyStats } = useTimeRecordsStore();
+  const { getTimeRecords } = useTimeRecordsStore();
   const { getUserBalance } = useCoinsStore();
-  const { getNextEvent, getUnlockedEvents } = useCoinEventsStore();
 
   const displayUser = user;
 
@@ -31,10 +27,7 @@ export const DashboardScreen = () => {
     const cleaned = String(rawEmpNo).replace(/^PN[-\s]?/i, '');
     return cleaned ? `PN-${cleaned}` : 'PN-—';
   })();
-  const todayDate = new Date().toISOString().split('T')[0];
-  const todayRecords = getTimeRecords(displayUser.id).filter(record => record.date === todayDate);
   const coinBalance = userBalance?.currentBalance || 0;
-  const unlockedEvents = getUnlockedEvents(coinBalance);
 
   return (
     <div className="flex-1 bg-white min-h-screen">
