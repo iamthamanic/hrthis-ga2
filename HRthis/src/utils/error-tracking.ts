@@ -199,8 +199,8 @@ export const trackMessage = (
   errorTracker.captureMessage(message, level);
 };
 
-export const setUserContext = (user: { id: string; email: string } | null): void => {
-  errorTracker.setUser(user);
+export const setUserContext = (_user: { id: string; email: string } | null): void => {
+  errorTracker.setUser(_user);
 };
 
 // Initialize on import (can be configured later)

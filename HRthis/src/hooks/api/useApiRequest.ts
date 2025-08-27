@@ -362,7 +362,7 @@ export function usePaginatedApiRequest<T>(
   const [page, setPage] = useState(1);
   const [allData, setAllData] = useState<T[]>([]);
   
-  const { data, loading, error, execute, refetch } = useApiRequest(
+  const { data, loading, error, refetch } = useApiRequest(
     () => requestFn(page, pageSize),
     [page, pageSize],
     {

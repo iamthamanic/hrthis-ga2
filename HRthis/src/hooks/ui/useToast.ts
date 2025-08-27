@@ -3,7 +3,7 @@
  * Manages toast notifications with different types and auto-dismiss functionality
  */
 
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { create } from 'zustand';
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';

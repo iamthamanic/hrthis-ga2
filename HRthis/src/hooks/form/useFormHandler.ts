@@ -3,7 +3,7 @@
  * Provides complete form state management with validation, error handling, and submission logic
  */
 
-import { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { z } from 'zod';
 
 export type FormErrors<T> = {

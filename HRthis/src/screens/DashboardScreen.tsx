@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuthStore } from '../state/auth';
@@ -33,39 +33,8 @@ export const DashboardScreen = () => {
   })();
   const todayDate = new Date().toISOString().split('T')[0];
   const todayRecords = getTimeRecords(displayUser.id).filter(record => record.date === todayDate);
-  const todayRecord = todayRecords[0];
-  
-  // Calculate monthly and weekly stats
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-  const monthlyStats = getMonthlyStats(displayUser.id, currentMonth, currentYear);
-  const weeklyStats = getWeeklyStats(displayUser.id);
-
-  // Calculate vacation usage
-  const approvedVacations = getAllLeaveRequests()
-    .filter(req => 
-      req.userId === displayUser.id && 
-      req.type === 'VACATION' && 
-      req.status === 'APPROVED' &&
-      new Date(req.startDate).getFullYear() === currentYear
-    );
-  
-  const usedVacationDays = approvedVacations.reduce((total, req) => {
-    const start = new Date(req.startDate);
-    const end = new Date(req.endDate);
-    const days = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
-    return total + days;
-  }, 0);
-
-  // Calculate working hours based on employment type
-  const expectedMonthlyHours = displayUser.weeklyHours ? (displayUser.weeklyHours * 4.33) : 0;
-  const expectedWeeklyHours = displayUser.weeklyHours || 0;
-
-  // Get coin level info
   const coinBalance = userBalance?.currentBalance || 0;
-  const nextEvent = getNextEvent(coinBalance);
   const unlockedEvents = getUnlockedEvents(coinBalance);
-  const currentLevel = unlockedEvents.length > 0 ? unlockedEvents[unlockedEvents.length - 1] : null;
 
   return (
     <div className="flex-1 bg-white min-h-screen">
