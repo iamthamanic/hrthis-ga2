@@ -4,6 +4,7 @@ import { useAuthStore } from '../state/auth';
 import { useLearningStore } from '../state/learning';
 import { TrainingCategory } from '../types/learning';
 import { cn } from '../utils/cn';
+import DefaultAvatar from '../components/avatar/DefaultAvatar';
 
 export const LearningDashboard = () => {
   const { user } = useAuthStore();
@@ -30,6 +31,22 @@ export const LearningDashboard = () => {
   const filteredVideos = selectedCategory === 'all' 
     ? videos 
     : videos.filter(v => v.category === selectedCategory);
+
+  const resolveAvatarUrl = (url?: string): string | undefined => {
+    if (!url || url.trim() === '') return undefined;
+    const normalized = url.trim();
+    if (
+      normalized.startsWith('http://') ||
+      normalized.startsWith('https://') ||
+      normalized.startsWith('data:') ||
+      normalized.startsWith('blob:')
+    ) return normalized;
+    if (normalized.startsWith('/hrthis')) return normalized;
+    if (normalized.startsWith('/')) return `/hrthis${normalized}`;
+    return `/hrthis/${normalized}`;
+  };
+
+  // No demo avatar images; fallback is initials-only elsewhere. Here we keep existing gradient fallback.
 
   const categories = [
     { id: 'all', label: 'Alle', icon: '📚' },
@@ -62,9 +79,16 @@ export const LearningDashboard = () => {
             onClick={() => setShowProfile(!showProfile)}
             className="relative group"
           >
-            <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-lg transform transition-transform group-hover:scale-110">
-              {user?.name.charAt(0)}
-            </div>
+            {user?.avatarUrl ? (
+              <img
+                src={resolveAvatarUrl(user.avatarUrl)}
+                alt={user?.name}
+                className="w-20 h-20 rounded-full object-cover shadow-lg transform transition-transform group-hover:scale-110 border border-gray-200"
+                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+              />
+            ) : (
+              <DefaultAvatar sizeClass="w-20 h-20" className="shadow-lg transform transition-transform group-hover:scale-110 border border-gray-200" />
+            )}
             <div className="absolute -bottom-1 -right-1 bg-yellow-400 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">
               {userLevel?.level}
             </div>
@@ -247,9 +271,16 @@ export const LearningDashboard = () => {
 
             {/* Avatar Section */}
             <div className="text-center mb-6">
-              <div className="w-32 h-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-4xl mx-auto mb-4">
-                {user?.name.charAt(0)}
-              </div>
+              {user?.avatarUrl ? (
+                <img
+                  src={resolveAvatarUrl(user.avatarUrl)}
+                  alt={user?.name}
+                  className="w-32 h-32 rounded-full object-cover mx-auto mb-4 border border-gray-200"
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+                />
+              ) : (
+                <DefaultAvatar sizeClass="w-32 h-32" className="mx-auto mb-4 border border-gray-200" />
+              )}
               <h3 className="text-xl font-bold">{user?.name}</h3>
               <p className="text-purple-600 font-medium">{userLevel?.title}</p>
             </div>

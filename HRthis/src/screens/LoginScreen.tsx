@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
@@ -27,6 +27,7 @@ export const LoginScreen = () => {
   const navigate = useNavigate();
   const { login, isAuthenticated } = useAuthStore();
   const toast = useToast();
+  const [showPassword, setShowPassword] = useState(false);
   
   // Redirect if already authenticated
   useEffect(() => {
@@ -39,7 +40,7 @@ export const LoginScreen = () => {
   const form = useFormHandler<LoginFormData>({
     initialValues: {
       email: 'max.mustermann@hrthis.de',
-      password: 'password'
+      password: ''
     },
     validationSchema: loginSchema,
     validateOnBlur: true,
@@ -98,17 +99,29 @@ export const LoginScreen = () => {
             <label className="text-sm font-medium text-gray-700 mb-2 block">
               Passwort
             </label>
-            <input
-              type="password"
-              className={cn(
-                "border rounded-lg px-4 py-3 text-base w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
-                form.touched.password && form.errors.password ? "border-red-500" : "border-gray-300"
-              )}
-              placeholder="Passwort eingeben"
-              value={form.values.password}
-              onChange={(e) => form.handleChange('password')(e.target.value)}
-              onBlur={form.handleBlur('password')}
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                className={cn(
+                  "border rounded-lg px-4 py-3 pr-12 text-base w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
+                  form.touched.password && form.errors.password ? "border-red-500" : "border-gray-300"
+                )}
+                placeholder="Passwort eingeben"
+                value={form.values.password}
+                onChange={(e) => form.handleChange('password')(e.target.value)}
+                onBlur={form.handleBlur('password')}
+                autoComplete="current-password"
+              />
+              <button
+                type="button"
+                aria-label={showPassword ? 'Passwort verbergen' : 'Passwort anzeigen'}
+                title={showPassword ? 'Passwort verbergen' : 'Passwort anzeigen'}
+                className="btn btn-ghost btn-xs absolute right-2 top-1/2 -translate-y-1/2"
+                onClick={() => setShowPassword((v) => !v)}
+              >
+                {showPassword ? '🙈' : '👁'}
+              </button>
+            </div>
             {form.touched.password && form.errors.password && (
               <p className="text-red-500 text-sm mt-1">{form.errors.password}</p>
             )}

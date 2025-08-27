@@ -1,3 +1,10 @@
+## [v2.4.2] - 2025-08-27
+### Changed
+- Unified default avatar fallback across app
+- Team Management avatar hover now overlays correctly
+### Fixed
+- Dashboard personal number shows single PN- prefix
+
 ## [v2.4.1] - 2025-08-26
 ### Fixed
 - Enforce '/hrthis' frontend base path for correct routing
