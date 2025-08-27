@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAuthStore } from '../state/auth';
 import { useCoinsStore } from '../state/coins';
-import { useTimeRecordsStore } from '../state/timeRecords';
 
 /**
  * Main dashboard screen showing personalized information
@@ -12,7 +11,6 @@ import { useTimeRecordsStore } from '../state/timeRecords';
 export const DashboardScreen = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { getTimeRecords } = useTimeRecordsStore();
   const { getUserBalance } = useCoinsStore();
 
   const displayUser = user;
@@ -27,7 +25,7 @@ export const DashboardScreen = () => {
     const cleaned = String(rawEmpNo).replace(/^PN[-\s]?/i, '');
     return cleaned ? `PN-${cleaned}` : 'PN-—';
   })();
-  const coinBalance = userBalance?.currentBalance || 0;
+  // const coinBalance = userBalance?.currentBalance || 0; // not used in current UI
 
   return (
     <div className="flex-1 bg-white min-h-screen">
