@@ -99,7 +99,7 @@ class ErrorTracker {
   /**
    * Add breadcrumb for better error context
    */
-  addBreadcrumb(breadcrumb: {
+  addBreadcrumb(_breadcrumb: {
     message: string;
     category?: string;
     level?: 'debug' | 'info' | 'warning' | 'error';
