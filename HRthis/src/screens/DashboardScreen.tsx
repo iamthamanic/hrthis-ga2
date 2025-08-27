@@ -25,6 +25,12 @@ export const DashboardScreen = () => {
 
   // Get user's data
   const userBalance = getUserBalance(displayUser.id);
+  // Normalize employee number: avoid double prefix and ensure 'PN-' once
+  const rawEmpNo = displayUser.employeeNumber || '';
+  const normalizedEmpNo = (() => {
+    const cleaned = String(rawEmpNo).replace(/^PN[-\s]?/i, '');
+    return cleaned ? `PN-${cleaned}` : 'PN-—';
+  })();
   const todayDate = new Date().toISOString().split('T')[0];
   const todayRecords = getTimeRecords(displayUser.id).filter(record => record.date === todayDate);
   const todayRecord = todayRecords[0];
@@ -95,7 +101,7 @@ export const DashboardScreen = () => {
                 Hallo, {displayUser.firstName || displayUser.name.split(' ')[0]}!
               </h1>
               <p className="text-gray-500 mt-1">
-                Personalnummer: PN-{displayUser.employeeNumber || '20250002'}
+                Personalnummer: {normalizedEmpNo}
               </p>
             </div>
           </div>

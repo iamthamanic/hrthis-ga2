@@ -7,6 +7,7 @@ import { useTeamsStore } from '../state/teams';
 // import { useCoinsStore } from '../state/coins';
 import { User } from '../types';
 import { cn } from '../utils/cn';
+import DefaultAvatar from '../components/avatar/DefaultAvatar';
 
 /**
  * Extended user interface for team management view
@@ -35,6 +36,13 @@ export const TeamManagementScreen = () => {
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterRole, setFilterRole] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('name');
+
+  // Global hover preview (fixed overlay to avoid clipping/stacking issues)
+  const [hoverPreview, setHoverPreview] = useState<{
+    src: string;
+    top: number;
+    left: number;
+  } | null>(null);
 
   // Check if current user is admin
   const isAdmin = user?.role === 'ADMIN' || user?.role === 'SUPERADMIN';
@@ -97,6 +105,23 @@ export const TeamManagementScreen = () => {
 
     return filtered;
   }, [teamMembers, searchTerm, filterStatus, filterRole, sortBy]);
+
+  // Helper to ensure avatar URLs include the base path (/hrthis) when needed
+  const resolveAvatarUrl = (url?: string): string | undefined => {
+    if (!url || url.trim() === '') return undefined;
+    const normalized = url.trim();
+    if (
+      normalized.startsWith('http://') ||
+      normalized.startsWith('https://') ||
+      normalized.startsWith('data:') ||
+      normalized.startsWith('blob:')
+    ) return normalized;
+    if (normalized.startsWith('/hrthis')) return normalized; // already prefixed
+    if (normalized.startsWith('/')) return `/hrthis${normalized}`; // absolute but missing base path
+    return `/hrthis/${normalized}`; // relative path → prefix
+  };
+
+  // No demo images: fallback should be initials only when avatarUrl is missing
 
   if (!isAdmin) {
     return (
@@ -244,7 +269,7 @@ export const TeamManagementScreen = () => {
       </div>
 
       {/* Team Members Table */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-lg border border-gray-200 overflow-visible">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50">
@@ -277,10 +302,34 @@ export const TeamManagementScreen = () => {
                 <tr key={member.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                        <span className="text-blue-600 font-medium">
-                          {member.name.split(' ').map(n => n[0]).join('')}
-                        </span>
+                      <div
+                        className="relative group mr-3"
+                        onMouseEnter={(e) => {
+                          if (!member.avatarUrl) return;
+                          const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
+                          const src = resolveAvatarUrl(member.avatarUrl);
+                          if (!src) return;
+                          setHoverPreview({
+                            src,
+                            top: rect.top - 10,
+                            left: rect.left + rect.width / 2,
+                          });
+                        }}
+                        onMouseLeave={() => setHoverPreview(null)}
+                      >
+                        {/* Fallback initials always present */}
+                        <DefaultAvatar sizeClass="w-10 h-10" className="border border-gray-200" />
+                        {/* Avatar image overlays fallback when available */}
+                        {member.avatarUrl && (
+                          <>
+                            <img
+                              src={resolveAvatarUrl(member.avatarUrl)}
+                              alt={member.name}
+                              className="absolute inset-0 w-10 h-10 rounded-full object-cover border border-gray-200"
+                              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+                            />
+                          </>
+                        )}
                       </div>
                       <div>
                         <div className="text-sm font-medium text-gray-900">{member.name}</div>
@@ -368,6 +417,20 @@ export const TeamManagementScreen = () => {
           </div>
         )}
       </div>
+
+      {/* Fixed overlay for avatar preview */}
+      {hoverPreview && (
+        <div
+          className="fixed z-[99999] pointer-events-none"
+          style={{ top: hoverPreview.top, left: hoverPreview.left, transform: 'translate(-50%, -100%)' }}
+        >
+          <div className="p-2 bg-white rounded-xl shadow-2xl border border-gray-200">
+            <div className="w-40 h-40 rounded-full overflow-hidden">
+              <img src={hoverPreview.src} alt="avatar preview" className="w-full h-full object-cover" />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
