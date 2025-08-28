@@ -155,7 +155,7 @@ class PerformanceMonitor {
    */
   private monitorCustomMetrics() {
     // Monitor React render performance
-    if (window.performance && window.performance.measure) {
+    if (typeof window.performance?.measure === 'function') {
       // Measure initial app load
       window.addEventListener('load', () => {
         const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
