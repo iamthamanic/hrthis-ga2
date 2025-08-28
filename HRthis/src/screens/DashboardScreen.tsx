@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuthStore } from '../state/auth';
-import { useCoinsStore } from '../state/coins';
+// import { useCoinsStore } from '../state/coins';
 
 /**
  * Main dashboard screen showing personalized information
@@ -11,14 +11,13 @@ import { useCoinsStore } from '../state/coins';
 export const DashboardScreen = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { getUserBalance } = useCoinsStore();
+  // const { getUserBalance } = useCoinsStore();
 
   const displayUser = user;
 
   if (!user || !displayUser) return null;
 
-  // Get user's data
-  const userBalance = getUserBalance(displayUser.id);
+  // Get user's data (balance currently not displayed directly in header)
   // Normalize employee number: avoid double prefix and ensure 'PN-' once
   const rawEmpNo = displayUser.employeeNumber || '';
   const normalizedEmpNo = (() => {
