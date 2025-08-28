@@ -330,7 +330,7 @@ export const exportToPDF = (
         `${data['meeting']} Tage`,
         `${data['fortbildung']} Tage`,
         `${data['ux']} Tage`,
-        `${data['arbeitsstunden'].toFixed(1)} h`
+        `${(data['arbeitsstunden'] ?? 0).toFixed(1)} h`
       ]);
     });
     
