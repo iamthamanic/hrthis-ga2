@@ -394,11 +394,11 @@ class PerformanceMonitor {
     const summary: Record<string, any> = {};
     
     const metricGroups = metrics.reduce((acc, metric) => {
-      if (!acc[metric.metric]) {
-        acc[metric.metric] = [];
-      }
-      acc[metric.metric].push(metric.value);
-      return acc;
+      const key = metric.metric;
+      // Ensure array exists before pushing to satisfy strict typing
+      const arr = acc[key] ?? (acc[key] = []);
+      arr.push(metric.value);
+      return acc as Record<string, number[]>;
     }, {} as Record<string, number[]>);
 
     for (const [metric, values] of Object.entries(metricGroups)) {
