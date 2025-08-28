@@ -393,13 +393,11 @@ class PerformanceMonitor {
   private calculateSummary(metrics: PerformanceData[]) {
     const summary: Record<string, any> = {};
     
-    const metricGroups = metrics.reduce((acc, metric) => {
+    const metricGroups: Record<string, number[]> = {};
+    metrics.forEach((metric) => {
       const key = metric.metric;
-      // Ensure array exists before pushing to satisfy strict typing
-      const arr = acc[key] ?? (acc[key] = []);
-      arr.push(metric.value);
-      return acc as Record<string, number[]>;
-    }, {} as Record<string, number[]>);
+      (metricGroups[key] ??= []).push(metric.value);
+    });
 
     for (const [metric, values] of Object.entries(metricGroups)) {
       const sorted = values.sort((a, b) => a - b);
