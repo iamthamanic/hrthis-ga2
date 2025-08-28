@@ -325,12 +325,12 @@ export const exportToPDF = (
     Object.entries(summaryData).forEach(([userName, data]) => {
       tableRows.push([
         userName,
-        `${data.urlaub} Tage`,
-        `${data.krank} Tage`,
-        `${data.meeting} Tage`,
-        `${data.fortbildung} Tage`,
-        `${data.ux} Tage`,
-        `${data.arbeitsstunden.toFixed(1)} h`
+        `${data['urlaub']} Tage`,
+        `${data['krank']} Tage`,
+        `${data['meeting']} Tage`,
+        `${data['fortbildung']} Tage`,
+        `${data['ux']} Tage`,
+        `${data['arbeitsstunden'].toFixed(1)} h`
       ]);
     });
     
