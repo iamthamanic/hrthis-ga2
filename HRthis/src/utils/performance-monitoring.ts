@@ -376,8 +376,8 @@ class PerformanceMonitor {
     }
 
     // Send to analytics service in production
-    if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_ANALYTICS_URL) {
-      fetch(process.env.REACT_APP_ANALYTICS_URL, {
+    if (process.env.NODE_ENV === 'production' && process.env['REACT_APP_ANALYTICS_URL']) {
+      fetch(process.env['REACT_APP_ANALYTICS_URL'] as string, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ metrics: batch, summary }),
