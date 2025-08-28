@@ -155,7 +155,7 @@ export const AppNavigator = () => {
       <Route path="/calendar" element={<Navigate to="/time-vacation" />} />
       <Route path="/learning" element={<MainLayout><LearningDashboard /></MainLayout>} />
       <Route path="/benefits" element={<MainLayout><BenefitsScreen /></MainLayout>} />
-      <Route path="/documents" element={<MainLayout><DocumentsScreen /></MainLayout>} />
+      <Route path="/documents/*" element={<MainLayout><DocumentsScreen /></MainLayout>} />
       <Route path="/admin/*" element={<MainLayout><AdminScreen /></MainLayout>} />
       <Route path="/team-calendar" element={<MainLayout><TeamCalendarScreen /></MainLayout>} />
       
